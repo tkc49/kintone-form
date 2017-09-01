@@ -1,14 +1,11 @@
 <?php
 /**
- * Class SampleTest
+ * Class Kintone_Form_Tests
  *
  * @package Kintone_Form
  */
 
-/**
- * Sample test case.
- */
-class SampleTest extends WP_UnitTestCase {
+class Kintone_Form_Tests extends WP_UnitTestCase {
 
 	/**
 	 * A single example test.
@@ -17,4 +14,10 @@ class SampleTest extends WP_UnitTestCase {
 		// Replace this with some actual testing code.
 		$this->assertTrue( true );
 	}
+
+
+	
+
+
+
 }
