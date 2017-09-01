@@ -231,15 +231,7 @@ class KintoneForm {
 
 		add_action( 'wpcf7_before_send_mail', array( $this, 'kintone_form_send' ),1);
 
-		add_filter( 'wpcf7_skip_mail', array( $this, 'wpcf7_skip_mail' ), 10 , 2 );
-
-
 	}
-
-	public function wpcf7_skip_mail( $skip_mail, $contact_form ){
-		return false;
-	}
-
 
 	public function wpcf7_editor_panels( $panels ){
 
