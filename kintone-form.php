@@ -1,9 +1,9 @@
 <?php
 /**
- * Plugin Name: kintone form
+ * Plugin Name: Form data to kintone
  * Plugin URI:  
  * Description: This plugin is an addon for "Contact form 7".
- * Version:	 1.0.0
+ * Version:	 1.0.1
  * Author:	  Takashi Hosoya
  * Author URI:  http://ht79.info/
  * License:	 GPLv2 
