@@ -3,7 +3,7 @@
  * Plugin Name: Form data to kintone
  * Plugin URI:  
  * Description: This plugin is an addon for "Contact form 7".
- * Version:	 1.0.1
+ * Version:	 1.0.5
  * Author:	  Takashi Hosoya
  * Author URI:  http://ht79.info/
  * License:	 GPLv2 
@@ -221,6 +221,8 @@ class KintoneForm {
 			dirname( plugin_basename( __FILE__ ) ).$this->langs
 		);
 
+		add_action('admin_menu', array( $this, 'admin_menu' ) );
+
 
 		// Add Setting Panel
 		add_filter( 'wpcf7_editor_panels', array( $this, 'wpcf7_editor_panels' ) );
@@ -232,6 +234,72 @@ class KintoneForm {
 		add_action( 'wpcf7_before_send_mail', array( $this, 'kintone_form_send' ),1);
 
 	}
+
+	public function form_data_to_kintone_setting(){
+
+		if(! empty( $_POST ) &&  check_admin_referer($this->nonce)){
+
+		}
+
+		$wp_n = wp_nonce_field($this->nonce);
+
+	?>
+
+
+		<div class="wrap">
+		
+			<h2>Form data to kintone add-ons:UPDATE</h2>
+			<div class="form-data-to-kintone-setting-block">
+
+				<div class="title">
+					<h3>License Information</h3>
+				</div>
+				<div class="inner">
+					
+					<form method="post" action="">
+						<?php echo $wp_n; ?>
+
+						<table class="form-table">
+				        	<tr valign="top">
+				        		<th scope="row"><label for="add_text">kintone domain</label></th>
+				        		<td><input name="kintone_to_wp_kintone_url" type="text" id="kintone_to_wp_kintone_url" value="'.( $kintone_url == "" ? "" : esc_textarea($kintone_url)).'" class="regular-text" /></td>
+				        	</tr>
+				        	<tr valign="top">
+				        		<th scope="row"><label for="add_text">API Token</label><br><span style="font-size:10px;">Permission: show record</span></th>
+				        		<td><input name="kintone_to_wp_kintone_api_token" type="text" id="kintone_to_wp_kintone_api_token" value="'.( $api_token == "" ? "" : esc_textarea( $api_token ) ).'" class="regular-text" /></td>
+				        	</tr>        
+				        	<tr valign="top">
+				        		<th scope="row"><label for="add_text">Reflect kintone to post_type</label></th>
+				        		<td>
+				        			kintone APP ID:<input name="kintone_to_wp_target_appid" type="text" id="kintone_to_wp_target_appid" value="'.( $target_appid == "" ? "" : esc_textarea($target_appid) ).'" class="small-text" /> ->
+									WordPress Post Type:<select name="kintone_to_wp_reflect_post_type">
+										<option value=""></option>
+										<option '.selected( $reflect_post_type, "post", false).' value="post">post</option>
+									</select>	
+								</td>
+				        	</tr>
+			        	</table>
+
+				        <p class="submit"><input type="submit" name="get_kintone_fields" class="button-primary" value="Get kintone fields" /></p>
+					
+					</form>
+
+
+				</div>
+			</div>
+		</div>
+			
+
+
+
+<?php	
+
+	}	
+
+	public function admin_menu(){
+		add_submenu_page('options-general.php', 'Form data to kintone', 'Form data to kintone', 'manage_options', 'form-data-to-kintone-setting', array( $this,'form_data_to_kintone_setting' ) );
+	}
+
 
 	public function wpcf7_editor_panels( $panels ){
 

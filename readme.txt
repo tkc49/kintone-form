@@ -1,17 +1,17 @@
 === Form data to kintone ===
-Contributors: 
+Contributors: tkc49
 Tags: cybozu, kintone, crm, database, custom field, contact form 7, form
 Requires at least: 4.8
 Tested up to: 4.8
-Stable tag: 1.0.1
+Stable tag: 1.0.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-The data of kintone can be reflected on WordPress.
+This plugin can import data sent from Contact form 7 into kintone.
 
 == Description ==
 
-The data of kintone can be reflected on WordPress.
+This plugin can import data sent from Contact form 7 into kintone.
 
 = What is kintone? =
 
@@ -21,6 +21,9 @@ Collaborate with team members and partners via apps and workspaces.
 
 * Information in Japanese : https://kintone.cybozu.com/jp/
 * Information in English: https://www.kintone.com/
+
+Thanks
+Cover banner designed by [akari_doi](https://profiles.wordpress.org/akari_doi/)
 
 
 == Installation ==
@@ -48,11 +51,16 @@ Please contact Cybozu.
 
 https://www.cybozu.com/jp/inquiry/
 
+
 == Screenshots ==
 
 1. screenshot-1.png
 
 == Changelog ==
 
+* 1.0.5 - fix
+* 1.0.4 - add contributer
+* 1.0.3 - Change plugin's discription
+* 1.0.2 - Change plugin's discription
 * 1.0.1 - Change plugin name
 * 1.0.0 - First Release
