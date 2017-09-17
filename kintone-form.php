@@ -3,7 +3,7 @@
  * Plugin Name: Form data to kintone
  * Plugin URI:  
  * Description: This plugin is an addon for "Contact form 7".
- * Version:	 1.0.8
+ * Version:	 1.0.9
  * Author:	  Takashi Hosoya
  * Author URI:  http://ht79.info/
  * License:	 GPLv2 
@@ -31,7 +31,8 @@
 
 define( 'KINTONE_FORM_URL',  plugins_url( '', __FILE__ ) );
 define( 'KINTONE_FORM_PATH', dirname( __FILE__ ) );
-
+define( 'GUMROAD_KINTONE_FORM_ATTACHMENTS_SLUG', 'jIewp' );
+define( 'GUMROAD_KINTONE_FORM_MULTI_KINTONE_APP_SLUG', 'Uqikv' );
 
 $kintone_form = new KintoneForm();
 $kintone_form->register();
@@ -93,7 +94,7 @@ class KintoneForm {
 			'NUMBER',
 			'RICH_TEXT',
 			'MULTI_LINE_TEXT'
-		),	
+		),
 		'range' => array(
 			'SINGLE_LINE_TEXT',
 			'NUMBER',
@@ -202,6 +203,8 @@ class KintoneForm {
 	    'MULTI_LINE_TEXT' => 'textarea'
 	);
 	
+
+
 	
 	function __construct()
 	{
@@ -227,7 +230,7 @@ class KintoneForm {
 			dirname( plugin_basename( __FILE__ ) ).$this->langs
 		);
 
-		//add_action('admin_menu', array( $this, 'admin_menu' ) );
+		add_action('admin_menu', array( $this, 'admin_menu' ) );
 
 
 		// Add Setting Panel
@@ -239,22 +242,65 @@ class KintoneForm {
 
 		add_action( 'wpcf7_before_send_mail', array( $this, 'kintone_form_send' ),1);
 
+		add_action( 'admin_enqueue_scripts', array( $this, 'register_assets' ) );
+
+	}
+
+	public function register_assets() {
+		
+		// styles
+		wp_enqueue_style('kintone-form', plugin_dir_url( __FILE__ ).'asset/css/kintone-form.css', array());
+		
 	}
 
 	public function form_data_to_kintone_setting(){
 
+		$license_result_attachment = "";
+		$license_result_multiple_kintone_app = "";
+
 		if(! empty( $_POST ) &&  check_admin_referer($this->nonce)){
+
+			if( isset($_POST['kintone_to_wp_license_key_attachment']) &&  !empty($_POST['kintone_to_wp_license_key_attachment']) ){
+
+				$kintone_to_wp_license_key_attachment = sanitize_text_field($_POST['kintone_to_wp_license_key_attachment']);
+
+				update_option('_kintone_to_wp_license_key_attachment', base64_encode($kintone_to_wp_license_key_attachment));
+
+				$license_result_attachment = $this->gumroad_verify_license($kintone_to_wp_license_key_attachment, GUMROAD_KINTONE_FORM_ATTACHMENTS_SLUG);
+
+			}else{
+				delete_option('_kintone_to_wp_license_key_attachment');
+			}
+
+			if( isset($_POST['kintone_to_wp_license_key_multiple_kintone_app']) &&  !empty($_POST['kintone_to_wp_license_key_multiple_kintone_app']) ){
+
+				$kintone_to_wp_license_key_multiple_kintone_app = sanitize_text_field($_POST['kintone_to_wp_license_key_multiple_kintone_app']);
+				update_option('_kintone_to_wp_license_key_multiple_kintone_app', base64_encode($kintone_to_wp_license_key_multiple_kintone_app));
+
+				$license_result_multiple_kintone_app = $this->gumroad_verify_license($kintone_to_wp_license_key_multiple_kintone_app, GUMROAD_KINTONE_FORM_MULTI_KINTONE_APP_SLUG);
+
+			}else{
+				delete_option('_kintone_to_wp_license_key_multiple_kintone_app');
+			}
+
+			echo '<div class="updated notice is-dismissible"><p><strong>Success</strong></p></div>';
+
 
 		}
 
 		$wp_n = wp_nonce_field($this->nonce);
+		$kintone_to_wp_license_key_attachment = base64_decode(get_option( '_kintone_to_wp_license_key_attachment' ));
+		$kintone_to_wp_license_key_multiple_kintone_app = base64_decode(get_option( '_kintone_to_wp_license_key_multiple_kintone_app' ));
+		
+
 
 	?>
 
 
 		<div class="wrap">
 		
-			<h2>Form data to kintone add-ons:UPDATE</h2>
+			<h1>Form data to kintone add-ons:UPDATE</h1>
+			<p>Coming Soon... :)</p>
 			<div class="form-data-to-kintone-setting-block">
 
 				<div class="title">
@@ -264,33 +310,31 @@ class KintoneForm {
 					
 					<form method="post" action="">
 						<?php echo $wp_n; ?>
-
 						<table class="form-table">
 				        	<tr valign="top">
-				        		<th scope="row"><label for="add_text">kintone domain</label></th>
-				        		<td><input name="kintone_to_wp_kintone_url" type="text" id="kintone_to_wp_kintone_url" value="'.( $kintone_url == "" ? "" : esc_textarea($kintone_url)).'" class="regular-text" /></td>
-				        	</tr>
-				        	<tr valign="top">
-				        		<th scope="row"><label for="add_text">API Token</label><br><span style="font-size:10px;">Permission: show record</span></th>
-				        		<td><input name="kintone_to_wp_kintone_api_token" type="text" id="kintone_to_wp_kintone_api_token" value="'.( $api_token == "" ? "" : esc_textarea( $api_token ) ).'" class="regular-text" /></td>
-				        	</tr>        
-				        	<tr valign="top">
-				        		<th scope="row"><label for="add_text">Reflect kintone to post_type</label></th>
+				        		<th scope="row"><label for="add_text">License key : Add-on Attachment</label></th>
 				        		<td>
-				        			kintone APP ID:<input name="kintone_to_wp_target_appid" type="text" id="kintone_to_wp_target_appid" value="'.( $target_appid == "" ? "" : esc_textarea($target_appid) ).'" class="small-text" /> ->
-									WordPress Post Type:<select name="kintone_to_wp_reflect_post_type">
-										<option value=""></option>
-										<option '.selected( $reflect_post_type, "post", false).' value="post">post</option>
-									</select>	
-								</td>
-				        	</tr>
+				        			<input name="kintone_to_wp_license_key_attachment" type="text" id="kintone_to_wp_license_key_attachment" value="<?php echo ($kintone_to_wp_license_key_attachment == "" ? "" : esc_textarea($kintone_to_wp_license_key_attachment)); ?>" class="regular-text" />
+				        			<?php if(is_wp_error($license_result_attachment)): ?>
+				        				<br><span style="color:red;"><?php echo $license_result_attachment->get_error_message(); ?></span>
+				        			<?php endif; ?>
+				        		</td>
+				        	</tr>	
+				        	<tr valign="top">
+				        		<th scope="row"><label for="add_text">License key : Add-on Multiple kintone app</label></th>
+				        		<td>
+				        			<input name="kintone_to_wp_license_key_multiple_kintone_app" type="text" id="kintone_to_wp_license_key_multiple_kintone_app" value="<?php echo ($kintone_to_wp_license_key_multiple_kintone_app == "" ? "" : esc_textarea($kintone_to_wp_license_key_multiple_kintone_app)); ?>" class="regular-text" />
+				        			<?php if(is_wp_error($license_result_multiple_kintone_app)): ?>
+				        				<br><span style="color:red;"><?php echo $license_result_multiple_kintone_app->get_error_message(); ?></span>
+				        			<?php endif; ?>
+				        		</td>
+				        	</tr>	
+
 			        	</table>
 
-				        <p class="submit"><input type="submit" name="get_kintone_fields" class="button-primary" value="Get kintone fields" /></p>
+				        <p class="submit"><input type="submit" class="button-primary" value="Activate License" /></p>
 					
 					</form>
-
-
 				</div>
 			</div>
 		</div>
@@ -302,8 +346,31 @@ class KintoneForm {
 
 	}	
 
+
+	public function gumroad_verify_license( $license, $guid ) {
+	    $ch = curl_init( 'https://api.gumroad.com/v2/licenses/verify' );
+	    curl_setopt_array( $ch, [
+	        CURLOPT_CONNECTTIMEOUT => 10,
+	        CURLOPT_RETURNTRANSFER => true,
+	        CURLOPT_SSL_VERIFYPEER => false,
+	        CURLOPT_POST           => true,
+	        CURLOPT_POSTFIELDS     => "product_permalink={$guid}&license_key={$license}",
+	    ] );
+	    $result = curl_exec( $ch );
+	    curl_close( $ch );
+	    if ( ! $result ) {
+	        return false;
+	    }
+	    if ( ( $json = json_decode( $result ) ) && $json->success ) {
+	        return $json;
+	    } else {
+	        return new WP_Error( 'invalid_license', '無効なライセンスです。', [ 'status' => 403 ] );
+	    }
+	}
+
 	public function admin_menu(){
-		add_submenu_page('options-general.php', 'Form data to kintone', 'Form data to kintone', 'manage_options', 'form-data-to-kintone-setting', array( $this,'form_data_to_kintone_setting' ) );
+		add_menu_page( 'Form data to kintone', 'Form data to kintone', 'manage_options', 'form-data-to-kintone-setting', array( $this,'form_data_to_kintone_setting' ) );
+		
 	}
 
 
@@ -406,8 +473,7 @@ class KintoneForm {
 				                                                <?php endif; ?>
 				                                            <?php else: ?>
 				                                            	<?php if( $form_data['type'] == 'FILE' ): ?>
-				                                            		<?php // add-ons ?>
-				                                            		<!-- <a href="#" title="">Add-Ons</a> -->
+				                                            		<a href="<?php echo admin_url('admin.php?page=form-data-to-kintone-setting'); ?>" title="">Add-Ons</a>
 				                                            	<?php else: ?>
 				                                            		Not Support
 				                                            	<?php endif; ?>
@@ -452,8 +518,7 @@ class KintoneForm {
 					<tfoot>
 						<tr>
 							<td colspan="2">
-								<?php // add-ons ?>
-								<!-- <span class="add button">追加</span> ← <a href="#" title="">Add-Ons</a> -->
+								<span class="add button">追加</span> ← <a href="<?php echo admin_url('admin.php?page=form-data-to-kintone-setting'); ?>" title="">Add-Ons</a>
 							</td>
 						</tr>
 					</tfoot>				
