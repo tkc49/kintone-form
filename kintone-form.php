@@ -3,7 +3,7 @@
  * Plugin Name: Form data to kintone
  * Plugin URI:  
  * Description: This plugin is an addon for "Contact form 7".
- * Version:	 1.0.6
+ * Version:	 1.0.8
  * Author:	  Takashi Hosoya
  * Author URI:  http://ht79.info/
  * License:	 GPLv2 
@@ -94,6 +94,12 @@ class KintoneForm {
 			'RICH_TEXT',
 			'MULTI_LINE_TEXT'
 		),	
+		'range' => array(
+			'SINGLE_LINE_TEXT',
+			'NUMBER',
+			'RICH_TEXT',
+			'MULTI_LINE_TEXT'
+		),			
 		'date' => array(
 			'SINGLE_LINE_TEXT',
 			'DATE',
@@ -400,7 +406,8 @@ class KintoneForm {
 				                                                <?php endif; ?>
 				                                            <?php else: ?>
 				                                            	<?php if( $form_data['type'] == 'FILE' ): ?>
-				                                            		<a href="#" title="">Add-Ons</a>
+				                                            		<?php // add-ons ?>
+				                                            		<!-- <a href="#" title="">Add-Ons</a> -->
 				                                            	<?php else: ?>
 				                                            		Not Support
 				                                            	<?php endif; ?>
@@ -445,7 +452,8 @@ class KintoneForm {
 					<tfoot>
 						<tr>
 							<td colspan="2">
-								<span class="add button">追加</span> ← <a href="#" title="">Add-Ons</a>
+								<?php // add-ons ?>
+								<!-- <span class="add button">追加</span> ← <a href="#" title="">Add-Ons</a> -->
 							</td>
 						</tr>
 					</tfoot>				
