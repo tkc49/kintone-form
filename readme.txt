@@ -3,7 +3,7 @@ Contributors: tkc49
 Tags: cybozu, kintone, crm, database, custom field, contact form 7, form
 Requires at least: 4.8
 Tested up to: 4.8
-Stable tag: 1.0.8
+Stable tag: 1.0.9
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -58,6 +58,7 @@ https://www.cybozu.com/jp/inquiry/
 
 == Changelog ==
 
+* 1.0.9 - Add add-ons
 * 1.0.8 - remove add-ons text
 * 1.0.7 - fix a problem with range
 * 1.0.6 - remove admin menu
