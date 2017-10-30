@@ -1,12 +1,12 @@
 <?php
 /**
  * Plugin Name: Form data to kintone
- * Plugin URI:  
+ * Plugin URI:
  * Description: This plugin is an addon for "Contact form 7".
- * Version:	 1.0.9
+ * Version:	 1.0.10
  * Author:	  Takashi Hosoya
  * Author URI:  http://ht79.info/
- * License:	 GPLv2 
+ * License:	 GPLv2
  * Text Domain: kintone-form
  * Domain Path: /languages
  */
@@ -100,7 +100,7 @@ class KintoneForm {
 			'NUMBER',
 			'RICH_TEXT',
 			'MULTI_LINE_TEXT'
-		),			
+		),
 		'date' => array(
 			'SINGLE_LINE_TEXT',
 			'DATE',
@@ -202,10 +202,10 @@ class KintoneForm {
 	    'RICH_TEXT' => 'textarea',
 	    'MULTI_LINE_TEXT' => 'textarea'
 	);
-	
 
 
-	
+
+
 	function __construct()
 	{
 		$data = get_file_data(
@@ -214,7 +214,7 @@ class KintoneForm {
 		);
 		$this->version = $data['ver'];
 		$this->langs   = $data['langs'];
-		
+
 	}
 
 	public function register()
@@ -247,10 +247,10 @@ class KintoneForm {
 	}
 
 	public function register_assets() {
-		
+
 		// styles
 		wp_enqueue_style('kintone-form', plugin_dir_url( __FILE__ ).'asset/css/kintone-form.css', array());
-		
+
 	}
 
 	public function form_data_to_kintone_setting(){
@@ -291,14 +291,14 @@ class KintoneForm {
 		$wp_n = wp_nonce_field($this->nonce);
 		$kintone_to_wp_license_key_attachment = base64_decode(get_option( '_kintone_to_wp_license_key_attachment' ));
 		$kintone_to_wp_license_key_multiple_kintone_app = base64_decode(get_option( '_kintone_to_wp_license_key_multiple_kintone_app' ));
-		
+
 
 
 	?>
 
 
 		<div class="wrap">
-		
+
 			<h1>Form data to kintone add-ons:UPDATE</h1>
 			<p>Coming Soon... :)</p>
 			<div class="form-data-to-kintone-setting-block">
@@ -307,7 +307,7 @@ class KintoneForm {
 					<h3>License Information</h3>
 				</div>
 				<div class="inner">
-					
+
 					<form method="post" action="">
 						<?php echo $wp_n; ?>
 						<table class="form-table">
@@ -319,7 +319,7 @@ class KintoneForm {
 				        				<br><span style="color:red;"><?php echo $license_result_attachment->get_error_message(); ?></span>
 				        			<?php endif; ?>
 				        		</td>
-				        	</tr>	
+				        	</tr>
 				        	<tr valign="top">
 				        		<th scope="row"><label for="add_text">License key : Add-on Multiple kintone app</label></th>
 				        		<td>
@@ -328,23 +328,23 @@ class KintoneForm {
 				        				<br><span style="color:red;"><?php echo $license_result_multiple_kintone_app->get_error_message(); ?></span>
 				        			<?php endif; ?>
 				        		</td>
-				        	</tr>	
+				        	</tr>
 
 			        	</table>
 
 				        <p class="submit"><input type="submit" class="button-primary" value="Activate License" /></p>
-					
+
 					</form>
 				</div>
 			</div>
 		</div>
-			
 
 
 
-<?php	
 
-	}	
+<?php
+
+	}
 
 
 	public function gumroad_verify_license( $license, $guid ) {
@@ -370,7 +370,7 @@ class KintoneForm {
 
 	public function admin_menu(){
 		add_menu_page( 'Form data to kintone', 'Form data to kintone', 'manage_options', 'form-data-to-kintone-setting', array( $this,'form_data_to_kintone_setting' ) );
-		
+
 	}
 
 
@@ -379,7 +379,7 @@ class KintoneForm {
 
 		$panels['form-kintone-panel'] = array(
 				'title' => 'kintone',
-				'callback' => array( $this, 'form_kintone_panel_form') 
+				'callback' => array( $this, 'form_kintone_panel_form')
 			);
 
 		return $panels;
@@ -402,7 +402,7 @@ class KintoneForm {
 		$this->kintone_fieldcode_supported_list = apply_filters( 'kintone_fieldcode_supported_list', $this->kintone_fieldcode_supported_list );
 
 
-		
+
 	?>
 		<h2><?php echo esc_html( __( 'Setting kintone', 'form-kintone' ) ); ?></h2>
 		<fieldset>
@@ -416,7 +416,7 @@ class KintoneForm {
 		<p class="description">
 			<div class="repeat">
 				<div id="kintone_form_setting" class="wrapper" style="border-collapse: collapse;">
-					
+
 					<div class="container">
 
 						<?php if( isset($kintone_setting_data['app_datas']) && !empty($kintone_setting_data['app_datas']) ): ?>
@@ -443,52 +443,54 @@ class KintoneForm {
 	                                        	<th style="text-align: left; padding: 5px 10px;">Example Shortcode</th>
 	                                        </tr>
 
-	                                        <?php foreach ($app_data['formdata']['properties'] as $form_data): ?>
-	                                        	<?php 
+	                                        <?php if(isset($app_data['formdata']['properties'])): ?>
+		                                        <?php foreach ($app_data['formdata']['properties'] as $form_data): ?>
+		                                        	<?php
 
-	                                        	if(isset($form_data['code'])):
-		                                        	$select_option = '';
-		                                        	if(isset($app_data['setting'][$form_data['code']]) && !empty($app_data['setting'][$form_data['code']]) ){
-		                                        		$select_option = $app_data['setting'][$form_data['code']];
-		                                        	}
+		                                        	if(isset($form_data['code'])):
+			                                        	$select_option = '';
+			                                        	if(isset($app_data['setting'][$form_data['code']]) && !empty($app_data['setting'][$form_data['code']]) ){
+			                                        		$select_option = $app_data['setting'][$form_data['code']];
+			                                        	}
 
-		                                        	$error_msg = $this->check_consistency( $tags, $select_option, $form_data );
-		                                        	
-		                                        	?>
+			                                        	$error_msg = $this->check_consistency( $tags, $select_option, $form_data );
 
-			                                        <tr>
-			                                            <td style="padding: 5px 10px; border-bottom: 1px solid #e2e2e2;"><?php echo esc_html( $form_data['label'] ).'('. esc_html( $form_data['code'] ).')'; ?></td>
-			                                            <td><-</td>
-			                                            <td style="padding: 5px 10px; border-bottom: 1px solid #e2e2e2;">
-			                                            	<?php if( array_key_exists( $form_data['type'] ,$this->kintone_fieldcode_supported_list ) ): ?>
-				                                            	
-				                                                <select name="kintone_setting_data[app_datas][<?php echo $i; ?>][setting][<?php echo esc_attr( $form_data['code'] ) ?>]">
-				                                                	<option value=""></option>
-				                                                	<?php foreach ($mailtags as $value): ?>
-				                                                		<option <?php selected( $value, $select_option ); ?> value="<?php echo esc_attr($value); ?>">[<?php echo esc_attr($value); ?>]</option>
-				                                                	<?php endforeach; ?>
-				                                                </select>
-				                                                <?php if($error_msg): ?>
-				                                                	<div style="color:red; font-weight:bold;"><?php echo $error_msg; ?></div>
-				                                                <?php endif; ?>
-				                                            <?php else: ?>
-				                                            	<?php if( $form_data['type'] == 'FILE' ): ?>
-				                                            		<a href="<?php echo admin_url('admin.php?page=form-data-to-kintone-setting'); ?>" title="">Add-Ons</a>
-				                                            	<?php else: ?>
-				                                            		Not Support
+			                                        	?>
+
+				                                        <tr>
+				                                            <td style="padding: 5px 10px; border-bottom: 1px solid #e2e2e2;"><?php echo esc_html( $form_data['label'] ).'('. esc_html( $form_data['code'] ).')'; ?></td>
+				                                            <td><-</td>
+				                                            <td style="padding: 5px 10px; border-bottom: 1px solid #e2e2e2;">
+				                                            	<?php if( array_key_exists( $form_data['type'] ,$this->kintone_fieldcode_supported_list ) ): ?>
+
+					                                                <select name="kintone_setting_data[app_datas][<?php echo $i; ?>][setting][<?php echo esc_attr( $form_data['code'] ) ?>]">
+					                                                	<option value=""></option>
+					                                                	<?php foreach ($mailtags as $value): ?>
+					                                                		<option <?php selected( $value, $select_option ); ?> value="<?php echo esc_attr($value); ?>">[<?php echo esc_attr($value); ?>]</option>
+					                                                	<?php endforeach; ?>
+					                                                </select>
+					                                                <?php if($error_msg): ?>
+					                                                	<div style="color:red; font-weight:bold;"><?php echo $error_msg; ?></div>
+					                                                <?php endif; ?>
+					                                            <?php else: ?>
+					                                            	<?php if( $form_data['type'] == 'FILE' ): ?>
+					                                            		<a href="<?php echo admin_url('admin.php?page=form-data-to-kintone-setting'); ?>" title="">Add-Ons</a>
+					                                            	<?php else: ?>
+					                                            		Not Support
+					                                            	<?php endif; ?>
 				                                            	<?php endif; ?>
-			                                            	<?php endif; ?>
-			                                            </td>
-			                                            <td style="padding: 5px 10px; border-bottom: 1px solid #e2e2e2;">
-			                                            	<?php if( array_key_exists( $form_data['type'] ,$this->kintone_fieldcode_supported_list ) ): ?>
-			                                            		<?php echo $this->create_sample_shortcode( $form_data, $select_option ); ?>
-			                                            	<?php endif; ?>
-			                                            </td>
-			                                            
-			                                        </tr>
-			                                    <?php endif; ?>
+				                                            </td>
+				                                            <td style="padding: 5px 10px; border-bottom: 1px solid #e2e2e2;">
+				                                            	<?php if( array_key_exists( $form_data['type'] ,$this->kintone_fieldcode_supported_list ) ): ?>
+				                                            		<?php echo $this->create_sample_shortcode( $form_data, $select_option ); ?>
+				                                            	<?php endif; ?>
+				                                            </td>
 
-	                                        <?php endforeach; ?>
+				                                        </tr>
+				                                    <?php endif; ?>
+
+		                                        <?php endforeach; ?>
+		                                    <?php endif; ?>
 	                                        </table>
 	                                    </td>
 	                                </tr>
@@ -496,7 +498,7 @@ class KintoneForm {
 								</table>
 
 								<?php $i++ ?>
-								
+
 							<?php endforeach; ?>
 
 						<?php else: ?>
@@ -521,12 +523,12 @@ class KintoneForm {
 								<span class="add button">追加</span> ← <a href="<?php echo admin_url('admin.php?page=form-data-to-kintone-setting'); ?>" title="">Add-Ons</a>
 							</td>
 						</tr>
-					</tfoot>				
+					</tfoot>
 				</div>
 			</div>
 		</p>
 		</fieldset>
-	<?php		
+	<?php
 	}
 
 	private function create_sample_shortcode( $form_data, $select_option ){
@@ -534,7 +536,7 @@ class KintoneForm {
 	   $shortcode = '';
 
 	   if(!empty($this->kintone_fieldcode_supported_list[$form_data['type']]) && !empty($select_option)  ){
-		   
+
 		   $shortcode .= '[';
 
 			if( $form_data['type'] == 'RADIO_BUTTON' ||
@@ -544,22 +546,22 @@ class KintoneForm {
 			{
 				$options = '"'.implode('" "',$form_data['options']).'"';
 				if( $form_data['type'] == 'MULTI_SELECT' ){
-					$shortcode .= $this->kintone_fieldcode_supported_list[$form_data['type']] . ' ' . $select_option . ' multiple '.$options;		
+					$shortcode .= $this->kintone_fieldcode_supported_list[$form_data['type']] . ' ' . $select_option . ' multiple '.$options;
 				}else{
-					$shortcode .= $this->kintone_fieldcode_supported_list[$form_data['type']] . ' ' . $select_option . ' '.$options;		
+					$shortcode .= $this->kintone_fieldcode_supported_list[$form_data['type']] . ' ' . $select_option . ' '.$options;
 				}
-				
+
 
 
 			}else{
-				
+
 				$shortcode .= $this->kintone_fieldcode_supported_list[$form_data['type']] . ' ' . $select_option;
-			
+
 			}
-			$shortcode .= ']';	
+			$shortcode .= ']';
 		}
 
-		
+
 		return $shortcode;
 
 	}
@@ -603,14 +605,24 @@ class KintoneForm {
 	public function wpcf7_save_contact_form( $contact_form, $args, $context ){
 
 		$properties = array();
-		
+
 		$i = 0;
 		if(isset($args['kintone_setting_data']['app_datas'])){
 			foreach ($args['kintone_setting_data']['app_datas'] as $app_data) {
 
-				$url = 'https://'.$args['kintone_setting_data']['domain'].'/k/v1/form.json?app='.$app_data['appid'];
-				$app_data['formdata'] = $this->kintone_api( $url, $app_data['token'] );
-				$args['kintone_setting_data']['app_datas'][$i] = $app_data;
+				if( !empty($app_data['appid']) && !empty($app_data['token']) && !empty($args['kintone_setting_data']['domain']) ){
+
+					$url = 'https://'.$args['kintone_setting_data']['domain'].'/k/v1/form.json?app='.$app_data['appid'];
+					$kintone_form_data = $this->kintone_api( $url, $app_data['token'] );
+
+
+					if( !is_wp_error($kintone_form_data) ){
+
+						$app_data['formdata'] = $kintone_form_data;
+						$args['kintone_setting_data']['app_datas'][$i] = $app_data;
+					}
+
+				}
 
 				$i++;
 
@@ -635,7 +647,7 @@ class KintoneForm {
 
 
 		$cf7_send_data = $submission->get_posted_data();
-		
+
 		$kintone_post_data = array();
 
 
@@ -690,13 +702,13 @@ class KintoneForm {
 									        if( isset($post_data['value']) && !empty($post_data['value'])){
 									        	$kintone_post_data[$post_data_count]['datas'][$kintone_form_data['code']] = $post_data;
 									        }
-									        break;								        
+									        break;
 									    case 'DROP_DOWN':
 									    	$post_data = KintoneForm_drop_down::format_to_kintone_data( $kintone_form_data, $cf7_send_data, $cf7_mail_tag, $e );
 									        if( isset($post_data['value']) && !empty($post_data['value'])){
 									        	$kintone_post_data[$post_data_count]['datas'][$kintone_form_data['code']] = $post_data;
 									        }
-									        break;								        								        
+									        break;
 									    case 'DATE':
 									    	$post_data = KintoneForm_date::format_to_kintone_data( $kintone_form_data, $cf7_send_data, $cf7_mail_tag, $e );
 									        if( isset($post_data['value']) && !empty($post_data['value'])){
@@ -708,7 +720,7 @@ class KintoneForm {
 									        if( isset($post_data['value']) && !empty($post_data['value'])){
 									        	$kintone_post_data[$post_data_count]['datas'][$kintone_form_data['code']] = $post_data;
 									        }
-									        break;								        
+									        break;
 									    case 'DATETIME':
 									    	$post_data = KintoneForm_datetime::format_to_kintone_data( $kintone_form_data, $cf7_send_data, $cf7_mail_tag, $e );
 									        if( isset($post_data['value']) && !empty($post_data['value'])){
@@ -732,7 +744,7 @@ class KintoneForm {
 									        if( isset($post_data['value']) && !empty($post_data['value'])){
 									        	$kintone_post_data[$post_data_count]['datas'][$kintone_form_data['code']] = $post_data;
 									        }
-									        break;								        
+									        break;
 									    case 'RECORD_NUMBER':
 									        break;
 									    case 'MODIFIER':
@@ -744,7 +756,7 @@ class KintoneForm {
 									    case 'CREATED_TIME':
 									        break;
 									    case 'CALC':
-									        break;								        
+									        break;
 									    case 'USER_SELECT':
 									        break;
 									    case 'REFERENCE_TABLE':
@@ -765,11 +777,11 @@ class KintoneForm {
 									        	$kintone_post_data[$post_data_count]['datas'][$kintone_form_data['code']] = $post_data;
 									        }
 									    	break;
-									}					
+									}
 
 								}
 							}
-							
+
 						}
 
 					}
@@ -777,7 +789,7 @@ class KintoneForm {
 			}
 
 			$post_data_count++;
-			
+
 		}
 
 		if ($e->get_error_code()) {
@@ -799,7 +811,7 @@ class KintoneForm {
 
 		$error_msg = "";
 		$error_msg = implode("\r\n", $e->get_error_messages());
-		
+
 		$to = get_option( 'admin_email' );
 		$subject = 'kintone form post error';
 		$body = $error_msg;
@@ -829,7 +841,7 @@ class KintoneForm {
 	        )
 	    );
 
-	    if ( is_wp_error( $res ) ) {	
+	    if ( is_wp_error( $res ) ) {
 	    	$this->erro_mail( $res );
 	        return $res;
 	    } elseif (  $res["response"]["code"] !== 200 ) {
@@ -866,9 +878,9 @@ class KintoneForm {
 				if( $file ){
 					$return_value = $res['body'];
 				}else{
-					$return_value = json_decode( $res['body'], true );	
+					$return_value = json_decode( $res['body'], true );
 				}
-				
+
 				if ( isset( $return_value['message'] ) && isset( $return_value['code'] ) ) {
 
 					echo '<div class="error fade"><p><strong>'.$return_value['message'].'</strong></p></div>';
