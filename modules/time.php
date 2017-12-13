@@ -34,7 +34,7 @@ class KintoneForm_time
 			$e->add('Error', $cf7_mail_tag .'->'. $kintone_form_data['code'].' : time format error');
 		}
 
-		$value = date('H:i:s',strtotime($value));
+		$value = date('H:i',strtotime($value));
 
 		$return_data['value'] = $value;
 
