@@ -251,6 +251,22 @@ class KintoneForm {
 		// styles
 		wp_enqueue_style('kintone-form', plugin_dir_url( __FILE__ ).'asset/css/kintone-form.css', array());
 
+		global $wp_query;
+
+		wp_enqueue_script('jquery');
+		// register our main script but do not enqueue it yet
+		wp_register_script( 'my_loadmore', plugin_dir_url( __FILE__ ).'asset/myloadmore.js', array('jquery') );
+
+		wp_localize_script( 'my_loadmore', 'misha_loadmore_params', array(
+			'ajaxurl' => site_url() . '/wp-admin/admin-ajax.php', // WordPress AJAX
+			'posts' => json_encode( $wp_query->query_vars ), // everything about your loop is here
+			'current_page' => get_query_var( 'paged' ) ? get_query_var('paged') : 1,
+			'max_page' => $wp_query->max_num_pages
+		) );
+
+		wp_enqueue_script( 'my_loadmore' );
+
+
 	}
 
 	public function form_data_to_kintone_setting(){
@@ -386,6 +402,7 @@ class KintoneForm {
 
 	}
 
+
 	public function form_kintone_panel_form( $post ) {
 
 		$kintone_setting_data = get_post_meta( $post->id(), '_kintone_setting_data', true );
@@ -430,6 +447,7 @@ class KintoneForm {
 											APP ID:<input type="text" id="kintone-form-appid" name="kintone_setting_data[app_datas][<?php echo $i; ?>][appid]" class="small-text" size="70" value="<?php echo esc_attr( $app_data['appid'] ); ?>" />
 											Api Token:<input type="text" id="kintone-form-token" name="kintone_setting_data[app_datas][<?php echo $i; ?>][token]" class="regular-text" size="70" value="<?php echo esc_attr( $app_data['token'] ); ?>" />
 										</td>
+										<td><input type="submit" class="button-primary" name="get-kintone-data" value="GET"></td>
 										<td><span class="remove button">Remove</span></td>
 									</tr>
 									<tr>
