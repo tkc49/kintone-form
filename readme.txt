@@ -3,7 +3,7 @@ Contributors: tkc49
 Tags: cybozu, kintone, crm, database, custom field, contact form 7, form
 Requires at least: 4.8
 Tested up to: 4.8
-Stable tag: 1.0.13
+Stable tag: 1.0.14
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -60,6 +60,7 @@ https://www.cybozu.com/jp/inquiry/
 1. screenshot-1.png
 
 == Changelog ==
+* 1.0.14 - Fixed bug that unnecessary error mail was sent
 * 1.0.13 - fix time format error
 * 1.0.12 - change plugin's icon
 * 1.0.11 - add youtube in readme.txt

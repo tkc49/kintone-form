@@ -3,7 +3,7 @@
  * Plugin Name: Form data to kintone
  * Plugin URI:
  * Description: This plugin is an addon for "Contact form 7".
- * Version:	 1.0.13
+ * Version:	 1.0.14
  * Author:	  Takashi Hosoya
  * Author URI:  http://ht79.info/
  * License:	 GPLv2
@@ -800,7 +800,7 @@ class KintoneForm {
 		}else{
 
 			foreach ($kintone_post_data as $data) {
-				
+
 				if( !empty($kintone_setting_data['domain']) && !empty($data['token']) && !empty($data['appid']) ){
 					$url = 'https://'.$kintone_setting_data['domain'].'/k/v1/record.json';
 					$this->save_data( $url, $data['token'], $data['appid'], $data['datas'] );
