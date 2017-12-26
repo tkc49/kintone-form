@@ -800,8 +800,11 @@ class KintoneForm {
 		}else{
 
 			foreach ($kintone_post_data as $data) {
-				$url = 'https://'.$kintone_setting_data['domain'].'/k/v1/record.json';
-				$this->save_data( $url, $data['token'], $data['appid'], $data['datas'] );
+				
+				if( !empty($kintone_setting_data['domain']) && !empty($data['token']) && !empty($data['appid']) ){
+					$url = 'https://'.$kintone_setting_data['domain'].'/k/v1/record.json';
+					$this->save_data( $url, $data['token'], $data['appid'], $data['datas'] );
+				}
 
 			}
 		}
