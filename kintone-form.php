@@ -3,7 +3,7 @@
  * Plugin Name: Form data to kintone
  * Plugin URI:
  * Description: This plugin is an addon for "Contact form 7".
- * Version:	 1.0.10
+ * Version:	 1.0.16
  * Author:	  Takashi Hosoya
  * Author URI:  http://ht79.info/
  * License:	 GPLv2
@@ -70,7 +70,8 @@ class KintoneForm {
 			'DATETIME',
 			'LINK',
 			'RICH_TEXT',
-			'MULTI_LINE_TEXT'
+			'MULTI_LINE_TEXT',
+			'DROP_DOWN'
 		),
 		'email' => array(
 			'SINGLE_LINE_TEXT',
@@ -184,7 +185,25 @@ class KintoneForm {
 		),
 		'file' => array(
 			'FILE',
-		)
+		),
+		'hidden' => array(
+			'SINGLE_LINE_TEXT',
+			'NUMBER',
+			'DATE',
+			'TIME',
+			'DATETIME',
+			'LINK',
+			'RICH_TEXT',
+			'MULTI_LINE_TEXT',
+			'DROP_DOWN'
+		),
+		'time' => array(
+			'SINGLE_LINE_TEXT',
+			'TIME',
+			'RICH_TEXT',
+			'MULTI_LINE_TEXT',
+		),
+		
 
 	);
 
@@ -818,8 +837,11 @@ class KintoneForm {
 		}else{
 
 			foreach ($kintone_post_data as $data) {
-				$url = 'https://'.$kintone_setting_data['domain'].'/k/v1/record.json';
-				$this->save_data( $url, $data['token'], $data['appid'], $data['datas'] );
+
+				if( !empty($kintone_setting_data['domain']) && !empty($data['token']) && !empty($data['appid']) ){
+					$url = 'https://'.$kintone_setting_data['domain'].'/k/v1/record.json';
+					$this->save_data( $url, $data['token'], $data['appid'], $data['datas'] );
+				}
 
 			}
 		}
