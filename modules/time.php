@@ -29,14 +29,15 @@ class KintoneForm_time
 		}
 
 
+		if($value){
+			if(strtotime($value) === false){
+				$e->add('Error', $cf7_mail_tag .'->'. $kintone_form_data['code'].' : time format error');
+			}
+			
+			$value = date('H:i',strtotime($value));
+			$return_data['value'] = $value;
 
-		if(strtotime($value) === false){
-			$e->add('Error', $cf7_mail_tag .'->'. $kintone_form_data['code'].' : time format error');
 		}
-
-		$value = date('H:i',strtotime($value));
-
-		$return_data['value'] = $value;
 
 		return $return_data;
 
