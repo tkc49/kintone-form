@@ -215,7 +215,7 @@ class KintoneForm {
 	    'MULTI_SELECT' => 'select',
 	    'DROP_DOWN' => 'select',
 	    'DATE' => 'date',
-	    'TIME' => '',
+	    'TIME' => 'time',
 	    'DATETIME' => '',
 	    'LINK' => 'url',
 	    'RICH_TEXT' => 'textarea',
@@ -274,11 +274,11 @@ class KintoneForm {
 
 		wp_enqueue_script('jquery');
 		// register our main script but do not enqueue it yet
-		wp_register_script( 'my_loadmore', plugin_dir_url( __FILE__ ).'asset/myloadmore.js', array('jquery') );
+		wp_register_script( 'my_loadmore', plugin_dir_url( __FILE__ ).'asset/js/myloadmore.js', array('jquery'),'',true );
 
 		wp_localize_script( 'my_loadmore', 'misha_loadmore_params', array(
 			'ajaxurl' => site_url() . '/wp-admin/admin-ajax.php', // WordPress AJAX
-			'posts' => json_encode( $wp_query->query_vars ), // everything about your loop is here
+			'posts' => 'hosoya', // everything about your loop is here
 			'current_page' => get_query_var( 'paged' ) ? get_query_var('paged') : 1,
 			'max_page' => $wp_query->max_num_pages
 		) );
@@ -465,8 +465,9 @@ class KintoneForm {
 										<td valign="top" style="padding: 10px 0px;">
 											APP ID:<input type="text" id="kintone-form-appid" name="kintone_setting_data[app_datas][<?php echo $i; ?>][appid]" class="small-text" size="70" value="<?php echo esc_attr( $app_data['appid'] ); ?>" />
 											Api Token:<input type="text" id="kintone-form-token" name="kintone_setting_data[app_datas][<?php echo $i; ?>][token]" class="regular-text" size="70" value="<?php echo esc_attr( $app_data['token'] ); ?>" />
+											<input type="submit" class="button-primary" name="get-kintone-data" value="GET">
 										</td>
-										<td><input type="submit" class="button-primary" name="get-kintone-data" value="GET"></td>
+										<td></td>
 										<td><span class="remove button">Remove</span></td>
 									</tr>
 									<tr>
@@ -477,7 +478,7 @@ class KintoneForm {
 	                                        	<th style="text-align: left; padding: 5px 10px;">kintone Label(fieldcode)</th>
 	                                        	<th></th>
 	                                        	<th style="text-align: left; padding: 5px 10px;">Contact form 7 mail tag</th>
-	                                        	<th style="text-align: left; padding: 5px 10px;">Example Shortcode</th>
+	                                        	<th style="text-align: left; padding: 5px 10px;">Example Contact Form 7's Shortcode<br>※ Change <span style="color:red">your-cf7-tag-name</span> to original name ( your-name or your-email or etc )</th>
 	                                        </tr>
 
 	                                        <?php if(isset($app_data['formdata']['properties'])): ?>
@@ -545,6 +546,7 @@ class KintoneForm {
 									<td valign="top" style="padding: 10px 0px;">
 										APP ID:<input type="text" id="kintone-form-appid" name="kintone_setting_data[app_datas][0][appid]" class="small-text" size="70" value="" />
 										Api Token:<input type="text" id="kintone-form-token" name="kintone_setting_data[app_datas][0][token]" class="regular-text" size="70" value="" />
+										<input type="submit" class="button-primary" name="get-kintone-data" value="GET">
 									</td>
 								</tr>
 							</table>
@@ -570,9 +572,12 @@ class KintoneForm {
 
 	private function create_sample_shortcode( $form_data, $select_option ){
 
+		$select_option = '<span style="color:red">your-cf7-tag-name</span>';
+
+
 	   $shortcode = '';
 
-	   if(!empty($this->kintone_fieldcode_supported_list[$form_data['type']]) && !empty($select_option)  ){
+	   if(!empty($this->kintone_fieldcode_supported_list[$form_data['type']]) ){
 
 		   $shortcode .= '[';
 
@@ -587,8 +592,6 @@ class KintoneForm {
 				}else{
 					$shortcode .= $this->kintone_fieldcode_supported_list[$form_data['type']] . ' ' . $select_option . ' '.$options;
 				}
-
-
 
 			}else{
 
