@@ -492,8 +492,9 @@ class KintoneForm {
 			                                        	}
 
 			                                        	$error_msg = $this->check_consistency( $tags, $select_option, $form_data );
-
 			                                        	?>
+
+														<?php $hash = hash('md5', $form_data['code']) ?>
 
 				                                        <tr>
 				                                            <td style="padding: 5px 10px; border-bottom: 1px solid #e2e2e2;"><?php echo esc_html( $form_data['label'] ).'('. esc_html( $form_data['code'] ).')'; ?></td>
@@ -506,7 +507,7 @@ class KintoneForm {
 					                                                	<?php foreach ($mailtags as $value): ?>
 					                                                		<option <?php selected( $value, $select_option ); ?> value="<?php echo esc_attr($value); ?>">[<?php echo esc_attr($value); ?>]</option>
 					                                                	<?php endforeach; ?>
-					                                                </select>
+					                                                </select> or <input type="text" id="<?php echo $hash; ?>" class="your-cf7-tag-name" placeholder="your-cf7-tag-name"/>
 					                                                <?php if($error_msg): ?>
 					                                                	<div style="color:red; font-weight:bold;"><?php echo $error_msg; ?></div>
 					                                                <?php endif; ?>
@@ -520,7 +521,7 @@ class KintoneForm {
 				                                            </td>
 				                                            <td style="padding: 5px 10px; border-bottom: 1px solid #e2e2e2;">
 				                                            	<?php if( array_key_exists( $form_data['type'] ,$this->kintone_fieldcode_supported_list ) ): ?>
-				                                            		<?php echo $this->create_sample_shortcode( $form_data, $select_option ); ?>
+				                                            		<?php echo $this->create_sample_shortcode( $form_data, $select_option, $hash ); ?>
 				                                            	<?php endif; ?>
 				                                            </td>
 
@@ -570,12 +571,11 @@ class KintoneForm {
 	<?php
 	}
 
-	private function create_sample_shortcode( $form_data, $select_option ){
+	private function create_sample_shortcode( $form_data, $select_option, $hash ){
 
-		$select_option = '<span style="color:red">your-cf7-tag-name</span>';
+		$select_option = '<span id="short-code-' . $hash . '" style="color:red">your-cf7-tag-name</span>';
 
-
-	   $shortcode = '';
+		$shortcode = '';
 
 	   if(!empty($this->kintone_fieldcode_supported_list[$form_data['type']]) ){
 

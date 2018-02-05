@@ -1,24 +1,37 @@
 (function($){
 
-	console.log('hoge');
-	console.log(misha_loadmore_params.posts);
-	console.log('hoge2');
+	var $input = $('.your-cf7-tag-name');
 
-	$('input[name="get-kintone-data"]').click(function(){
+	$input.each(function(index, element){ 
 		
-		let kintoneDomain = $('#kintone-form-domain').val();
-		let kintoenAppId = $('#kintone-form-appid').val();
-		let kintoneFormToken = $('#kintone-form-token').val();
-
-		console.log(kintoneDomain);
-		
-
-
-
-
-
-		// return false;
+		var $output = $('#short-code-'+$(this).attr("id"));
+		$(this).on('input', function(event) {
+		  var value = $(this).val();
+		  $output.text(value);
+		});	
 	
+
 	});
+
+	// console.log('hoge');
+	// console.log(misha_loadmore_params.posts);
+	// console.log('hoge2');
+
+	// $('input[name="get-kintone-data"]').click(function(){
+		
+	// 	let kintoneDomain = $('#kintone-form-domain').val();
+	// 	let kintoenAppId = $('#kintone-form-appid').val();
+	// 	let kintoneFormToken = $('#kintone-form-token').val();
+
+	// 	console.log(kintoneDomain);
+		
+
+
+
+
+
+	// 	// return false;
+	
+	// });
 
 })(jQuery);
