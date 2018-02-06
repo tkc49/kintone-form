@@ -6,12 +6,25 @@
 		
 		var $output = $('#short-code-'+$(this).attr("id"));
 		$(this).on('input', function(event) {
-		  var value = $(this).val();
-		  $output.text(value);
-		});	
-	
+			var value = $(this).val();
+			$output.text(value);
 
+			if( $(this).val() !== '' ){
+				$('select[id*="cf7-mailtag-' + $(this).attr("id")).attr("disabled", true);
+			}else{
+				$('select[id*="cf7-mailtag-' + $(this).attr("id")).removeAttr("disabled");
+				$output.text($('select[id*="cf7-mailtag-' + $(this).attr("id")).val());
+			}
+		});	
+
+		$('select[id*="cf7-mailtag-' + $(this).attr("id")).change(function(){
+			$output.text($(this).val());
+		});
+	
 	});
+
+
+
 
 	// console.log('hoge');
 	// console.log(misha_loadmore_params.posts);

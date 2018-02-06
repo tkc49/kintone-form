@@ -502,7 +502,7 @@ class KintoneForm {
 				                                            <td style="padding: 5px 10px; border-bottom: 1px solid #e2e2e2;">
 				                                            	<?php if( array_key_exists( $form_data['type'] ,$this->kintone_fieldcode_supported_list ) ): ?>
 
-					                                                <select name="kintone_setting_data[app_datas][<?php echo $i; ?>][setting][<?php echo esc_attr( $form_data['code'] ) ?>]">
+					                                                <select id="cf7-mailtag-<?php echo $hash; ?>" name="kintone_setting_data[app_datas][<?php echo $i; ?>][setting][<?php echo esc_attr( $form_data['code'] ) ?>]">
 					                                                	<option value=""></option>
 					                                                	<?php foreach ($mailtags as $value): ?>
 					                                                		<option <?php selected( $value, $select_option ); ?> value="<?php echo esc_attr($value); ?>">[<?php echo esc_attr($value); ?>]</option>
