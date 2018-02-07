@@ -486,11 +486,21 @@ class KintoneForm {
 		                                        	<?php
 
 		                                        	if(isset($form_data['code'])):
-			                                        	$select_option = '';
+														$select_option = '';
+														
 			                                        	if(isset($app_data['setting'][$form_data['code']]) && !empty($app_data['setting'][$form_data['code']]) ){
-			                                        		$select_option = $app_data['setting'][$form_data['code']];
-			                                        	}
+															$select_option = $app_data['setting'][$form_data['code']];
+														}
 
+														$original_cf7tag_name = '';
+														$selectbox_readonly = '';
+			                                        	if(isset($app_data['setting_original_cf7tag_name'][$form_data['code']]) && !empty($app_data['setting_original_cf7tag_name'][$form_data['code']]) ){
+															$original_cf7tag_name = $app_data['setting_original_cf7tag_name'][$form_data['code']];
+															$selectbox_readonly = 'disabled="disabled"';
+														}
+
+														var_dump($app_data);
+														
 			                                        	$error_msg = $this->check_consistency( $tags, $select_option, $form_data );
 			                                        	?>
 
@@ -502,12 +512,12 @@ class KintoneForm {
 				                                            <td style="padding: 5px 10px; border-bottom: 1px solid #e2e2e2;">
 				                                            	<?php if( array_key_exists( $form_data['type'] ,$this->kintone_fieldcode_supported_list ) ): ?>
 
-					                                                <select id="cf7-mailtag-<?php echo $hash; ?>" name="kintone_setting_data[app_datas][<?php echo $i; ?>][setting][<?php echo esc_attr( $form_data['code'] ) ?>]">
+					                                                <select id="cf7-mailtag-<?php echo $hash; ?>" <?php echo $selectbox_readonly; ?> name="kintone_setting_data[app_datas][<?php echo $i; ?>][setting][<?php echo esc_attr( $form_data['code'] ) ?>]">
 					                                                	<option value=""></option>
 					                                                	<?php foreach ($mailtags as $value): ?>
 					                                                		<option <?php selected( $value, $select_option ); ?> value="<?php echo esc_attr($value); ?>">[<?php echo esc_attr($value); ?>]</option>
 					                                                	<?php endforeach; ?>
-					                                                </select> or <input type="text" id="<?php echo $hash; ?>" class="your-cf7-tag-name" placeholder="your-cf7-tag-name"/>
+					                                                </select> or <input type="text" id="<?php echo $hash; ?>" class="your-cf7-tag-name" placeholder="your-cf7-tag-name" name="kintone_setting_data[app_datas][<?php echo $i; ?>][setting_original_cf7tag_name][<?php echo esc_attr( $form_data['code'] ) ?>]" value="<?php echo $original_cf7tag_name; ?>" />
 					                                                <?php if($error_msg): ?>
 					                                                	<div style="color:red; font-weight:bold;"><?php echo $error_msg; ?></div>
 					                                                <?php endif; ?>
@@ -521,7 +531,7 @@ class KintoneForm {
 				                                            </td>
 				                                            <td style="padding: 5px 10px; border-bottom: 1px solid #e2e2e2;">
 				                                            	<?php if( array_key_exists( $form_data['type'] ,$this->kintone_fieldcode_supported_list ) ): ?>
-				                                            		<?php echo $this->create_sample_shortcode( $form_data, $select_option, $hash ); ?>
+				                                            		<?php echo $this->create_sample_shortcode( $form_data, $select_option, $original_cf7tag_name, $hash ); ?>
 				                                            	<?php endif; ?>
 				                                            </td>
 
@@ -571,9 +581,18 @@ class KintoneForm {
 	<?php
 	}
 
-	private function create_sample_shortcode( $form_data, $select_option, $hash ){
+	private function create_sample_shortcode( $form_data, $select_option, $original_cf7tag_name, $hash ){
 
-		$select_option = '<span id="short-code-' . $hash . '" style="color:red">your-cf7-tag-name</span>';
+		$tag_name = '';
+		if( $original_cf7tag_name ){
+			$tag_name = $original_cf7tag_name;
+		}elseif( $select_option ){
+			$tag_name = $select_option;
+		}else{
+			$tag_name = 'your-cf7-tag-name';
+		}
+
+		$cf7_mailtag_name = '<span id="short-code-' . $hash . '" style="color:red">'.$tag_name.'</span>';
 
 		$shortcode = '';
 
@@ -588,14 +607,14 @@ class KintoneForm {
 			{
 				$options = '"'.implode('" "',$form_data['options']).'"';
 				if( $form_data['type'] == 'MULTI_SELECT' ){
-					$shortcode .= $this->kintone_fieldcode_supported_list[$form_data['type']] . ' ' . $select_option . ' multiple '.$options;
+					$shortcode .= $this->kintone_fieldcode_supported_list[$form_data['type']] . ' ' . $cf7_mailtag_name . ' multiple '.$options;
 				}else{
-					$shortcode .= $this->kintone_fieldcode_supported_list[$form_data['type']] . ' ' . $select_option . ' '.$options;
+					$shortcode .= $this->kintone_fieldcode_supported_list[$form_data['type']] . ' ' . $cf7_mailtag_name . ' '.$options;
 				}
 
 			}else{
 
-				$shortcode .= $this->kintone_fieldcode_supported_list[$form_data['type']] . ' ' . $select_option;
+				$shortcode .= $this->kintone_fieldcode_supported_list[$form_data['type']] . ' ' . $cf7_mailtag_name;
 
 			}
 			$shortcode .= ']';
@@ -701,9 +720,11 @@ class KintoneForm {
 			$kintone_post_data[$post_data_count]['token'] = $appdata['token'];
 			$kintone_post_data[$post_data_count]['datas'] = array();
 
-			if(isset($appdata['setting'])){
+			$kintone_data_for_post = get_data_for_post($appdata);
 
-				foreach ($appdata['setting'] as $kintone_fieldcode => $cf7_mail_tag) {
+			if(isset($kintone_data_for_post['setting'])){
+
+				foreach ($kintone_data_for_post['setting'] as $kintone_fieldcode => $cf7_mail_tag) {
 
 					if(!empty($cf7_mail_tag)){
 
@@ -848,6 +869,31 @@ class KintoneForm {
 
 			}
 		}
+	}
+
+	private function get_data_for_post( $appdata ){
+
+		$data['setting'] = array();
+
+		if( isset($appdata['setting_original_cf7tag_name']) && !empty($appdata['setting_original_cf7tag_name']) ){
+
+			foreach ($appdata['setting_original_cf7tag_name'] as $key => $value) {
+				if( $value ){
+					$data['setting'][$key] = $value;
+				}else{
+					if(isset($appdata['setting'][$key])){
+						$data['setting'][$key] = $appdata['setting'][$key];
+					}	
+				}
+			}
+
+		}else{
+			if(isset($appdata['setting'])){
+				return $appdata['setting'];
+			}
+		}
+
+		return $data;
 	}
 
 	private function erro_mail( $e ){
