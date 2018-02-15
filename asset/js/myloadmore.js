@@ -23,28 +23,18 @@
 	
 	});
 
+})(jQuery);
 
+(function($){
 
+	$( 'input.kintone-form-insert-tag' ).click( function() {
 
-	// console.log('hoge');
-	// console.log(misha_loadmore_params.posts);
-	// console.log('hoge2');
+		var $form = $( this ).closest( 'form.tag-generator-panel' );
+		var tag = $form.find( 'textarea.tag' ).val();		
+		wpcf7.taggen.insert( tag );
+		tb_remove(); // close thickbox
+		return false;
+	} );
 
-	// $('input[name="get-kintone-data"]').click(function(){
-		
-	// 	let kintoneDomain = $('#kintone-form-domain').val();
-	// 	let kintoenAppId = $('#kintone-form-appid').val();
-	// 	let kintoneFormToken = $('#kintone-form-token').val();
-
-	// 	console.log(kintoneDomain);
-		
-
-
-
-
-
-	// 	// return false;
-	
-	// });
 
 })(jQuery);

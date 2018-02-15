@@ -275,6 +275,9 @@ class KintoneForm {
 	}
 
 	public function kintone_form_tag_generator( $contact_form, $args = '' ) {
+
+		global $post;
+
 		$args = wp_parse_args( $args, array() );
 		$type = $args['id'];
 	
@@ -282,101 +285,54 @@ class KintoneForm {
 			$type = 'text';
 		}
 	
-		if ( 'text' == $type ) {
-			$description = __( "Generate a form-tag for a single-line plain text input field. For more details, see %s.", 'contact-form-7' );
-		} elseif ( 'email' == $type ) {
-			$description = __( "Generate a form-tag for a single-line email address input field. For more details, see %s.", 'contact-form-7' );
-		} elseif ( 'url' == $type ) {
-			$description = __( "Generate a form-tag for a single-line URL input field. For more details, see %s.", 'contact-form-7' );
-		} elseif ( 'tel' == $type ) {
-			$description = __( "Generate a form-tag for a single-line telephone number input field. For more details, see %s.", 'contact-form-7' );
+		$description = 'Please copy & paste the code below.';
+		$properties = $contact_form->get_properties();
+		$kintone_setting_data = $properties['kintone_setting_data'];
+
+		$insert_code = '';
+
+		foreach ( $kintone_setting_data['app_datas'] as $appdata) {
+			
+			foreach ($appdata['formdata']['properties'] as $form_data){
+
+				if(isset($form_data['code'])){
+
+					$select_option = '';
+					if(isset($appdata['setting'][$form_data['code']]) && !empty($appdata['setting'][$form_data['code']]) ){
+						$select_option = $appdata['setting'][$form_data['code']];
+					}
+
+					$original_cf7tag_name = '';
+					$selectbox_readonly = '';
+					if(isset($appdata['setting_original_cf7tag_name'][$form_data['code']]) && !empty($appdata['setting_original_cf7tag_name'][$form_data['code']]) ){
+						$original_cf7tag_name = $appdata['setting_original_cf7tag_name'][$form_data['code']];
+					}
+
+					$code = wp_strip_all_tags( $this->create_sample_shortcode($form_data, $select_option, $original_cf7tag_name, ''));
+					if($code){
+						$insert_code .= '<label> '.$form_data['label']."\n    ".$code."</label>\n\n";
+					}
+							
+				}
+			}
+
 		}
-	
-		$desc_link = wpcf7_link( __( 'https://contactform7.com/text-fields/', 'contact-form-7' ), __( 'Text Fields', 'contact-form-7' ) );
-	
+		
 	?>
-	<div class="control-box">
-	<fieldset>
-	<legend>aaa<?php echo sprintf( esc_html( $description ), $desc_link ); ?></legend>
-	
-	<table class="form-table">
-	<tbody>
-		<tr>
-		<th scope="row"><?php echo esc_html( __( 'Field type', 'contact-form-7' ) ); ?></th>
-		<td>
-			<fieldset>
-			<legend class="screen-reader-text"><?php echo esc_html( __( 'Field type', 'contact-form-7' ) ); ?></legend>
-			<label><input type="checkbox" name="required" /> <?php echo esc_html( __( 'Required field', 'contact-form-7' ) ); ?></label>
-			</fieldset>
-		</td>
-		</tr>
-	
-		<tr>
-		<th scope="row"><label for="<?php echo esc_attr( $args['content'] . '-name' ); ?>"><?php echo esc_html( __( 'Name', 'contact-form-7' ) ); ?></label></th>
-		<td><input type="text" name="name" class="tg-name oneline" id="<?php echo esc_attr( $args['content'] . '-name' ); ?>" /></td>
-		</tr>
-	
-		<tr>
-		<th scope="row"><label for="<?php echo esc_attr( $args['content'] . '-values' ); ?>"><?php echo esc_html( __( 'Default value', 'contact-form-7' ) ); ?></label></th>
-		<td><input type="text" name="values" class="oneline" id="<?php echo esc_attr( $args['content'] . '-values' ); ?>" /><br />
-		<label><input type="checkbox" name="placeholder" class="option" /> <?php echo esc_html( __( 'Use this text as the placeholder of the field', 'contact-form-7' ) ); ?></label></td>
-		</tr>
-	
-	<?php if ( in_array( $type, array( 'text', 'email', 'url' ) ) ) : ?>
-		<tr>
-		<th scope="row"><?php echo esc_html( __( 'Akismet', 'contact-form-7' ) ); ?></th>
-		<td>
-			<fieldset>
-			<legend class="screen-reader-text"><?php echo esc_html( __( 'Akismet', 'contact-form-7' ) ); ?></legend>
-	
-	<?php if ( 'text' == $type ) : ?>
-			<label>
-				<input type="checkbox" name="akismet:author" class="option" />
-				<?php echo esc_html( __( "This field requires author's name", 'contact-form-7' ) ); ?>
-			</label>
-	<?php elseif ( 'email' == $type ) : ?>
-			<label>
-				<input type="checkbox" name="akismet:author_email" class="option" />
-				<?php echo esc_html( __( "This field requires author's email address", 'contact-form-7' ) ); ?>
-			</label>
-	<?php elseif ( 'url' == $type ) : ?>
-			<label>
-				<input type="checkbox" name="akismet:author_url" class="option" />
-				<?php echo esc_html( __( "This field requires author's URL", 'contact-form-7' ) ); ?>
-			</label>
-	<?php endif; ?>
-	
-			</fieldset>
-		</td>
-		</tr>
-	<?php endif; ?>
-	
-		<tr>
-		<th scope="row"><label for="<?php echo esc_attr( $args['content'] . '-id' ); ?>"><?php echo esc_html( __( 'Id attribute', 'contact-form-7' ) ); ?></label></th>
-		<td><input type="text" name="id" class="idvalue oneline option" id="<?php echo esc_attr( $args['content'] . '-id' ); ?>" /></td>
-		</tr>
-	
-		<tr>
-		<th scope="row"><label for="<?php echo esc_attr( $args['content'] . '-class' ); ?>"><?php echo esc_html( __( 'Class attribute', 'contact-form-7' ) ); ?></label></th>
-		<td><input type="text" name="class" class="classvalue oneline option" id="<?php echo esc_attr( $args['content'] . '-class' ); ?>" /></td>
-		</tr>
-	
-	</tbody>
-	</table>
-	</fieldset>
-	</div>
-	
-	<div class="insert-box">
-		<input type="text" name="<?php echo $type; ?>" class="tag code" readonly="readonly" onfocus="this.select()" />
-	
-		<div class="submitbox">
-		<input type="button" class="button button-primary insert-tag" value="<?php echo esc_attr( __( 'Insert Tag', 'contact-form-7' ) ); ?>" />
+		<div class="control-box">
+		<fieldset>
+			<legend><?php echo esc_html( $description ); ?></legend>
+			<textarea class="tag code" name="" id="" rows="18" style="width:100%" readonly="readonly"><?php echo $insert_code; ?></textarea>
+		</fieldset>
 		</div>
-	
-		<br class="clear" />
-	
-		<p class="description mail-tag"><label for="<?php echo esc_attr( $args['content'] . '-mailtag' ); ?>"><?php echo sprintf( esc_html( __( "To use the value input through this field in a mail field, you need to insert the corresponding mail-tag (%s) into the field on the Mail tab.", 'contact-form-7' ) ), '<strong><span class="mail-tag"></span></strong>' ); ?><input type="text" class="mail-tag code hidden" readonly="readonly" id="<?php echo esc_attr( $args['content'] . '-mailtag' ); ?>" /></label></p>
-	</div>
+		
+		<div class="insert-box">
+		
+			<div class="submitbox">
+			<input type="button" class="button button-primary kintone-form-insert-tag" value="<?php echo esc_attr( __( 'Insert Tag', 'contact-form-7' ) ); ?>" />
+			</div>
+		
+		</div>
 	<?php
 	}
 		
@@ -562,7 +518,7 @@ class KintoneForm {
 
 		<p class="description">
 			<label for="kintone-form-domain">kintone domain:
-				<input type="text" id="kintone-form-domain" name="kintone_setting_data[domain]" class="" size="70" value="<?php echo esc_attr( $domain ); ?>" />
+				<input type="text" id="kintone-form-domain" placeholder="xxxx.cybozu.com" name="kintone_setting_data[domain]" class="" size="70" value="<?php echo esc_attr( $domain ); ?>" />
 			</label>
 		</p>
 
