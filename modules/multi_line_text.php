@@ -25,7 +25,7 @@ class KintoneForm_multi_line_text
 		$value = $cf7_send_data[$cf7_mail_tag];
 
 		if( is_array($value) ){
-			$value = $value[0];
+			$value = implode("\n", $value);
 		}		
 
 
