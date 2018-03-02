@@ -24,6 +24,11 @@ class KintoneForm_number
 		$return_data = array();
 		$value = $cf7_send_data[$cf7_mail_tag];
 
+		if( is_array($value) ){
+			$value = $value[0];
+		}
+
+
 		if( !empty($value) && !is_numeric($value) ){
 			$e->add('Error', $cf7_mail_tag .'->'. $kintone_form_data['code'].' : Numeric format error');
 		}
@@ -47,6 +52,8 @@ class KintoneForm_number
 			}
 			
 		}
+
+
 
 		$return_data['value'] = mb_convert_kana($value, "n", "utf-8");;
 
