@@ -24,6 +24,11 @@ class KintoneForm_rich_text
 		$return_data = array();
 		$value = $cf7_send_data[$cf7_mail_tag];
 
+		if( is_array($value) ){
+			$value = implode("\n", $value);
+		}		
+		
+
 
 		if( $kintone_form_data['required'] == 'true' && empty($value) ){
 			$e->add('Error', $cf7_mail_tag .'->'. $kintone_form_data['code'].' : Required fields');

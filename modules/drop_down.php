@@ -24,6 +24,10 @@ class KintoneForm_drop_down
 
 		$return_data = array();
 		$value = $cf7_send_data[$cf7_mail_tag];
+		
+		if( is_array($value) ){
+			$value = $value[0];
+		}
 
 		if( $kintone_form_data['required'] == 'true' && empty($value) ){
 
@@ -32,7 +36,7 @@ class KintoneForm_drop_down
 		}
 		
 		if( !empty( $value ) ){
-			
+						
 			$match_flg = false;
 			foreach ($kintone_form_data['options'] as $option_key => $option_value) {
 				

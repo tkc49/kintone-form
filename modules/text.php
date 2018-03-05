@@ -24,6 +24,11 @@ class KintoneForm_text
 		$return_data = array();
 		$value = $cf7_send_data[$cf7_mail_tag];
 
+		if( is_array($value) ){
+			$value = implode(",", $value);
+		}		
+		
+
 
 		if( $kintone_form_data['required'] == 'true' && empty($value) ){
 			// エラー
