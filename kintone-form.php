@@ -501,10 +501,12 @@ class KintoneForm {
 
 		$kintone_setting_data = wp_parse_args( $kintone_setting_data, array(
 			'domain' => '',
+			'email_address_to_send_kintone_registration_error' => get_option('admin_email'),
 			'app_datas' => array()
 		) );
 
 		$domain = $kintone_setting_data['domain'];
+		$email_address_to_send_kintone_registration_error = $kintone_setting_data['email_address_to_send_kintone_registration_error'];
 		$mailtags = $post->collect_mail_tags();
 		$tags = $post->scan_form_tags();
 
@@ -517,9 +519,20 @@ class KintoneForm {
 		<fieldset>
 
 		<p class="description">
-			<label for="kintone-form-domain">kintone domain:
-				<input type="text" id="kintone-form-domain" placeholder="xxxx.cybozu.com" name="kintone_setting_data[domain]" class="" size="70" value="<?php echo esc_attr( $domain ); ?>" />
-			</label>
+
+			<table>
+				<tr>
+					<th>kintone domain:</th>
+					<td><input type="text" id="kintone-form-domain" placeholder="xxxx.cybozu.com" name="kintone_setting_data[domain]" class="" size="70" value="<?php echo esc_attr( $domain ); ?>" /></td>
+				</tr>
+				<tr>
+					<th>E-mail address to send kintone registration error:</th>
+					<td><input type="text" id="email-address-to-send-kintone-registration-error" name="kintone_setting_data[email_address_to_send_kintone_registration_error]" class="" size="70" value="<?php echo esc_attr( $email_address_to_send_kintone_registration_error ); ?>" /></td>
+				</tr>
+			</table>
+
+
+
 		</p>
 
 		<p class="description">
@@ -926,7 +939,7 @@ class KintoneForm {
 
 		if ($e->get_error_code()) {
 
-			$this->erro_mail($e);
+			$this->erro_mail( $e, $kintone_setting_data['email_address_to_send_kintone_registration_error']);
 
 
 		}else{
@@ -935,7 +948,7 @@ class KintoneForm {
 
 				if( !empty($kintone_setting_data['domain']) && !empty($data['token']) && !empty($data['appid']) ){
 					$url = 'https://'.$kintone_setting_data['domain'].'/k/v1/record.json';
-					$this->save_data( $url, $data['token'], $data['appid'], $data['datas'] );
+					$this->save_data( $url, $data['token'], $data['appid'], $data['datas'], $kintone_setting_data['email_address_to_send_kintone_registration_error'] );
 				}
 
 			}
@@ -967,12 +980,19 @@ class KintoneForm {
 		return $data;
 	}
 
-	private function erro_mail( $e ){
+	private function erro_mail( $e, $email_address_to_send_kintone_registration_error ){
 
 		$error_msg = "";
-		$error_msg = implode("\r\n", $e->get_error_messages());
+		$error_msg .= implode("\r\n", $e->get_error_messages())."\r\n";
+		$error_msg .= var_export($e->get_error_data(), true);
+		
 
-		$to = get_option( 'admin_email' );
+		if( $email_address_to_send_kintone_registration_error ){
+			$to = $email_address_to_send_kintone_registration_error;
+		}else{
+			$to = get_option( 'admin_email' );
+		}
+		
 		$subject = 'kintone form post error';
 		$body = $error_msg;
 		$headers = array('Content-Type: text/html; charset=UTF-8');
@@ -981,7 +1001,7 @@ class KintoneForm {
 
 	}
 
-	private function save_data( $url, $token, $appid, $datas )
+	private function save_data( $url, $token, $appid, $datas, $email_address_to_send_kintone_registration_error )
 	{
 
 	    $headers["X-Cybozu-API-Token"] = $token;
@@ -1002,13 +1022,14 @@ class KintoneForm {
 	    );
 
 	    if ( is_wp_error( $res ) ) {
-	    	$this->erro_mail( $res );
+	    	$this->erro_mail( $res, $email_address_to_send_kintone_registration_error );
 	        return $res;
 	    } elseif (  $res["response"]["code"] !== 200 ) {
-	        $message = json_decode( $res["body"], true );
+			
+			$message = json_decode( $res["body"], true );
 	        $e = new WP_Error();
-	        $e->add( "validation-error", $message["message"], $message );
-	        $this->erro_mail( $e );
+	        $e->add( "validation-error", $message["message"], $message["errors"] );
+	        $this->erro_mail( $e, $email_address_to_send_kintone_registration_error );
 	        return $e;
 	    } else {
 	        return true;
