@@ -507,6 +507,11 @@ class KintoneForm {
 
 		$domain = $kintone_setting_data['domain'];
 		$email_address_to_send_kintone_registration_error = $kintone_setting_data['email_address_to_send_kintone_registration_error'];
+
+		$kintone_basic_authentication_id = $kintone_setting_data['kintone_basic_authentication_id'];
+		$kintone_basic_authentication_password = $kintone_setting_data['kintone_basic_authentication_password'];
+
+
 		$mailtags = $post->collect_mail_tags();
 		$tags = $post->scan_form_tags();
 
@@ -529,6 +534,12 @@ class KintoneForm {
 					<th>E-mail address to send kintone registration error:</th>
 					<td><input type="text" id="email-address-to-send-kintone-registration-error" name="kintone_setting_data[email_address_to_send_kintone_registration_error]" class="" size="70" value="<?php echo esc_attr( $email_address_to_send_kintone_registration_error ); ?>" /></td>
 				</tr>
+				<tr>
+					<th>Basic Authentication:</th>
+					<td>
+						ID： <input type="text" disabled id="kintone-basic-authentication-id" name="kintone_setting_data[kintone_basic_authentication_id]" class="" size="30" value="<?php echo esc_attr( $kintone_basic_authentication_id ); ?>" /> / Password： <input disabled type="password" id="kintone-basic-authentication-password" name="kintone_setting_data[kintone_basic_authentication_password]" class="" size="30" value="<?php echo esc_attr( $kintone_basic_authentication_password ); ?>" />
+					</td>
+				</tr>	
 			</table>
 
 
@@ -763,6 +774,17 @@ class KintoneForm {
 
 						$app_data['formdata'] = $kintone_form_data;
 						$args['kintone_setting_data']['app_datas'][$i] = $app_data;
+
+						$salt = wp_salt( 'AUTH_SALT' );
+
+						$encode_password = openssl_encrypt(
+							$args['kintone_setting_data']['kintone_basic_authentication_password'],
+							'aes-256-cbc',
+							
+						)
+
+						$encrypted_password = crypt($args['kintone_setting_data']['kintone_basic_authentication_password'], $salt);
+						$args['kintone_setting_data']['kintone_basic_authentication_password'] = $encrypted_password;
 					}
 
 				}
