@@ -509,7 +509,7 @@ class KintoneForm {
 		$email_address_to_send_kintone_registration_error = $kintone_setting_data['email_address_to_send_kintone_registration_error'];
 
 		$kintone_basic_authentication_id = $kintone_setting_data['kintone_basic_authentication_id'];
-		$kintone_basic_authentication_password = $kintone_setting_data['kintone_basic_authentication_password'];
+		$kintone_basic_authentication_password = self::decode($kintone_setting_data['kintone_basic_authentication_password']);
 
 
 		$mailtags = $post->collect_mail_tags();
@@ -756,6 +756,15 @@ class KintoneForm {
 		return $properties;
 	}
 
+
+	public static function encode( $value ){
+		return base64_encode(md5(AUTH_SALT) . $value . md5(md5(AUTH_SALT)));
+	}
+
+	public static function decode( $encoded ){
+		return preg_match('/^[a-f0-9]{32}$/', $encoded) ? $encoded : str_replace(array(md5(AUTH_SALT), md5(md5(AUTH_SALT))), '', base64_decode($encoded));
+	}
+
 	public function wpcf7_save_contact_form( $contact_form, $args, $context ){
 
 		$properties = array();
@@ -767,24 +776,17 @@ class KintoneForm {
 				if( !empty($app_data['appid']) && !empty($app_data['token']) && !empty($args['kintone_setting_data']['domain']) ){
 
 					$url = 'https://'.$args['kintone_setting_data']['domain'].'/k/v1/form.json?app='.$app_data['appid'];
-					$kintone_form_data = $this->kintone_api( $url, $app_data['token'] );
+					$kintone_form_data = $this->kintone_api( $url, $app_data['token'], $args['kintone_setting_data']['kintone_basic_authentication_id'], $args['kintone_setting_data']['kintone_basic_authentication_password'] );
 
 
 					if( !is_wp_error($kintone_form_data) ){
-
 						$app_data['formdata'] = $kintone_form_data;
 						$args['kintone_setting_data']['app_datas'][$i] = $app_data;
 
-						$salt = wp_salt( 'AUTH_SALT' );
-
-						$encode_password = openssl_encrypt(
-							$args['kintone_setting_data']['kintone_basic_authentication_password'],
-							'aes-256-cbc',
-							
-						)
-
-						$encrypted_password = crypt($args['kintone_setting_data']['kintone_basic_authentication_password'], $salt);
-						$args['kintone_setting_data']['kintone_basic_authentication_password'] = $encrypted_password;
+						if( $args['kintone_setting_data']['kintone_basic_authentication_password'] ){
+							$args['kintone_setting_data']['kintone_basic_authentication_password'] = self::encode( $args['kintone_setting_data']['kintone_basic_authentication_password'] );
+						}
+						
 					}
 
 				}
@@ -1058,13 +1060,36 @@ class KintoneForm {
 	    }
 	}
 
+	//  form data to kintone WordPress Plugin incorporates code from WP to kintone WordPress Plugin, Copyright 2016 WordPress.org
+	public static function get_basic_auth_header( $basic_auth_user = null, $basic_auth_pass = null )
+	{
+		if ( $basic_auth_user && $basic_auth_pass ) {
+			$auth = base64_encode( $basic_auth_user.':'.$basic_auth_pass );
+			return array( 'Authorization' => 'Basic '.$auth );
+		} else {
+			return array();
+		}
+	}
 
-	public function kintone_api( $request_url, $kintone_token, $file = false ){
+	//  form data to kintone WordPress Plugin incorporates code from WP to kintone WordPress Plugin, Copyright 2016 WordPress.org	
+	public static function get_auth_header( $token )
+	{
+		if ( $token ) {
+			return array( 'X-Cybozu-API-Token' => $token );
+		} else {
+			return new WP_Error( 'kintone', 'API Token is required' );
+		}
+	}
+
+
+	public function kintone_api( $request_url, $kintone_token, $basic_auth_user = null, $basic_auth_pass = null ,$file = false ){
 
 		if( $request_url ){
 
-			$headers = array( 'X-Cybozu-API-Token' =>  $kintone_token );
-
+			$headers = array_merge(
+				self::get_auth_header( $kintone_token ), self::get_basic_auth_header( $basic_auth_user, $basic_auth_pass )
+			);
+	
 			$res = wp_remote_get(
 				$request_url,
 				array(
