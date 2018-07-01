@@ -547,7 +547,7 @@ class KintoneForm {
 				<tr>
 					<th>Basic Authentication:</th>
 					<td>
-						ID： <input type="text" disabled id="kintone-basic-authentication-id" name="kintone_setting_data[kintone_basic_authentication_id]" class="" size="30" value="<?php echo esc_attr( $kintone_basic_authentication_id ); ?>" /> / Password： <input disabled type="password" id="kintone-basic-authentication-password" name="kintone_setting_data[kintone_basic_authentication_password]" class="" size="30" value="<?php echo esc_attr( $kintone_basic_authentication_password ); ?>" />
+						ID： <input type="text" id="kintone-basic-authentication-id" name="kintone_setting_data[kintone_basic_authentication_id]" class="" size="30" value="<?php echo esc_attr( $kintone_basic_authentication_id ); ?>" /> / Password： <input type="password" id="kintone-basic-authentication-password" name="kintone_setting_data[kintone_basic_authentication_password]" class="" size="30" value="<?php echo esc_attr( $kintone_basic_authentication_password ); ?>" />
 					</td>
 				</tr>	
 			</table>
