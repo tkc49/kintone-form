@@ -265,6 +265,8 @@ class KintoneForm {
 
 		add_action( 'wpcf7_admin_init', array( $this, 'kintone_form_add_tag_generator_text' ) );
 
+		add_action( 'admin_notices', array( $this, 'admin_notices' ) );
+
 
 	}
 
@@ -293,26 +295,28 @@ class KintoneForm {
 
 		foreach ( $kintone_setting_data['app_datas'] as $appdata) {
 			
-			foreach ($appdata['formdata']['properties'] as $form_data){
+			if( isset($appdata['formdata']['properties']) ){
+				foreach ($appdata['formdata']['properties'] as $form_data){
 
-				if(isset($form_data['code'])){
+					if(isset($form_data['code'])){
 
-					$select_option = '';
-					if(isset($appdata['setting'][$form_data['code']]) && !empty($appdata['setting'][$form_data['code']]) ){
-						$select_option = $appdata['setting'][$form_data['code']];
+						$select_option = '';
+						if(isset($appdata['setting'][$form_data['code']]) && !empty($appdata['setting'][$form_data['code']]) ){
+							$select_option = $appdata['setting'][$form_data['code']];
+						}
+
+						$original_cf7tag_name = '';
+						$selectbox_readonly = '';
+						if(isset($appdata['setting_original_cf7tag_name'][$form_data['code']]) && !empty($appdata['setting_original_cf7tag_name'][$form_data['code']]) ){
+							$original_cf7tag_name = $appdata['setting_original_cf7tag_name'][$form_data['code']];
+						}
+
+						$code = wp_strip_all_tags( $this->create_sample_shortcode($form_data, $select_option, $original_cf7tag_name, ''));
+						if($code){
+							$insert_code .= '<label> '.$form_data['label']."\n    ".$code."</label>\n\n";
+						}
+								
 					}
-
-					$original_cf7tag_name = '';
-					$selectbox_readonly = '';
-					if(isset($appdata['setting_original_cf7tag_name'][$form_data['code']]) && !empty($appdata['setting_original_cf7tag_name'][$form_data['code']]) ){
-						$original_cf7tag_name = $appdata['setting_original_cf7tag_name'][$form_data['code']];
-					}
-
-					$code = wp_strip_all_tags( $this->create_sample_shortcode($form_data, $select_option, $original_cf7tag_name, ''));
-					if($code){
-						$insert_code .= '<label> '.$form_data['label']."\n    ".$code."</label>\n\n";
-					}
-							
 				}
 			}
 
@@ -507,6 +511,17 @@ class KintoneForm {
 
 		$domain = $kintone_setting_data['domain'];
 		$email_address_to_send_kintone_registration_error = $kintone_setting_data['email_address_to_send_kintone_registration_error'];
+
+		$kintone_basic_authentication_id = "";
+		if( isset($kintone_setting_data['kintone_basic_authentication_id']) ){
+			$kintone_basic_authentication_id = $kintone_setting_data['kintone_basic_authentication_id'];	
+		}
+
+		$kintone_basic_authentication_password = "";
+		if( isset($kintone_setting_data['kintone_basic_authentication_password']) ){
+			$kintone_basic_authentication_password = self::decode($kintone_setting_data['kintone_basic_authentication_password']);
+		}
+
 		$mailtags = $post->collect_mail_tags();
 		$tags = $post->scan_form_tags();
 
@@ -529,10 +544,13 @@ class KintoneForm {
 					<th>E-mail address to send kintone registration error:</th>
 					<td><input type="text" id="email-address-to-send-kintone-registration-error" name="kintone_setting_data[email_address_to_send_kintone_registration_error]" class="" size="70" value="<?php echo esc_attr( $email_address_to_send_kintone_registration_error ); ?>" /></td>
 				</tr>
+				<tr>
+					<th>Basic Authentication:</th>
+					<td>
+						ID： <input type="text" id="kintone-basic-authentication-id" name="kintone_setting_data[kintone_basic_authentication_id]" class="" size="30" value="<?php echo esc_attr( $kintone_basic_authentication_id ); ?>" /> / Password： <input type="password" id="kintone-basic-authentication-password" name="kintone_setting_data[kintone_basic_authentication_password]" class="" size="30" value="<?php echo esc_attr( $kintone_basic_authentication_password ); ?>" />
+					</td>
+				</tr>	
 			</table>
-
-
-
 		</p>
 
 		<p class="description">
@@ -566,7 +584,7 @@ class KintoneForm {
 	                                        	<th style="text-align: left; padding: 5px 10px;">Contact form 7 mail tag</th>
 	                                        	<th style="text-align: left; padding: 5px 10px;">Example Contact Form 7's Shortcode<br>※ Change <span style="color:red">your-cf7-tag-name</span> to original name ( your-name or your-email or etc )</th>
 	                                        </tr>
-
+											
 	                                        <?php if(isset($app_data['formdata']['properties'])): ?>
 		                                        <?php foreach ($app_data['formdata']['properties'] as $form_data): ?>
 		                                        	<?php
@@ -591,7 +609,7 @@ class KintoneForm {
 														<?php $hash = hash('md5', $form_data['code']) ?>
 
 				                                        <tr>
-				                                            <td style="padding: 5px 10px; border-bottom: 1px solid #e2e2e2;"><?php echo esc_html( $form_data['label'] ).'('. esc_html( $form_data['code'] ).')'; ?></td>
+				                                            <td style="padding: 5px 10px; border-bottom: 1px solid #e2e2e2;"><?php echo esc_html( ( isset( $form_data['label'] ) ) ? $form_data['label'] : "" ).'('. esc_html( $form_data['code'] ).')'; ?></td>
 				                                            <td><-</td>
 				                                            <td style="padding: 5px 10px; border-bottom: 1px solid #e2e2e2;">
 				                                            	<?php if( array_key_exists( $form_data['type'] ,$this->kintone_fieldcode_supported_list ) ): ?>
@@ -745,6 +763,15 @@ class KintoneForm {
 		return $properties;
 	}
 
+
+	public static function encode( $value ){
+		return base64_encode(md5(AUTH_SALT) . $value . md5(md5(AUTH_SALT)));
+	}
+
+	public static function decode( $encoded ){
+		return preg_match('/^[a-f0-9]{32}$/', $encoded) ? $encoded : str_replace(array(md5(AUTH_SALT), md5(md5(AUTH_SALT))), '', base64_decode($encoded));
+	}
+
 	public function wpcf7_save_contact_form( $contact_form, $args, $context ){
 
 		$properties = array();
@@ -756,14 +783,17 @@ class KintoneForm {
 				if( !empty($app_data['appid']) && !empty($app_data['token']) && !empty($args['kintone_setting_data']['domain']) ){
 
 					$url = 'https://'.$args['kintone_setting_data']['domain'].'/k/v1/form.json?app='.$app_data['appid'];
-					$kintone_form_data = $this->kintone_api( $url, $app_data['token'] );
-
-
-					if( !is_wp_error($kintone_form_data) ){
-
-						$app_data['formdata'] = $kintone_form_data;
-						$args['kintone_setting_data']['app_datas'][$i] = $app_data;
+					$kintone_form_data = $this->kintone_api( $url, $app_data['token'], $args['kintone_setting_data']['kintone_basic_authentication_id'], $args['kintone_setting_data']['kintone_basic_authentication_password'] );
+										
+					if( $args['kintone_setting_data']['kintone_basic_authentication_password'] ){
+						$args['kintone_setting_data']['kintone_basic_authentication_password'] = self::encode( $args['kintone_setting_data']['kintone_basic_authentication_password'] );
 					}
+					
+					if( !is_wp_error($kintone_form_data) ){
+						$app_data['formdata'] = $kintone_form_data;
+					}
+
+					$args['kintone_setting_data']['app_datas'][$i] = $app_data;
 
 				}
 
@@ -948,7 +978,7 @@ class KintoneForm {
 
 				if( !empty($kintone_setting_data['domain']) && !empty($data['token']) && !empty($data['appid']) ){
 					$url = 'https://'.$kintone_setting_data['domain'].'/k/v1/record.json';
-					$this->save_data( $url, $data['token'], $data['appid'], $data['datas'], $kintone_setting_data['email_address_to_send_kintone_registration_error'] );
+					$this->save_data( $url, $data['token'], $data['appid'], $kintone_setting_data['kintone_basic_authentication_id'], self::decode($kintone_setting_data['kintone_basic_authentication_password']), $data['datas'], $kintone_setting_data['email_address_to_send_kintone_registration_error'] );
 				}
 
 			}
@@ -1001,11 +1031,15 @@ class KintoneForm {
 
 	}
 
-	private function save_data( $url, $token, $appid, $datas, $email_address_to_send_kintone_registration_error )
+	private function save_data( $url, $token, $appid, $basic_auth_user, $basic_auth_pass, $datas, $email_address_to_send_kintone_registration_error )
 	{
 
-	    $headers["X-Cybozu-API-Token"] = $token;
-	    $headers["Content-Type"] = "application/json";
+		$headers = array_merge(
+			self::get_auth_header( $token ),
+			self::get_basic_auth_header( $basic_auth_user, $basic_auth_pass ),
+			array( 'Content-Type' => 'application/json' )
+		);
+
 
 	    $body = array(
 	        "app"	=> $appid,
@@ -1019,7 +1053,7 @@ class KintoneForm {
 	            "headers" => $headers,
 	            "body"	=> json_encode( $body )
 	        )
-	    );
+		);		
 
 	    if ( is_wp_error( $res ) ) {
 	    	$this->erro_mail( $res, $email_address_to_send_kintone_registration_error );
@@ -1036,13 +1070,36 @@ class KintoneForm {
 	    }
 	}
 
+	//  form data to kintone WordPress Plugin incorporates code from WP to kintone WordPress Plugin, Copyright 2016 WordPress.org
+	public static function get_basic_auth_header( $basic_auth_user = null, $basic_auth_pass = null )
+	{
+		if ( $basic_auth_user && $basic_auth_pass ) {
+			$auth = base64_encode( $basic_auth_user.':'.$basic_auth_pass );
+			return array( 'Authorization' => 'Basic '.$auth );
+		} else {
+			return array();
+		}
+	}
 
-	public function kintone_api( $request_url, $kintone_token, $file = false ){
+	//  form data to kintone WordPress Plugin incorporates code from WP to kintone WordPress Plugin, Copyright 2016 WordPress.org	
+	public static function get_auth_header( $token )
+	{
+		if ( $token ) {
+			return array( 'X-Cybozu-API-Token' => $token );
+		} else {
+			return new WP_Error( 'kintone', 'API Token is required' );
+		}
+	}
+
+
+	public function kintone_api( $request_url, $kintone_token, $basic_auth_user = null, $basic_auth_pass = null ,$file = false ){
 
 		if( $request_url ){
 
-			$headers = array( 'X-Cybozu-API-Token' =>  $kintone_token );
-
+			$headers = array_merge(
+				self::get_auth_header( $kintone_token ), self::get_basic_auth_header( $basic_auth_user, $basic_auth_pass )
+			);
+	
 			$res = wp_remote_get(
 				$request_url,
 				array(
@@ -1056,16 +1113,18 @@ class KintoneForm {
 
 			} else {
 
-				if( $file ){
-					$return_value = $res['body'];
+				if( $res['response']['code'] != 200 ){
+
+					set_transient( 'my-custom-admin-errors', 'kintone Error: ' . $res['response']['message'].'(Code='.$res['response']['code'].')' , 10 );
+					return new WP_Error( $res['response']['code'], $res['response']['message'] );
+
 				}else{
-					$return_value = json_decode( $res['body'], true );
-				}
 
-				if ( isset( $return_value['message'] ) && isset( $return_value['code'] ) ) {
-
-					echo '<div class="error fade"><p><strong>'.$return_value['message'].'</strong></p></div>';
-					return new WP_Error( $return_value['code'], $return_value['message'] );
+					if( $file ){
+						$return_value = $res['body'];
+					}else{
+						$return_value = json_decode( $res['body'], true );
+					}	
 				}
 
 				return $return_value;
@@ -1075,6 +1134,20 @@ class KintoneForm {
 			return new WP_Error( 'Error', 'URL is required' );
 		}
 
+	}
+	public function admin_notices(){
+?>
+
+    <?php if ( $message = get_transient( 'my-custom-admin-errors' ) ): ?>
+
+    <div class="error">
+        <ul>
+			<li><?php echo esc_html($message); ?></li>
+        </ul>
+    </div>
+    <?php endif; ?>
+
+<?php
 	}
 
 }

@@ -32,7 +32,8 @@ Cover banner designed by [akari_doi](https://profiles.wordpress.org/akari_doi/)
 == Installation ==
 
 1. Upload the entire `kintone-form` folder to the `/ wp-content / plugins /` directory.
-2. Write an equation for the confirmatory reaction of each cation and anion based on the experimental results of Operation 3. Activate the plugin through the 'Plugins' menu in WordPress
+2. Write an equation for the confirmatory reaction of each cation and anion based on the experimental results of Operation 
+3. Activate the plugin through the 'Plugins' menu in WordPress
 
 Open the post edit screen in the WordPress administration screen, and in the text editor pane, put the short code in the place where you want to display.
 
