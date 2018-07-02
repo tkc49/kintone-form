@@ -784,16 +784,16 @@ class KintoneForm {
 
 					$url = 'https://'.$args['kintone_setting_data']['domain'].'/k/v1/form.json?app='.$app_data['appid'];
 					$kintone_form_data = $this->kintone_api( $url, $app_data['token'], $args['kintone_setting_data']['kintone_basic_authentication_id'], $args['kintone_setting_data']['kintone_basic_authentication_password'] );
+										
+					if( $args['kintone_setting_data']['kintone_basic_authentication_password'] ){
+						$args['kintone_setting_data']['kintone_basic_authentication_password'] = self::encode( $args['kintone_setting_data']['kintone_basic_authentication_password'] );
+					}
 					
 					if( !is_wp_error($kintone_form_data) ){
 						$app_data['formdata'] = $kintone_form_data;
-						$args['kintone_setting_data']['app_datas'][$i] = $app_data;
- 
-						if( $args['kintone_setting_data']['kintone_basic_authentication_password'] ){
-							$args['kintone_setting_data']['kintone_basic_authentication_password'] = self::encode( $args['kintone_setting_data']['kintone_basic_authentication_password'] );
-						}
-						
 					}
+
+					$args['kintone_setting_data']['app_datas'][$i] = $app_data;
 
 				}
 
