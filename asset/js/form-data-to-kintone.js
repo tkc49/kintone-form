@@ -1,3 +1,8 @@
+/**************************************
+*
+* To automatically generate cf7 shortcode
+*
+***************************************/
 (function($){
 
 	var $input = $('.your-cf7-tag-name');
@@ -25,6 +30,11 @@
 
 })(jQuery);
 
+/**************************************
+*
+*  Insert shortcode tag of kintone
+*
+***************************************/
 (function($){
 
 	$( 'input.kintone-form-insert-tag' ).click( function() {

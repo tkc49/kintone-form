@@ -350,17 +350,19 @@ class KintoneForm {
 		global $wp_query;
 
 		wp_enqueue_script('jquery');
-		// register our main script but do not enqueue it yet
-		wp_register_script( 'my_loadmore', plugin_dir_url( __FILE__ ).'asset/js/myloadmore.js', array('jquery'),'',true );
-
-		wp_localize_script( 'my_loadmore', 'misha_loadmore_params', array(
+		wp_register_script( 'form_data_to_kintone', plugin_dir_url( __FILE__ ).'asset/js/form-data-to-kintone.js', array('jquery'),'',true );
+		wp_enqueue_script( 'form_data_to_kintone' );
+		
+		
+		wp_register_script( 'form_data_to_kintone_load_kintone_data_ajax', plugin_dir_url( __FILE__ ).'asset/js/load-kintone-data-ajax.js', array('jquery'),'',true );
+		wp_localize_script( 'form_data_to_kintone_load_kintone_data_ajax', 'form_data_to_kintone_load_kintone_data_ajax_param', array(
 			'ajaxurl' => site_url() . '/wp-admin/admin-ajax.php', // WordPress AJAX
 			'posts' => 'hosoya', // everything about your loop is here
 			'current_page' => get_query_var( 'paged' ) ? get_query_var('paged') : 1,
 			'max_page' => $wp_query->max_num_pages
 		) );
+		wp_enqueue_script( 'form_data_to_kintone_load_kintone_data_ajax' );
 
-		wp_enqueue_script( 'my_loadmore' );
 
 
 	}
@@ -567,9 +569,9 @@ class KintoneForm {
 								<table class="row" style="margin-bottom: 30px; border-top: 6px solid #ccc; width: 100%;">
 									<tr>
 										<td valign="top" style="padding: 10px 0px;">
-											APP ID:<input type="text" id="kintone-form-appid" name="kintone_setting_data[app_datas][<?php echo $i; ?>][appid]" class="small-text" size="70" value="<?php echo esc_attr( $app_data['appid'] ); ?>" />
-											Api Token:<input type="text" id="kintone-form-token" name="kintone_setting_data[app_datas][<?php echo $i; ?>][token]" class="regular-text" size="70" value="<?php echo esc_attr( $app_data['token'] ); ?>" />
-											<input type="submit" class="button-primary" name="get-kintone-data" value="GET">
+											APP ID:<input type="text" id="kintone-form-appid-<?php echo $i; ?>" name="kintone_setting_data[app_datas][<?php echo $i; ?>][appid]" class="small-text" size="70" value="<?php echo esc_attr( $app_data['appid'] ); ?>" />
+											Api Token:<input type="text" id="kintone-form-token-<?php echo $i; ?>" name="kintone_setting_data[app_datas][<?php echo $i; ?>][token]" class="regular-text" size="70" value="<?php echo esc_attr( $app_data['token'] ); ?>" />
+											<input type="submit" id="js-get-kintone-data" class="button-primary" name="get-kintone-data" value="GET" data-number="<?php echo $i; ?>">
 										</td>
 										<td></td>
 										<td><span class="remove button">Remove</span></td>
@@ -657,9 +659,9 @@ class KintoneForm {
 							<table class="row" style="margin-bottom: 30px; border-top: 6px solid #ccc; width: 100%;">
 								<tr>
 									<td valign="top" style="padding: 10px 0px;">
-										APP ID:<input type="text" id="kintone-form-appid" name="kintone_setting_data[app_datas][0][appid]" class="small-text" size="70" value="" />
-										Api Token:<input type="text" id="kintone-form-token" name="kintone_setting_data[app_datas][0][token]" class="regular-text" size="70" value="" />
-										<input type="submit" class="button-primary" name="get-kintone-data" value="GET">
+										APP ID:<input type="text" id="kintone-form-appid-0" name="kintone_setting_data[app_datas][0][appid]" class="small-text" size="70" value="" />
+										Api Token:<input type="text" id="kintone-form-token-0" name="kintone_setting_data[app_datas][0][token]" class="regular-text" size="70" value="" />
+										<input type="submit" id="js-get-kintone-data" class="button-primary" name="get-kintone-data" value="GET">
 									</td>
 								</tr>
 							</table>
