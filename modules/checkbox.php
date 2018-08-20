@@ -23,6 +23,12 @@ class KintoneForm_checkbox
 
 		$return_data = array();
 		$value = $cf7_send_data[$cf7_mail_tag];
+		
+		// 
+		// Check Acceptance
+		// 
+		$value = check_acceptance( $value, $cf7_mail_tag );
+		
 
 		if( $kintone_form_data['required'] == 'true' && empty($value) ){
 			$e->add('Error', $cf7_mail_tag .'->'. $kintone_form_data['code'].' : Required fields');
