@@ -1017,19 +1017,16 @@ class KintoneForm {
 
 		$error_msg = "";
 		$error_msg .= implode("\r\n", $e->get_error_messages())."\r\n";
-		$error_msg .= var_export($e->get_error_data(), true);
-		
 
 		if( $email_address_to_send_kintone_registration_error ){
 			$to = $email_address_to_send_kintone_registration_error;
 		}else{
 			$to = get_option( 'admin_email' );
 		}
-		
+
 		$subject = 'kintone form post error';
 		$body = $error_msg;
-		$headers = array('Content-Type: text/html; charset=UTF-8');
-		wp_mail( $to, $subject, $body, $headers );
+		wp_mail( $to, $subject, $body );
 
 
 	}
