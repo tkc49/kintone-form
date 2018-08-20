@@ -810,6 +810,12 @@ class KintoneForm {
 	}
 
 	public function kintone_form_send( $wpcf7_data ){
+		
+		// Contact Form 7 add confirm
+		if( isset($_POST["_wpcf7c"]) && $_POST["_wpcf7c"] == "step1" ){
+			return ;
+		}
+		
 
 		$kintone_setting_data = $wpcf7_data->prop('kintone_setting_data');
 		if(empty($kintone_setting_data)){
