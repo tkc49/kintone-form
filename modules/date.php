@@ -28,6 +28,7 @@ class KintoneForm_date
             $value = $cf7_send_data[$cf7_mail_tag];
         }
 		
+		$value = apply_filters( 'kintone_form_date_customize_mailtag', $value, $cf7_send_data, $cf7_mail_tag );
 
 		if( $kintone_form_data['required'] == 'true' && empty($value) ){
 			// エラー
