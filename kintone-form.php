@@ -261,7 +261,8 @@ class KintoneForm {
 		add_action( 'wpcf7_save_contact_form', array( $this, 'wpcf7_save_contact_form' ), 10, 3 );
 		add_filter( 'wpcf7_editor_panels', array( $this, 'wpcf7_editor_panels' ) );
 
-		add_action( 'wpcf7_before_send_mail', array( $this, 'kintone_form_send' ),1);
+		//add_action( 'wpcf7_before_send_mail', array( $this, 'kintone_form_send' ),1);
+		add_action( 'wpcf7_submit', array( $this, 'kintone_form_send' ));
 
 		add_action( 'admin_enqueue_scripts', array( $this, 'register_assets' ) );
 
