@@ -22,7 +22,12 @@ class KintoneForm_datetime
 	public static function format_to_kintone_data( $kintone_form_data, $cf7_send_data, $cf7_mail_tag, $e ) {
 
 		$return_data = array();
-		$value = $cf7_send_data[$cf7_mail_tag];
+		
+        $value = '';
+		if( isset($cf7_send_data[$cf7_mail_tag]) ){
+            $value = $cf7_send_data[$cf7_mail_tag];
+        }
+		
 
 		if( $kintone_form_data['required'] == 'true' && empty($value) ){
 			$e->add('Error', $cf7_mail_tag .'->'. $kintone_form_data['code'].' : Required fields');
