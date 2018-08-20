@@ -21,14 +21,9 @@ class KintoneForm_drop_down
 
 	public static function format_to_kintone_data( $kintone_form_data, $cf7_send_data, $cf7_mail_tag, $e ) {
 
+
 		$return_data = array();
-
-        $value = '';
-		if( isset($cf7_send_data[$cf7_mail_tag]) ){
-            $value = $cf7_send_data[$cf7_mail_tag];
-        }
-        
-
+		$value = $cf7_send_data[$cf7_mail_tag];
 		// 
 		// Check Acceptance
 		// 
