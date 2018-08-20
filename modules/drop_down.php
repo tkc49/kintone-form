@@ -56,7 +56,10 @@ class KintoneForm_drop_down
 
 			}
 			if(!$match_flg){
-				$e->add('Error', $cf7_mail_tag .'->'. $kintone_form_data['code'].' : not match');
+				$e->add('Error', $cf7_mail_tag .'->' . $kintone_form_data['code'].' : not match');
+				$e->add('Error', 'kintone form data:' . var_export($kintone_form_data['options'], true));
+				$e->add('Error', 'CF7 value:' . $value);
+				
 			}
 		}
 
