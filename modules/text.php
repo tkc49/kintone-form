@@ -34,6 +34,9 @@ class KintoneForm_text
 		$value = check_acceptance( $value, $cf7_mail_tag );
         
 
+        $value = apply_filters( 'kintone_form_text_customize_mailtag', $value, $cf7_send_data, $cf7_mail_tag );
+
+
 		if( is_array($value) ){
 			$value = implode(",", $value);
 		}		
