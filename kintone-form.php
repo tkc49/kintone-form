@@ -1047,7 +1047,7 @@ class KintoneForm {
 		);
 		
 		$headers = apply_filters( 'form_data_to_kintone_post_header', $headers, self::get_auth_header( $token ), self::get_basic_auth_header( $basic_auth_user, $basic_auth_pass ), array( 'Content-Type' => 'application/json' ));
-
+        $datas = apply_filters( 'form_data_to_kintone_post_datas', $datas, $appid );
 
 	    $body = array(
 	        "app"	=> $appid,
