@@ -61,25 +61,73 @@ https://www.cybozu.com/jp/inquiry/
 1. screenshot-1.png
 
 == Changelog ==
-* 1.10.2 - fix add myloadmore.js
-* 1.10.1 - fix version number
-* 1.10.0 - changes some setting page
-* 1.0.18 - fix bug
-* 1.0.17 - fix CF7 Radio Button
-* 1.0.16 - Add time of mailtag
-* 1.0.15 - It corresponds to hidden of CF7
-* 1.0.14 - Fixed bug that unnecessary error mail was sent
-* 1.0.13 - fix time format error
-* 1.0.12 - change plugin's icon
-* 1.0.11 - add youtube in readme.txt
-* 1.0.10 - fix Saving kintone's configuration information as null results in an error
-* 1.0.9 - Add add-ons
-* 1.0.8 - remove add-ons text
-* 1.0.7 - fix a problem with range
-* 1.0.6 - remove admin menu
-* 1.0.5 - fix
-* 1.0.4 - add contributer
-* 1.0.3 - Change plugin's discription
-* 1.0.2 - Change plugin's discription
-* 1.0.1 - Change plugin name
-* 1.0.0 - First Release
+
+= 2.0.0 =
+* add kintone Basic Authentication
+* fix some bug
+
+= 1.10.2 =
+* fix add myloadmore.js
+
+= 1.10.1 =
+* fix version number
+
+= 1.10.0 =
+* changes some setting page
+
+= 1.0.18 =
+* fix bug
+
+= 1.0.17 =
+* fix CF7 Radio Button
+
+= 1.0.16 =
+* Add time of mailtag
+
+= 1.0.15 =
+* It corresponds to hidden of CF7
+
+= 1.0.14 =
+* Fixed bug that unnecessary error mail was sent
+
+= 1.0.13 =
+* fix time format error
+
+= 1.0.12 =
+* change plugin's icon
+
+= 1.0.11 =
+* add youtube in readme.txt
+
+= 1.0.10 =
+* fix Saving kintone's configuration information as null results in an error
+
+= 1.0.9 =
+* Add add-ons
+
+= 1.0.8 =
+* remove add-ons text
+
+= 1.0.7 =
+* fix a problem with range
+
+= 1.0.6 =
+* remove admin menu
+
+= 1.0.5 =
+* fix
+
+= 1.0.4 =
+* add contributer
+
+= 1.0.3 =
+* Change plugin's discription
+
+= 1.0.2 =
+* Change plugin's discription
+
+= 1.0.1 =
+* Change plugin name
+
+= 1.0.0 =
+* First Release
