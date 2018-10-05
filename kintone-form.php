@@ -251,8 +251,6 @@ class KintoneForm {
 			dirname( plugin_basename( __FILE__ ) ).$this->langs
 		);
 
-		add_action('admin_menu', array( $this, 'admin_menu' ) );
-
 
 		// Add Setting Panel
 		add_filter( 'wpcf7_editor_panels', array( $this, 'wpcf7_editor_panels' ) );
@@ -381,7 +379,7 @@ class KintoneForm {
 
 				update_option('_kintone_to_wp_license_key_attachment', base64_encode($kintone_to_wp_license_key_attachment));
 
-				$license_result_attachment = $this->gumroad_verify_license($kintone_to_wp_license_key_attachment, GUMROAD_KINTONE_FORM_ATTACHMENTS_SLUG);
+//				$license_result_attachment = $this->gumroad_verify_license($kintone_to_wp_license_key_attachment, GUMROAD_KINTONE_FORM_ATTACHMENTS_SLUG);
 
 			}else{
 				delete_option('_kintone_to_wp_license_key_attachment');
@@ -392,7 +390,7 @@ class KintoneForm {
 				$kintone_to_wp_license_key_multiple_kintone_app = sanitize_text_field($_POST['kintone_to_wp_license_key_multiple_kintone_app']);
 				update_option('_kintone_to_wp_license_key_multiple_kintone_app', base64_encode($kintone_to_wp_license_key_multiple_kintone_app));
 
-				$license_result_multiple_kintone_app = $this->gumroad_verify_license($kintone_to_wp_license_key_multiple_kintone_app, GUMROAD_KINTONE_FORM_MULTI_KINTONE_APP_SLUG);
+//				$license_result_multiple_kintone_app = $this->gumroad_verify_license($kintone_to_wp_license_key_multiple_kintone_app, GUMROAD_KINTONE_FORM_MULTI_KINTONE_APP_SLUG);
 
 			}else{
 				delete_option('_kintone_to_wp_license_key_multiple_kintone_app');
@@ -460,34 +458,6 @@ class KintoneForm {
 <?php
 
 	}
-
-
-	public function gumroad_verify_license( $license, $guid ) {
-	    $ch = curl_init( 'https://api.gumroad.com/v2/licenses/verify' );
-	    curl_setopt_array( $ch, [
-	        CURLOPT_CONNECTTIMEOUT => 10,
-	        CURLOPT_RETURNTRANSFER => true,
-	        CURLOPT_SSL_VERIFYPEER => false,
-	        CURLOPT_POST           => true,
-	        CURLOPT_POSTFIELDS     => "product_permalink={$guid}&license_key={$license}",
-	    ] );
-	    $result = curl_exec( $ch );
-	    curl_close( $ch );
-	    if ( ! $result ) {
-	        return false;
-	    }
-	    if ( ( $json = json_decode( $result ) ) && $json->success ) {
-	        return $json;
-	    } else {
-	        return new WP_Error( 'invalid_license', '無効なライセンスです。', [ 'status' => 403 ] );
-	    }
-	}
-
-	public function admin_menu(){
-		add_menu_page( 'Form data to kintone', 'Form data to kintone', 'manage_options', 'form-data-to-kintone-setting', array( $this,'form_data_to_kintone_setting' ) );
-
-	}
-
 
 	public function wpcf7_editor_panels( $panels ){
 
