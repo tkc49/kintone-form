@@ -294,34 +294,36 @@ class KintoneForm {
 
 		$insert_code = '';
 
-		foreach ( $kintone_setting_data['app_datas'] as $appdata) {
-			
-			if( isset($appdata['formdata']['properties']) ){
-				foreach ($appdata['formdata']['properties'] as $form_data){
+		if(isset($kintone_setting_data['app_datas'])) {
+            foreach ($kintone_setting_data['app_datas'] as $appdata) {
 
-					if(isset($form_data['code'])){
+                if (isset($appdata['formdata']['properties'])) {
+                    foreach ($appdata['formdata']['properties'] as $form_data) {
 
-						$select_option = '';
-						if(isset($appdata['setting'][$form_data['code']]) && !empty($appdata['setting'][$form_data['code']]) ){
-							$select_option = $appdata['setting'][$form_data['code']];
-						}
+                        if (isset($form_data['code'])) {
 
-						$original_cf7tag_name = '';
-						$selectbox_readonly = '';
-						if(isset($appdata['setting_original_cf7tag_name'][$form_data['code']]) && !empty($appdata['setting_original_cf7tag_name'][$form_data['code']]) ){
-							$original_cf7tag_name = $appdata['setting_original_cf7tag_name'][$form_data['code']];
-						}
+                            $select_option = '';
+                            if (isset($appdata['setting'][$form_data['code']]) && !empty($appdata['setting'][$form_data['code']])) {
+                                $select_option = $appdata['setting'][$form_data['code']];
+                            }
 
-						$code = wp_strip_all_tags( $this->create_sample_shortcode($form_data, $select_option, $original_cf7tag_name, ''));
-						if($code){
-							$insert_code .= '<label> '.$form_data['label']."\n    ".$code."</label>\n\n";
-						}
-								
-					}
-				}
-			}
+                            $original_cf7tag_name = '';
+                            $selectbox_readonly = '';
+                            if (isset($appdata['setting_original_cf7tag_name'][$form_data['code']]) && !empty($appdata['setting_original_cf7tag_name'][$form_data['code']])) {
+                                $original_cf7tag_name = $appdata['setting_original_cf7tag_name'][$form_data['code']];
+                            }
 
-		}
+                            $code = wp_strip_all_tags($this->create_sample_shortcode($form_data, $select_option, $original_cf7tag_name, ''));
+                            if ($code) {
+                                $insert_code .= '<label> ' . $form_data['label'] . "\n    " . $code . "</label>\n\n";
+                            }
+
+                        }
+                    }
+                }
+
+            }
+        }
 		
 	?>
 		<div class="control-box">
