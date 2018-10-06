@@ -956,6 +956,7 @@ class KintoneForm {
 		}else{
 
 		    // 1フォームで複数アプリを登録する時に紐付けるキーに利用
+            $unique_key = '';
 		    $unique_key = apply_filters('form_data_to_kintone_get_unique_key', $unique_key);
 
 			foreach ($kintone_post_data as $data) {
