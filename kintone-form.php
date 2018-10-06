@@ -955,11 +955,23 @@ class KintoneForm {
 
 		}else{
 
+		    // 1フォームで複数アプリを登録する時に紐付けるキーに利用
+		    $unique_key = apply_filters('form_data_to_kintone_get_unique_key', $unique_key);
+
 			foreach ($kintone_post_data as $data) {
 
 				if( !empty($kintone_setting_data['domain']) && !empty($data['token']) && !empty($data['appid']) ){
 					$url = 'https://'.$kintone_setting_data['domain'].'/k/v1/record.json';
-					$this->save_data( $url, $data['token'], $data['appid'], $kintone_setting_data['kintone_basic_authentication_id'], self::decode($kintone_setting_data['kintone_basic_authentication_password']), $data['datas'], $kintone_setting_data['email_address_to_send_kintone_registration_error'] );
+					$this->save_data(
+					        $url,
+                            $data['token'],
+                            $data['appid'],
+                            $kintone_setting_data['kintone_basic_authentication_id'],
+                            self::decode($kintone_setting_data['kintone_basic_authentication_password']),
+                            $data['datas'],
+                            $kintone_setting_data['email_address_to_send_kintone_registration_error'],
+                            $unique_key
+                    );
 				}
 
 			}
@@ -1009,7 +1021,7 @@ class KintoneForm {
 
 	}
 
-	private function save_data( $url, $token, $appid, $basic_auth_user, $basic_auth_pass, $datas, $email_address_to_send_kintone_registration_error )
+	private function save_data( $url, $token, $appid, $basic_auth_user, $basic_auth_pass, $datas, $email_address_to_send_kintone_registration_error, $unique_key )
 	{
 
 		$headers = array_merge(
@@ -1019,7 +1031,7 @@ class KintoneForm {
 		);
 		
 		$headers = apply_filters( 'form_data_to_kintone_post_header', $headers, self::get_auth_header( $token ), self::get_basic_auth_header( $basic_auth_user, $basic_auth_pass ), array( 'Content-Type' => 'application/json' ));
-        $datas = apply_filters( 'form_data_to_kintone_post_datas', $datas, $appid );
+		$datas = apply_filters( 'form_data_to_kintone_post_datas', $datas, $appid, $unique_key );
 
 	    $body = array(
 	        "app"	=> $appid,
