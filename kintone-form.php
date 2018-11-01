@@ -1054,6 +1054,7 @@ class KintoneForm {
 				"body"	=> json_encode( $tmp_options["body"] )
 			);
 
+			// kintoneにフォームデータを追加/更新する
 			$res = wp_remote_post(
 				$url,
 				$options
