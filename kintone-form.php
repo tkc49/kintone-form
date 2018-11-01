@@ -716,11 +716,15 @@ class KintoneForm {
 				$tag_name = $tag->name;
 				if( $setting_cf7_mail_tag == $tag_name ){
 
-					if (in_array($kintone_field['type'], $this->consistency[$type])) {
+				    if(isset($kintone_field['type'])){
+						if (in_array($kintone_field['type'], $this->consistency[$type])) {
+							return "";
+						}else{
+							return "This setting is error.";
+						}
+                    }else{
 						return "";
-					}else{
-						return "This setting is error.";
-					}
+                    }
 				}
 			}
 		}
