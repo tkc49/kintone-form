@@ -781,8 +781,6 @@ class KintoneForm {
 
 	public function kintone_form_send( $wpcf7_data ){
 
-		error_log('bbb');
-
 		// Contact Form 7 add confirm
 		if( isset($_POST["_wpcf7c"]) && $_POST["_wpcf7c"] == "step1" ){
 			return ;
