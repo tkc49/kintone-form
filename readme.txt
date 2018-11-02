@@ -62,6 +62,9 @@ https://www.cybozu.com/jp/inquiry/
 
 == Changelog ==
 
+= 2.1.3 =
+* Change: Change error message mail.
+
 = 2.1.2 =
 * Fix bug: Change wpcf7_submit to wpcf7_mail_sent
 

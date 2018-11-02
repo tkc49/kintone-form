@@ -3,7 +3,7 @@
  * Plugin Name: Form data to kintone
  * Plugin URI:
  * Description: This plugin is an addon for "Contact form 7".
- * Version:	 2.1.2
+ * Version:	 2.1.3
  * Author:	  Takashi Hosoya
  * Author URI:  http://ht79.info/
  * License:	 GPLv2
@@ -1022,6 +1022,11 @@ class KintoneForm {
 
 		$error_msg = "";
 		$error_msg .= implode("\r\n", $e->get_error_messages())."\r\n";
+		$error_data = $e->get_error_data();
+		$error_data = var_export($error_data, true);
+
+		$error_msg .= $error_data;
+
 
 		if( $email_address_to_send_kintone_registration_error ){
 			$to = $email_address_to_send_kintone_registration_error;
