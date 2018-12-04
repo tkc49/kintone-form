@@ -2,8 +2,8 @@
 /**
  * Plugin Name: Form data to kintone
  * Plugin URI:
- * Description: This plugin is an addon for "Contact form 7".
- * Version:	 2.2.0
+ * Description: This plugin is an addon for "Contact Form 7".
+ * Version:	 2.2.2
  * Author:	  Takashi Hosoya
  * Author URI:  http://ht79.info/
  * License:	 GPLv2
@@ -343,7 +343,7 @@ class KintoneForm {
         <div class="insert-box">
 
             <div class="submitbox">
-                <input type="button" class="button button-primary kintone-form-insert-tag" value="<?php echo esc_attr( __( 'Insert Tag', 'contact-form-7' ) ); ?>" />
+                <input type="button" class="button button-primary kintone-form-insert-tag" value="<?php echo esc_attr( __( 'Insert Tag', 'kintone-form' ) ); ?>" />
             </div>
 
         </div>
