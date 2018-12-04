@@ -3,7 +3,7 @@
  * Plugin Name: Form data to kintone
  * Plugin URI:
  * Description: This plugin is an addon for "Contact form 7".
- * Version:	 2.1.3
+ * Version:	 2.1.6
  * Author:	  Takashi Hosoya
  * Author URI:  http://ht79.info/
  * License:	 GPLv2
@@ -724,7 +724,7 @@ class KintoneForm {
 				$tag_name = $tag->name;
 				if( $setting_cf7_mail_tag == $tag_name ){
 
-				    if(isset($kintone_field['type'])){
+				    if( isset($kintone_field['type']) && isset($this->consistency[$type]) ){
 						if (in_array($kintone_field['type'], $this->consistency[$type])) {
 							return "";
 						}else{

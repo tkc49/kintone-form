@@ -3,15 +3,16 @@ Contributors: tkc49
 Tags: cybozu, kintone, crm, database, custom field, contact form 7, form
 Requires at least: 4.9
 Tested up to: 4.9
-Stable tag: 2.1.2
+Stable tag: 2.1.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-This plugin can import data sent from Contact form 7 into kintone.
+This plugin can save form data to kintone.
 
 == Description ==
 
-This plugin can import data sent from Contact form 7 into kintone.
+This plugin is add-on of Contact Form 7 plugin.
+This plugin can save form data to kintone.
 
 [youtube https://www.youtube.com/watch?v=Z_5cETJyA_w]
 
@@ -32,28 +33,11 @@ Cover banner designed by [akari_doi](https://profiles.wordpress.org/akari_doi/)
 == Installation ==
 
 1. Upload the entire `kintone-form` folder to the `/ wp-content / plugins /` directory.
-2. Write an equation for the confirmatory reaction of each cation and anion based on the experimental results of Operation
-3. Activate the plugin through the 'Plugins' menu in WordPress
+2. Activate the plugin through the 'Plugins' menu in WordPress
 
-Open the post edit screen in the WordPress administration screen, and in the text editor pane, put the short code in the place where you want to display.
+A tab for setting the information on kitone appears on the "Contact Form 7" setting screen.
 
 == Frequently asked questions ==
-
-= Any field it can not be associated? =
-
-"The fields it can not be associated." in the below web page can not be associated to WordPress even if put in kinote.
-
-https://cybozudev.zendesk.com/hc/ja/articles/201941834
-(Sorry, only in Japanese)
-
-If you have questions about WordPress to kintone, please contact the following e-mail address.
-
-support@ht79.info
-
-For the operation of kintone, the above contact can't handle.
-Please contact Cybozu.
-
-https://www.cybozu.com/jp/inquiry/
 
 
 == Screenshots ==
@@ -61,6 +45,15 @@ https://www.cybozu.com/jp/inquiry/
 1. screenshot-1.png
 
 == Changelog ==
+
+= 2.1.6 =
+* Change readme.txt
+
+= 2.1.5 =
+* Change readme.txt
+
+= 2.1.4 =
+* fix notice error
 
 = 2.1.3 =
 * Change: Change error message mail.
