@@ -3,7 +3,7 @@
  * Plugin Name: Form data to kintone
  * Plugin URI:
  * Description: This plugin is an addon for "Contact form 7".
- * Version:	 2.1.6
+ * Version:	 2.2.0
  * Author:	  Takashi Hosoya
  * Author URI:  http://ht79.info/
  * License:	 GPLv2
@@ -511,22 +511,22 @@ class KintoneForm {
 
 
 		?>
-        <h2><?php echo esc_html( __( 'Setting kintone', 'form-kintone' ) ); ?></h2>
+        <h2><?php _e( 'Setting kintone', 'kintone-form'); ?></h2>
         <fieldset>
 
             <p class="description">
 
             <table>
                 <tr>
-                    <th>kintone domain:</th>
+                    <th><?php _e( 'kintone domain:', 'kintone-form'); ?></th>
                     <td><input type="text" id="kintone-form-domain" placeholder="xxxx.cybozu.com" name="kintone_setting_data[domain]" class="" size="70" value="<?php echo esc_attr( $domain ); ?>" /></td>
                 </tr>
                 <tr>
-                    <th>E-mail address to send kintone registration error:</th>
+                    <th><?php _e( 'E-mail address to send kintone registration error:', 'kintone-form'); ?></th>
                     <td><input type="text" id="email-address-to-send-kintone-registration-error" name="kintone_setting_data[email_address_to_send_kintone_registration_error]" class="" size="70" value="<?php echo esc_attr( $email_address_to_send_kintone_registration_error ); ?>" /></td>
                 </tr>
                 <tr>
-                    <th>Basic Authentication:</th>
+                    <th><?php _e( 'Basic Authentication:', 'kintone-form'); ?></th>
                     <td>
                         ID： <input type="text" id="kintone-basic-authentication-id" name="kintone_setting_data[kintone_basic_authentication_id]" class="" size="30" value="<?php echo esc_attr( $kintone_basic_authentication_id ); ?>" /> / Password： <input type="password" id="kintone-basic-authentication-password" name="kintone_setting_data[kintone_basic_authentication_password]" class="" size="30" value="<?php echo esc_attr( $kintone_basic_authentication_password ); ?>" />
                     </td>
@@ -560,10 +560,10 @@ class KintoneForm {
                                             <table style="width: 100%;">
 
                                                 <tr>
-                                                    <th style="text-align: left; padding: 5px 10px;">kintone Label(fieldcode)</th>
+                                                    <th style="text-align: left; padding: 5px 10px;"><?php _e( 'kintone Label(fieldcode)', 'kintone-form'); ?></th>
                                                     <th></th>
                                                     <th style="text-align: left; padding: 5px 10px;">Contact form 7 mail tag</th>
-                                                    <th style="text-align: left; padding: 5px 10px;">Example Contact Form 7's Shortcode<br>※ Change <span style="color:red">your-cf7-tag-name</span> to original name ( your-name or your-email or etc )</th>
+                                                    <th style="text-align: left; padding: 5px 10px;"><?php _e( 'Example Contact Form 7\'s Shortcode<br>※ Change <span style="color:red">your-cf7-tag-name</span> to original name ( your-name or your-email or etc )', 'kintone-form'); ?></th>
                                                 </tr>
 
 												<?php if(isset($app_data['formdata']['properties'])): ?>
