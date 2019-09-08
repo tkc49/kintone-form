@@ -244,22 +244,16 @@ class KintoneForm {
 			dirname( plugin_basename( __FILE__ ) ) . $this->langs
 		);
 
-
-		// Add Setting Panel
-		add_filter( 'wpcf7_editor_panels', array( $this, 'wpcf7_editor_panels' ) );
+		// Add Setting Panel.
 		add_filter( 'wpcf7_editor_panels', array( $this, 'wpcf7_editor_panels' ) );
 		add_filter( 'wpcf7_contact_form_properties', array( $this, 'wpcf7_contact_form_properties' ), 10, 2 );
 		add_action( 'wpcf7_save_contact_form', array( $this, 'wpcf7_save_contact_form' ), 10, 3 );
-		add_filter( 'wpcf7_editor_panels', array( $this, 'wpcf7_editor_panels' ) );
-
 
 		/**
 		 * wpcf7_submit フックの起動時にuploadsフォルダーの添付画像が削除されるので、
 		 * wpcf7_mail_sent フックに変更
-		 */ //      add_action( 'wpcf7_before_send_mail', array( $this, 'kintone_form_send' ),1);
-//		add_action( 'wpcf7_submit', array( $this, 'kintone_form_send' ));
+		 */
 		add_action( 'wpcf7_mail_sent', array( $this, 'kintone_form_send' ) );
-
 
 		add_action( 'admin_enqueue_scripts', array( $this, 'register_assets' ) );
 
