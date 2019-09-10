@@ -5,6 +5,9 @@
  * @package Kintone_Form
  */
 
+/**
+ * Post_Kintone
+ */
 class Post_Kintone {
 	/**
 	 * Constructor
