@@ -29,27 +29,19 @@ class KintoneForm_text {
 			$value = $cf7_send_data[ $cf7_mail_tag ];
 		}
 
-		// post_title 対応.
-		if ( 'post_title' === $cf7_mail_tag ) {
-			$value = get_the_title( $post->ID );
-		}
-
 		//
 		// Check Acceptance.
 		//
 		$value = check_acceptance( $value, $cf7_mail_tag );
 
-
 		$value = apply_filters( 'kintone_form_text_customize_mailtag', $value, $cf7_send_data, $cf7_mail_tag );
-
 
 		if ( is_array( $value ) ) {
 			$value = implode( ",", $value );
 		}
 
-
 		if ( $kintone_form_data['required'] == 'true' && empty( $value ) ) {
-			// エラー
+			// エラー.
 			$e->add( 'Error', $cf7_mail_tag . '->' . $kintone_form_data['code'] . ' : Required fields' );
 		}
 

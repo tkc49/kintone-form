@@ -18,63 +18,34 @@ class Post_Kintone {
 		add_filter( 'wpcf7_form_tag', array( $this, 'kintone_form_set_post_title' ) );
 	}
 
-	public function kintone_form_set_post_title( $tag ) {
-
-		global $post;
-
-		if ( ! is_array( $tag ) ) {
-			return $tag;
-		}
-
-		$name = $tag['name'];
-		if ( 'post_title' === $name ) {
-			$post_title    = get_the_title( $post );
-			$tag['values'] = (array) $post_title;
-		}
-
-		return $tag;
-	}
-
 
 	/**
 	 * フォームの情報をkintoneに登録する.
 	 *
-	 * @param WPCF7_ContactForm $wpcf7_data .
-	 *
+	 * @param WPCF7_ContactForm $contact_form .
 	 */
-	public function kintone_form_send( $wpcf7_data ) {
-
-		// Contact Form 7 add confirm.
-		if ( isset( $_POST["_wpcf7c"] ) && $_POST["_wpcf7c"] === "step1" ) {
-			return;
-		}
-
-//		error_log( var_export( $wpcf7_data, true ) );
-
-		$kintone_setting_data = $wpcf7_data->prop( 'kintone_setting_data' );
-		error_log( var_export( $kintone_setting_data, true ) );
-
-		if ( empty( $kintone_setting_data ) ) {
-			return;
-		}
-		error_log( 'hoge1' );
+	public function kintone_form_send( $contact_form ) {
 
 		$submission = WPCF7_Submission::get_instance();
 		if ( empty( $submission ) ) {
 			return;
 		}
-		error_log( 'hoge1' );
-
 		$cf7_send_data = $submission->get_posted_data();
 
+		// Contact Form 7 add confirm.
+		if ( isset( $cf7_send_data['_wpcf7c'] ) && 'step1' === $cf7_send_data['_wpcf7c'] ) {
+			return;
+		}
+
+		$kintone_setting_data = $contact_form->prop( 'kintone_setting_data' );
+		if ( empty( $kintone_setting_data ) ) {
+			return;
+		}
+
 		$kintone_post_data = array();
-
-
-		$post_data_count = 0;
+		$post_data_count   = 0;
 
 		$e = new WP_Error();
-
-		error_log( var_export( $kintone_setting_data, true ) );
 
 		foreach ( $kintone_setting_data['app_datas'] as $appdata ) {
 
@@ -93,7 +64,7 @@ class Post_Kintone {
 						foreach ( $appdata['formdata']['properties'] as $kintone_form_data ) {
 
 							if ( isset( $kintone_form_data['code'] ) ) {
-								if ( $kintone_fieldcode == $kintone_form_data['code'] ) {
+								if ( $kintone_fieldcode === $kintone_form_data['code'] ) {
 
 									switch ( $kintone_form_data['type'] ) {
 										case 'SINGLE_LINE_TEXT':
@@ -229,29 +200,17 @@ class Post_Kintone {
 											}
 											break;
 										case 'RECORD_NUMBER':
-											break;
 										case 'MODIFIER':
-											break;
 										case 'CREATOR':
-											break;
 										case 'UPDATED_TIME':
-											break;
 										case 'CREATED_TIME':
-											break;
 										case 'CALC':
-											break;
 										case 'USER_SELECT':
-											break;
 										case 'REFERENCE_TABLE':
-											break;
 										case 'GROUP':
-											break;
 										case 'SUBTABLE':
-											break;
 										case 'STATUS':
-											break;
 										case 'STATUS_ASSIGNEE':
-											break;
 										case 'CATEGORY':
 											break;
 										case 'FILE':
@@ -269,12 +228,9 @@ class Post_Kintone {
 											}
 											break;
 									}
-
 								}
 							}
-
 						}
-
 					}
 				}
 			}
@@ -286,7 +242,6 @@ class Post_Kintone {
 		if ( $e->get_error_code() ) {
 
 			$this->erro_mail( $e, $kintone_setting_data['email_address_to_send_kintone_registration_error'] );
-
 
 		} else {
 
@@ -301,7 +256,7 @@ class Post_Kintone {
 
 				if ( ! empty( $kintone_setting_data['domain'] ) && ! empty( $data['token'] ) && ! empty( $data['appid'] ) ) {
 					$url = 'https://' . $kintone_setting_data['domain'] . '/k/v1/record.json';
-					$this->save_data(
+					$this->save_data_to_kintone(
 						$url,
 						$data['token'],
 						$data['appid'],
@@ -313,11 +268,43 @@ class Post_Kintone {
 						$update_key
 					);
 				}
-
 			}
 		}
 	}
 
+	/**
+	 * CF7MailTagにpost_title存在する場合は記事のタイトルを設定する.
+	 *
+	 * @param array $tag .
+	 *
+	 * @return array .
+	 */
+	public function kintone_form_set_post_title( $tag ) {
+
+		global $post;
+
+		if ( ! is_array( $tag ) ) {
+			return $tag;
+		}
+
+		$name = $tag['name'];
+		if ( 'post_title' === $name ) {
+			$post_title    = get_the_title( $post );
+			$tag['values'] = (array) $post_title;
+		}
+
+		return $tag;
+	}
+
+	/**
+	 * Kintoneに保存するためにkintoneとCF7のメールタグの関連データを取得する
+	 * CF7のkintoneタブではオリジナルテキスト設定とCF7メールタグから選択する方法があり、それぞれ違う配列に保存されるので、
+	 * それを合体させている.
+	 *
+	 * @param array $appdata .
+	 *
+	 * @return array
+	 */
 	private function get_data_for_post( $appdata ) {
 
 		$data['setting'] = array();
@@ -333,7 +320,6 @@ class Post_Kintone {
 					}
 				}
 			}
-
 		} else {
 			if ( isset( $appdata['setting'] ) ) {
 				return $appdata['setting'];
@@ -343,15 +329,20 @@ class Post_Kintone {
 		return $data;
 	}
 
+	/**
+	 * エラーメール送信する
+	 *
+	 * @param WP_Error $e .
+	 * @param string   $email_address_to_send_kintone_registration_error .
+	 */
 	private function erro_mail( $e, $email_address_to_send_kintone_registration_error ) {
 
-		$error_msg  = "";
-		$error_msg  .= implode( "\r\n", $e->get_error_messages() ) . "\r\n";
+		$error_msg  = '';
+		$error_msg  .= implode( '\r\n', $e->get_error_messages() ) . '\r\n';
 		$error_data = $e->get_error_data();
 		$error_data = var_export( $error_data, true );
 
 		$error_msg .= $error_data;
-
 
 		if ( $email_address_to_send_kintone_registration_error ) {
 			$to = $email_address_to_send_kintone_registration_error;
@@ -363,11 +354,24 @@ class Post_Kintone {
 		$body    = $error_msg;
 		wp_mail( $to, $subject, $body );
 
-
 	}
 
-	private function save_data( $url, $token, $appid, $basic_auth_user, $basic_auth_pass, $datas, $email_address_to_send_kintone_registration_error, $unique_key, $update_key ) {
-
+	/**
+	 * Kintoneへデータを保存する.
+	 *
+	 * @param string $url .
+	 * @param string $token .
+	 * @param string $appid .
+	 * @param string $basic_auth_user .
+	 * @param string $basic_auth_pass .
+	 * @param array  $datas .
+	 * @param string $email_address_to_send_kintone_registration_error .
+	 * @param string $unique_key .
+	 * @param string $update_key .
+	 *
+	 * @return boolean|WP_Error
+	 */
+	private function save_data_to_kintone( $url, $token, $appid, $basic_auth_user, $basic_auth_pass, $datas, $email_address_to_send_kintone_registration_error, $unique_key, $update_key ) {
 
 		$headers = array_merge(
 			Utility::get_auth_header( $token ),
@@ -384,27 +388,29 @@ class Post_Kintone {
 		);
 		$datas   = apply_filters( 'form_data_to_kintone_post_datas', $datas, $appid, $unique_key );
 
-
 		$body = array(
-			"app"    => $appid,
-			"record" => $datas
+			'app'    => $appid,
+			'record' => $datas,
 		);
 
 		$tmp_options = apply_filters(
 			'form_data_to_kintone_before_wp_remoto_post',
-			array( "method" => "POST", "body" => $body ),
+			array(
+				'method' => 'POST',
+				'body'   => $body,
+			),
 			$update_key
 		);
 
 		if ( ! empty( $tmp_options ) ) {
 
 			$options = array(
-				"method"  => $tmp_options["method"],
-				"headers" => $headers,
-				"body"    => json_encode( $tmp_options["body"] )
+				'method'  => $tmp_options['method'],
+				'headers' => $headers,
+				'body'    => json_encode( $tmp_options['body'] ),
 			);
 
-			// kintoneにフォームデータを追加/更新する
+			// kintoneにフォームデータを追加/更新する.
 			$res = wp_remote_post(
 				$url,
 				$options
@@ -414,18 +420,17 @@ class Post_Kintone {
 				$this->erro_mail( $res, $email_address_to_send_kintone_registration_error );
 
 				return $res;
-			} elseif ( $res["response"]["code"] !== 200 ) {
+			} elseif ( 200 !== $res['response']['code'] ) {
 
-				$message = json_decode( $res["body"], true );
+				$message = json_decode( $res['body'], true );
 				$e       = new WP_Error();
-				$e->add( "validation-error", $message["message"], $message["errors"] );
+				$e->add( 'validation-error', $message['message'], $message['errors'] );
 				$this->erro_mail( $e, $email_address_to_send_kintone_registration_error );
 
 				return $e;
 			} else {
 				return true;
 			}
-
 		}
 
 	}

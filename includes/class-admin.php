@@ -5,6 +5,9 @@
  * @package Kintone_Form
  */
 
+/**
+ * Admin
+ */
 class Admin {
 
 	/**
@@ -200,7 +203,7 @@ class Admin {
 	 * @param array             $properties .
 	 * @param WPCF7_ContactForm $contact_form .
 	 *
-	 * @return array An array of image URLs.
+	 * @return array .
 	 */
 	public function wpcf7_contact_form_properties( $properties, $contact_form ) {
 
@@ -404,11 +407,11 @@ class Admin {
 														); ?></th>
 												</tr>
 
-												<?php if ( isset( $app_data['formdata']['properties'] ) ): ?>
-													<?php foreach ( $app_data['formdata']['properties'] as $form_data ): ?>
+												<?php if ( isset( $app_data['formdata']['properties'] ) ) : ?>
+													<?php foreach ( $app_data['formdata']['properties'] as $form_data ) : ?>
 														<?php
 
-														if ( isset( $form_data['code'] ) ):
+														if ( isset( $form_data['code'] ) ) :
 															$select_option = '';
 
 															if ( isset( $app_data['setting'][ $form_data['code'] ] ) && ! empty( $app_data['setting'][ $form_data['code'] ] ) ) {
@@ -429,7 +432,7 @@ class Admin {
 															);
 															?>
 
-															<?php $hash = hash( 'md5', $form_data['code'] ) ?>
+															<?php $hash = hash( 'md5', $form_data['code'] ); ?>
 
 															<tr>
 																<td style="padding: 5px 10px; border-bottom: 1px solid #e2e2e2;">
@@ -504,11 +507,11 @@ class Admin {
 
 								</table>
 
-								<?php $i ++ ?>
+								<?php $i ++; ?>
 
 							<?php endforeach; ?>
 
-						<?php else: ?>
+						<?php else : ?>
 
 							<table class="row" style="margin-bottom: 30px; border-top: 6px solid #ccc; width: 100%;">
 								<tr>
@@ -573,9 +576,9 @@ class Admin {
 
 			$shortcode .= '[';
 
-			if ( $form_data['type'] == 'RADIO_BUTTON' || $form_data['type'] == 'CHECK_BOX' || $form_data['type'] == 'MULTI_SELECT' || $form_data['type'] == 'DROP_DOWN' ) {
+			if ( 'RADIO_BUTTON' === $form_data['type'] || 'CHECK_BOX' === $form_data['type'] || 'MULTI_SELECT' === $form_data['type'] || 'DROP_DOWN' === $form_data['type'] ) {
 				$options = '"' . implode( '" "', $form_data['options'] ) . '"';
-				if ( $form_data['type'] == 'MULTI_SELECT' ) {
+				if ( 'MULTI_SELECT' === $form_data['type'] ) {
 					$shortcode .= $this->kintone_fieldcode_supported_list[ $form_data['type'] ] . ' ' . $cf7_mailtag_name . ' multiple ' . $options;
 				} else {
 					$shortcode .= $this->kintone_fieldcode_supported_list[ $form_data['type'] ] . ' ' . $cf7_mailtag_name . ' ' . $options;
@@ -618,7 +621,7 @@ class Admin {
 				if ( $setting_cf7_mail_tag === $tag_name ) {
 
 					if ( isset( $kintone_field['type'] ) && isset( $this->consistency[ $type ] ) ) {
-						if ( in_array( $kintone_field['type'], $this->consistency[ $type ] ) ) {
+						if ( in_array( $kintone_field['type'], $this->consistency[ $type ], true ) ) {
 							return '';
 						} else {
 							return 'This setting is error.';
@@ -655,7 +658,7 @@ class Admin {
 		$args = wp_parse_args( $args, array() );
 		$type = $args['id'];
 
-		if ( ! in_array( $type, array( 'email', 'url', 'tel' ) ) ) {
+		if ( ! in_array( $type, array( 'email', 'url', 'tel' ), true ) ) {
 			$type = 'text';
 		}
 
@@ -705,7 +708,9 @@ class Admin {
 		<div class="control-box">
 			<fieldset>
 				<legend><?php echo esc_html( $description ); ?></legend>
-				<textarea class="tag code" name="" id="" rows="18" style="width:100%" readonly="readonly"><?php echo $insert_code; ?></textarea>
+				<textarea class="tag code" name="" id="" rows="18" style="width:100%" readonly="readonly">
+<?php echo esc_textarea( $insert_code ); ?>
+				</textarea>
 			</fieldset>
 		</div>
 
@@ -810,10 +815,9 @@ class Admin {
 				$i ++;
 
 			}
+			$properties['kintone_setting_data'] = $args['kintone_setting_data'];
+			$contact_form->set_properties( $properties );
 		}
-		$properties['kintone_setting_data'] = $args['kintone_setting_data'];
-		$contact_form->set_properties( $properties );
-
 	}
 
 	/**
@@ -846,6 +850,17 @@ class Admin {
 		<?php
 	}
 
+	/**
+	 * kintoneからデータを取得する.
+	 *
+	 * @param string  $request_url .
+	 * @param string  $kintone_token .
+	 * @param string  $basic_auth_user .
+	 * @param string  $basic_auth_pass .
+	 * @param boolean $file .
+	 *
+	 * @return array|WP_Error
+	 */
 	public function kintone_api( $request_url, $kintone_token, $basic_auth_user = null, $basic_auth_pass = null, $file = false ) {
 
 		if ( $request_url ) {
@@ -858,7 +873,7 @@ class Admin {
 			$res = wp_remote_get(
 				$request_url,
 				array(
-					'headers' => $headers
+					'headers' => $headers,
 				)
 			);
 
@@ -868,7 +883,7 @@ class Admin {
 
 			} else {
 
-				if ( $res['response']['code'] != 200 ) {
+				if ( 200 !== $res['response']['code'] ) {
 
 					set_transient(
 						'my-custom-admin-errors',
