@@ -216,7 +216,7 @@ class Admin {
 
 
 	/**
-	 * kintone設定パネルをCF7のタブに追加.
+	 * Kintone設定パネルをCF7のタブに追加.
 	 *
 	 * @param array $panels .
 	 *
@@ -260,7 +260,7 @@ class Admin {
 
 		$kintone_basic_authentication_password = '';
 		if ( isset( $kintone_setting_data['kintone_basic_authentication_password'] ) ) {
-			$kintone_basic_authentication_password = self::decode(
+			$kintone_basic_authentication_password = Utility::decode(
 				$kintone_setting_data['kintone_basic_authentication_password']
 			);
 		}
@@ -845,6 +845,57 @@ class Admin {
 		<?php endif; ?>
 
 		<?php
+	}
+
+	public function kintone_api( $request_url, $kintone_token, $basic_auth_user = null, $basic_auth_pass = null, $file = false ) {
+
+		if ( $request_url ) {
+
+			$headers = array_merge(
+				Utility::get_auth_header( $kintone_token ),
+				Utility::get_basic_auth_header( $basic_auth_user, $basic_auth_pass )
+			);
+
+			$res = wp_remote_get(
+				$request_url,
+				array(
+					'headers' => $headers
+				)
+			);
+
+			if ( is_wp_error( $res ) ) {
+
+				return $res;
+
+			} else {
+
+				if ( $res['response']['code'] != 200 ) {
+
+					set_transient(
+						'my-custom-admin-errors',
+						'kintone Error: ' . $res['response']['message'] . '(Code=' . $res['response']['code'] . ')',
+						10
+					);
+
+					return new WP_Error( $res['response']['code'], $res['response']['message'] );
+
+				} else {
+
+					if ( $file ) {
+						$return_value = $res['body'];
+					} else {
+						$return_value = json_decode( $res['body'], true );
+					}
+				}
+
+				return $return_value;
+			}
+		} else {
+			echo '<div class="error fade"><p><strong>URL is required</strong></p></div>';
+
+			return new WP_Error( 'Error', 'URL is required' );
+		}
+
 	}
 }
 
