@@ -3,7 +3,7 @@
  * Plugin Name: Form data to kintone
  * Plugin URI:
  * Description: This plugin is an addon for "Contact Form 7".
- * Version:     2.2.3
+ * Version:     2.2.5
  * Author:      Takashi Hosoya
  * Author URI:  http://ht79.info/
  * License:     GPLv2
@@ -261,6 +261,25 @@ class KintoneForm {
 
 		add_action( 'admin_notices', array( $this, 'admin_notices' ) );
 
+		add_filter( 'wpcf7_form_tag', array( $this, 'kintone_form_set_post_title' ) );
+
+	}
+
+	public function kintone_form_set_post_title( $tag ) {
+
+		global $post;
+
+		if ( ! is_array( $tag ) ) {
+			return $tag;
+		}
+
+		$name = $tag['name'];
+		if ( $name == 'post_title' ) {
+			$post_title    = get_the_title( $post );
+			$tag['values'] = (array) $post_title;
+		}
+
+		return $tag;
 	}
 
 	public function kintone_form_add_tag_generator_text() {

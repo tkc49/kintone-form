@@ -3,7 +3,7 @@ Contributors: tkc49
 Tags: cybozu, kintone, crm, database, custom field, contact form 7, form
 Requires at least: 4.9
 Tested up to: 5.2
-Stable tag: 2.2.3
+Stable tag: 2.2.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -23,8 +23,8 @@ It is a cloud service that can make the business applications with non-programmi
 
 Collaborate with team members and partners via apps and workspaces.
 
-* Information in Japanese : https://kintone.cybozu.com/jp/
-* Information in English: https://www.kintone.com/
+* Information in Japanese : [https://kintone.cybozu.com/jp/](https://kintone.cybozu.com/jp/)
+* Information in English: [https://www.kintone.com/](https://www.kintone.com/)
 
 Thanks
 Cover banner designed by [akari_doi](https://profiles.wordpress.org/akari_doi/)
@@ -45,6 +45,14 @@ A tab for setting the information on kitone appears on the "Contact Form 7" sett
 1. screenshot-1.png
 
 == Changelog ==
+= 2.2.5 =
+* Change readme.txt
+
+= 2.2.4 =
+* Add put post_title to kintone
+
+= 2.2.3 =
+* Changed test up version
 
 = 2.2.2 =
 * Fix typo
