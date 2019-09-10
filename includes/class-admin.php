@@ -239,7 +239,8 @@ class Admin {
 	 */
 	public function form_kintone_panel_form( $post ) {
 
-		$kintone_setting_data = get_post_meta( $post->id(), '_kintone_setting_data', true );
+		$cf7                  = WPCF7_ContactForm::get_current();
+		$kintone_setting_data = $cf7->prop( 'kintone_setting_data' );
 
 		$kintone_setting_data = wp_parse_args(
 			$kintone_setting_data,
@@ -773,9 +774,7 @@ class Admin {
 	 * @param WPCF7_ContactForm $contact_form .
 	 * @param array             $args .
 	 * @param string            $context .
-	 *
 	 */
-
 	public function wpcf7_save_contact_form( $contact_form, $args, $context ) {
 
 		$properties = array();

@@ -27,7 +27,7 @@ class Post_Kintone {
 		}
 
 		$name = $tag['name'];
-		if ( $name == 'post_title' ) {
+		if ( 'post_title' === $name ) {
 			$post_title    = get_the_title( $post );
 			$tag['values'] = (array) $post_title;
 		}
@@ -36,23 +36,34 @@ class Post_Kintone {
 	}
 
 
+	/**
+	 * フォームの情報をkintoneに登録する.
+	 *
+	 * @param WPCF7_ContactForm $wpcf7_data .
+	 *
+	 */
 	public function kintone_form_send( $wpcf7_data ) {
 
-		// Contact Form 7 add confirm
-		if ( isset( $_POST["_wpcf7c"] ) && $_POST["_wpcf7c"] == "step1" ) {
+		// Contact Form 7 add confirm.
+		if ( isset( $_POST["_wpcf7c"] ) && $_POST["_wpcf7c"] === "step1" ) {
 			return;
 		}
 
+//		error_log( var_export( $wpcf7_data, true ) );
 
 		$kintone_setting_data = $wpcf7_data->prop( 'kintone_setting_data' );
+		error_log( var_export( $kintone_setting_data, true ) );
+
 		if ( empty( $kintone_setting_data ) ) {
 			return;
 		}
+		error_log( 'hoge1' );
 
 		$submission = WPCF7_Submission::get_instance();
 		if ( empty( $submission ) ) {
 			return;
 		}
+		error_log( 'hoge1' );
 
 		$cf7_send_data = $submission->get_posted_data();
 
@@ -62,6 +73,8 @@ class Post_Kintone {
 		$post_data_count = 0;
 
 		$e = new WP_Error();
+
+		error_log( var_export( $kintone_setting_data, true ) );
 
 		foreach ( $kintone_setting_data['app_datas'] as $appdata ) {
 
