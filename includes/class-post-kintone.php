@@ -341,7 +341,7 @@ class Post_Kintone {
 	private function erro_mail( $e, $email_address_to_send_kintone_registration_error ) {
 
 		$error_msg  = '';
-		$error_msg  .= implode( '\r\n', $e->get_error_messages() ) . '\r\n';
+		$error_msg  .= implode( "\r\n", $e->get_error_messages() ) . "\r\n";
 		$error_data = $e->get_error_data();
 		$error_data = var_export( $error_data, true );
 
