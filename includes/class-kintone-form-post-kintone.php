@@ -1,14 +1,14 @@
 <?php
 /**
- * Post_Kintone
+ * Kintone_Form_Post_Kintone
  *
  * @package Kintone_Form
  */
 
 /**
- * Post_Kintone
+ * Kintone_Form_Post_Kintone
  */
-class Post_Kintone {
+class Kintone_Form_Post_Kintone {
 	/**
 	 * Constructor
 	 */
@@ -264,7 +264,7 @@ class Post_Kintone {
 						$data['token'],
 						$data['appid'],
 						$kintone_setting_data['kintone_basic_authentication_id'],
-						Utility::decode( $kintone_setting_data['kintone_basic_authentication_password'] ),
+						Kintone_Form_Utility::decode( $kintone_setting_data['kintone_basic_authentication_password'] ),
 						$data['datas'],
 						$kintone_setting_data['email_address_to_send_kintone_registration_error'],
 						$unique_key,
@@ -377,16 +377,16 @@ class Post_Kintone {
 	private function save_data_to_kintone( $url, $token, $appid, $basic_auth_user, $basic_auth_pass, $datas, $email_address_to_send_kintone_registration_error, $unique_key, $update_key ) {
 
 		$headers = array_merge(
-			Utility::get_auth_header( $token ),
-			Utility::get_basic_auth_header( $basic_auth_user, $basic_auth_pass ),
+			Kintone_Form_Utility::get_auth_header( $token ),
+			Kintone_Form_Utility::get_basic_auth_header( $basic_auth_user, $basic_auth_pass ),
 			array( 'Content-Type' => 'application/json' )
 		);
 
 		$headers = apply_filters(
 			'form_data_to_kintone_post_header',
 			$headers,
-			Utility::get_auth_header( $token ),
-			Utility::get_basic_auth_header( $basic_auth_user, $basic_auth_pass ),
+			Kintone_Form_Utility::get_auth_header( $token ),
+			Kintone_Form_Utility::get_basic_auth_header( $basic_auth_user, $basic_auth_pass ),
 			array( 'Content-Type' => 'application/json' )
 		);
 		$datas   = apply_filters( 'form_data_to_kintone_post_datas', $datas, $appid, $unique_key );

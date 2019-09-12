@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 class KintoneForm_checkbox
 {
@@ -27,13 +27,13 @@ class KintoneForm_checkbox
 		if( isset($cf7_send_data[$cf7_mail_tag]) ){
             $value = $cf7_send_data[$cf7_mail_tag];
         }
-		
-		
-		// 
+
+
+		//
 		// Check Acceptance
-		// 
-		$value = check_acceptance( $value, $cf7_mail_tag );
-		
+		//
+		$value = kintone_form_check_acceptance( $value, $cf7_mail_tag );
+
 
 		if( $kintone_form_data['required'] == 'true' && empty($value) ){
 			$e->add('Error', $cf7_mail_tag .'->'. $kintone_form_data['code'].' : Required fields');
@@ -45,12 +45,12 @@ class KintoneForm_checkbox
 		}
 
 		if( !empty($value[0]) ){
-		
+
 			foreach ($value as $check_box_value) {
-				
+
 				$match_flg = false;
 				foreach ($kintone_form_data['options'] as $option_key => $option_value) {
-					
+
 					if( $check_box_value == $option_value ){
 						$match_flg = true;
 					}
@@ -63,7 +63,7 @@ class KintoneForm_checkbox
 			}
 		}else{
 
-			$value = '';			
+			$value = '';
 		}
 
 		$return_data['value'] = $value;

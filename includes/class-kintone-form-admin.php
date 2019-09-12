@@ -8,7 +8,7 @@
 /**
  * Admin
  */
-class Admin {
+class Kintone_Form_Admin {
 
 	/**
 	 * CF7のメールタグとkintoneのフィールドコードの関連付け.
@@ -264,7 +264,7 @@ class Admin {
 
 		$kintone_basic_authentication_password = '';
 		if ( isset( $kintone_setting_data['kintone_basic_authentication_password'] ) ) {
-			$kintone_basic_authentication_password = Utility::decode(
+			$kintone_basic_authentication_password = Kintone_Form_Utility::decode(
 				$kintone_setting_data['kintone_basic_authentication_password']
 			);
 		}
@@ -866,8 +866,8 @@ class Admin {
 		if ( $request_url ) {
 
 			$headers = array_merge(
-				Utility::get_auth_header( $kintone_token ),
-				Utility::get_basic_auth_header( $basic_auth_user, $basic_auth_pass )
+				Kintone_Form_Utility::get_auth_header( $kintone_token ),
+				Kintone_Form_Utility::get_basic_auth_header( $basic_auth_user, $basic_auth_pass )
 			);
 
 			$res = wp_remote_get(

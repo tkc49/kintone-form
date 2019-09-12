@@ -1,6 +1,6 @@
 <?php
 
-class Utility {
+class Kintone_Form_Utility {
 	public static function decode( $encoded ) {
 		return preg_match( '/^[a-f0-9]{32}$/', $encoded ) ? $encoded : str_replace(
 			array(

@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 class KintoneForm_multi_line_text
 {
@@ -27,17 +27,17 @@ class KintoneForm_multi_line_text
 		if( isset($cf7_send_data[$cf7_mail_tag]) ){
             $value = $cf7_send_data[$cf7_mail_tag];
         }
-		
-		
-		// 
+
+
+		//
 		// Check Acceptance
-		// 
-		$value = check_acceptance( $value, $cf7_mail_tag );
-		
+		//
+		$value = kintone_form_check_acceptance( $value, $cf7_mail_tag );
+
 
 		if( is_array($value) ){
 			$value = implode("\n", $value);
-		}		
+		}
 
 
 		if( $kintone_form_data['required'] == 'true' && empty($value) ){

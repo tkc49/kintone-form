@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 class KintoneForm_drop_down
 {
@@ -27,14 +27,14 @@ class KintoneForm_drop_down
 		if( isset($cf7_send_data[$cf7_mail_tag]) ){
             $value = $cf7_send_data[$cf7_mail_tag];
         }
-        
 
-		// 
+
+		//
 		// Check Acceptance
-		// 
-		$value = check_acceptance( $value, $cf7_mail_tag );
-		
-		
+		//
+		$value = kintone_form_check_acceptance( $value, $cf7_mail_tag );
+
+
 		if( is_array($value) ){
 			$value = $value[0];
 		}
@@ -44,12 +44,12 @@ class KintoneForm_drop_down
 			$e->add('Error', $cf7_mail_tag .'->'. $kintone_form_data['code'].' : Required fields');
 
 		}
-		
+
 		if( !empty( $value ) ){
-						
+
 			$match_flg = false;
 			foreach ($kintone_form_data['options'] as $option_key => $option_value) {
-				
+
 				if( $value == $option_value ){
 					$match_flg = true;
 				}
@@ -59,11 +59,11 @@ class KintoneForm_drop_down
 				$e->add('Error', $cf7_mail_tag .'->' . $kintone_form_data['code'].' : not match');
 				$e->add('Error', 'kintone form data:' . var_export($kintone_form_data['options'], true));
 				$e->add('Error', 'CF7 value:' . $value);
-				
+
 			}
 		}
 
-		
+
 		$return_data['value'] = $value;
 
 		return $return_data;

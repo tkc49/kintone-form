@@ -29,14 +29,14 @@ class Kintone_Form {
 	 */
 	public function plugins_loaded() {
 
-		require_once KINTONE_FORM_PATH . '/includes/class-utility.php';
+		require_once KINTONE_FORM_PATH . '/includes/class-kintone-form-KintoneFormUtility.php';
 
 
-		require_once KINTONE_FORM_PATH . '/includes/class-admin.php';
-		new Admin();
+		require_once KINTONE_FORM_PATH . '/includes/class-kintone-form-admin.php';
+		new Kintone_Form_Admin();
 
-		require_once KINTONE_FORM_PATH . '/includes/class-post-kintone.php';
-		new Post_Kintone();
+		require_once KINTONE_FORM_PATH . '/includes/class-kintone-form-post-kintone.php';
+		new Kintone_Form_Post_Kintone();
 
 
 	}
