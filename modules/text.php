@@ -1,68 +1,65 @@
-<?php 
+<?php
 
-class KintoneForm_text
-{
+class KintoneForm_text {
 
 	/*
 	 * get instance
 	 */
-	public static function getInstance()
-	{
+	public static function getInstance() {
 		/**
-		* a variable that keeps the sole instance.
-		*/
+		 * a variable that keeps the sole instance.
+		 */
 		static $instance;
 
-		if ( !isset( $instance ) ) {
+		if ( ! isset( $instance ) ) {
 			$instance = new KintoneForm_text();
 		}
+
 		return $instance;
 	}
 
 	public static function format_to_kintone_data( $kintone_form_data, $cf7_send_data, $cf7_mail_tag, $e ) {
 
+		global $post;
+
 		$return_data = array();
 
-        $value = '';
-		if( isset($cf7_send_data[$cf7_mail_tag]) ){
-            $value = $cf7_send_data[$cf7_mail_tag];
-        }
-        
-		// 
-		// Check Acceptance
-		// 
+		$value = '';
+		if ( isset( $cf7_send_data[ $cf7_mail_tag ] ) ) {
+			$value = $cf7_send_data[ $cf7_mail_tag ];
+		}
+
+		//
+		// Check Acceptance.
+		//
 		$value = check_acceptance( $value, $cf7_mail_tag );
-        
 
-        $value = apply_filters( 'kintone_form_text_customize_mailtag', $value, $cf7_send_data, $cf7_mail_tag );
+		$value = apply_filters( 'kintone_form_text_customize_mailtag', $value, $cf7_send_data, $cf7_mail_tag );
 
-
-		if( is_array($value) ){
-			$value = implode(",", $value);
-		}		
-		
-
-
-		if( $kintone_form_data['required'] == 'true' && empty($value) ){
-			// エラー
-			$e->add('Error', $cf7_mail_tag .'->'. $kintone_form_data['code'].' : Required fields');
+		if ( is_array( $value ) ) {
+			$value = implode( ",", $value );
 		}
 
-		if( !empty($kintone_form_data['minLength']) ){
+		if ( $kintone_form_data['required'] == 'true' && empty( $value ) ) {
+			// エラー.
+			$e->add( 'Error', $cf7_mail_tag . '->' . $kintone_form_data['code'] . ' : Required fields' );
+		}
 
-			if( $kintone_form_data['minLength'] > mb_strlen( $value ) ){
-				
-				$e->add('Error', $cf7_mail_tag .'->'. $kintone_form_data['code'].' : Minimum value error');
+		if ( ! empty( $kintone_form_data['minLength'] ) ) {
+
+			if ( $kintone_form_data['minLength'] > mb_strlen( $value ) ) {
+
+				$e->add( 'Error', $cf7_mail_tag . '->' . $kintone_form_data['code'] . ' : Minimum value error' );
 			}
 
 		}
 
-		if( !empty($kintone_form_data['maxLength']) ){
+		if ( ! empty( $kintone_form_data['maxLength'] ) ) {
 
-			if( $kintone_form_data['maxLength'] < mb_strlen( $value ) ){
-				$e->add('Error', $cf7_mail_tag .'->'. $kintone_form_data['code'].' : Maximum value error');
+			if ( $kintone_form_data['maxLength'] < mb_strlen( $value ) ) {
+				$e->add( 'Error', $cf7_mail_tag . '->' . $kintone_form_data['code'] . ' : Maximum value error' );
 			}
-			
+
 		}
 
 		$return_data['value'] = $value;
@@ -70,7 +67,6 @@ class KintoneForm_text
 		return $return_data;
 
 	}
-
 
 
 }
