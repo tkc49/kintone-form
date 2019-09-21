@@ -1,23 +1,33 @@
 <?php
 
-class KintoneForm_text {
+class KintoneFormText {
 
-	/*
-	 * get instance
+	/**
+	 * Get instance
 	 */
-	public static function getInstance() {
+	public static function get_instance() {
 		/**
-		 * a variable that keeps the sole instance.
+		 * A variable that keeps the sole instance.
 		 */
 		static $instance;
 
 		if ( ! isset( $instance ) ) {
-			$instance = new KintoneForm_text();
+			$instance = new KintoneFormText();
 		}
 
 		return $instance;
 	}
 
+	/**
+	 * Format for kintone data.
+	 *
+	 * @param array    $kintone_form_data .
+	 * @param array    $cf7_send_data .
+	 * @param string   $cf7_mail_tag .
+	 * @param WP_Error $e .
+	 *
+	 * @return array An array of image URLs.
+	 */
 	public static function format_to_kintone_data( $kintone_form_data, $cf7_send_data, $cf7_mail_tag, $e ) {
 
 		global $post;
@@ -37,12 +47,7 @@ class KintoneForm_text {
 		$value = apply_filters( 'kintone_form_text_customize_mailtag', $value, $cf7_send_data, $cf7_mail_tag );
 
 		if ( is_array( $value ) ) {
-			$value = implode( ",", $value );
-		}
-
-		if ( $kintone_form_data['required'] == 'true' && empty( $value ) ) {
-			// エラー.
-			$e->add( 'Error', $cf7_mail_tag . '->' . $kintone_form_data['code'] . ' : Required fields' );
+			$value = implode( ',', $value );
 		}
 
 		if ( ! empty( $kintone_form_data['minLength'] ) ) {
@@ -51,7 +56,6 @@ class KintoneForm_text {
 
 				$e->add( 'Error', $cf7_mail_tag . '->' . $kintone_form_data['code'] . ' : Minimum value error' );
 			}
-
 		}
 
 		if ( ! empty( $kintone_form_data['maxLength'] ) ) {
@@ -59,7 +63,6 @@ class KintoneForm_text {
 			if ( $kintone_form_data['maxLength'] < mb_strlen( $value ) ) {
 				$e->add( 'Error', $cf7_mail_tag . '->' . $kintone_form_data['code'] . ' : Maximum value error' );
 			}
-
 		}
 
 		$return_data['value'] = $value;
@@ -67,8 +70,4 @@ class KintoneForm_text {
 		return $return_data;
 
 	}
-
-
 }
-
-

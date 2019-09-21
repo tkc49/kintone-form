@@ -3,7 +3,7 @@
  * Plugin Name: Form data to kintone
  * Plugin URI:
  * Description: This plugin is an addon for "Contact Form 7".
- * Version:     2.4.0
+ * Version:     2.5.0
  * Author:      Takashi Hosoya
  * Author URI:  http://ht79.info/
  * License:     GPLv2
@@ -57,10 +57,10 @@ require KINTONE_FORM_PATH . '/modules/radio.php';
 require KINTONE_FORM_PATH . '/modules/checkbox.php';
 require KINTONE_FORM_PATH . '/modules/date.php';
 require KINTONE_FORM_PATH . '/modules/datetime.php';
-require KINTONE_FORM_PATH . '/modules/drop_down.php';
+require KINTONE_FORM_PATH . '/modules/dropdown.php';
 require KINTONE_FORM_PATH . '/modules/link.php';
-require KINTONE_FORM_PATH . '/modules/rich_text.php';
-require KINTONE_FORM_PATH . '/modules/multi_line_text.php';
+require KINTONE_FORM_PATH . '/modules/richText.php';
+require KINTONE_FORM_PATH . '/modules/multiLineText.php';
 require KINTONE_FORM_PATH . '/modules/multi_select.php';
 require KINTONE_FORM_PATH . '/modules/time.php';
 require KINTONE_FORM_PATH . '/includes/check-acceptance.php';

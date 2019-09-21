@@ -1,6 +1,14 @@
 <?php
+/**
+ * Multi Line Text
+ *
+ * @package kintone-form
+ */
 
-class KintoneFormTime {
+/**
+ * KintoneFormMultiLineText
+ */
+class KintoneFormMultiLineText {
 
 	/**
 	 * Get instance
@@ -12,7 +20,7 @@ class KintoneFormTime {
 		static $instance;
 
 		if ( ! isset( $instance ) ) {
-			$instance = new KintoneFormTime();
+			$instance = new KintoneFormMultiLineText();
 		}
 
 		return $instance;
@@ -37,17 +45,20 @@ class KintoneFormTime {
 			$value = $cf7_send_data[ $cf7_mail_tag ];
 		}
 
-		if ( $value ) {
-			if ( strtotime( $value ) === false ) {
-				$e->add( 'Error', $cf7_mail_tag . '->' . $kintone_form_data['code'] . ' : time format error' );
-			}
+		//
+		// Check Acceptance.
+		//
+		$value = kintone_form_check_acceptance( $value, $cf7_mail_tag );
 
-			$value                = date( 'H:i', strtotime( $value ) );
-			$return_data['value'] = $value;
-
+		if ( is_array( $value ) ) {
+			$value = implode( "\n", $value );
 		}
+
+		$return_data['value'] = $value;
 
 		return $return_data;
 
 	}
 }
+
+

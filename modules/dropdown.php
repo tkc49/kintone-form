@@ -1,9 +1,17 @@
 <?php
+/**
+ * Drop Down
+ *
+ * @package kintone-form
+ */
 
-class KintoneFormTime {
+/**
+ * KintoneFormDate
+ */
+class KintoneFormDropdown {
 
 	/**
-	 * Get instance
+	 * Get instance.
 	 */
 	public static function get_instance() {
 		/**
@@ -12,14 +20,14 @@ class KintoneFormTime {
 		static $instance;
 
 		if ( ! isset( $instance ) ) {
-			$instance = new KintoneFormTime();
+			$instance = new KintoneFormDropdown();
 		}
 
 		return $instance;
 	}
 
 	/**
-	 * Format for kintone data.
+	 * Format_to_kintone_data
 	 *
 	 * @param array    $kintone_form_data .
 	 * @param array    $cf7_send_data .
@@ -37,17 +45,20 @@ class KintoneFormTime {
 			$value = $cf7_send_data[ $cf7_mail_tag ];
 		}
 
-		if ( $value ) {
-			if ( strtotime( $value ) === false ) {
-				$e->add( 'Error', $cf7_mail_tag . '->' . $kintone_form_data['code'] . ' : time format error' );
-			}
+		//
+		// Check Acceptance.
+		//
+		$value = kintone_form_check_acceptance( $value, $cf7_mail_tag );
 
-			$value                = date( 'H:i', strtotime( $value ) );
-			$return_data['value'] = $value;
-
+		if ( is_array( $value ) ) {
+			$value = $value[0];
 		}
+
+		$return_data['value'] = $value;
 
 		return $return_data;
 
 	}
 }
+
+

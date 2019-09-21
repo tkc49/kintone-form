@@ -1,25 +1,25 @@
 <?php
 
-class KintoneForm_drop_down {
+class KintoneFormRichText {
 
-	/*
-	 * get instance.
+	/**
+	 * Get instance
 	 */
-	public static function getInstance() {
+	public static function get_instance() {
 		/**
-		 * a variable that keeps the sole instance.
+		 * A variable that keeps the sole instance.
 		 */
 		static $instance;
 
 		if ( ! isset( $instance ) ) {
-			$instance = new KintoneForm_drop_down();
+			$instance = new KintoneFormRichText();
 		}
 
 		return $instance;
 	}
 
 	/**
-	 * Format_to_kintone_data
+	 * Format for kintone data.
 	 *
 	 * @param array    $kintone_form_data .
 	 * @param array    $cf7_send_data .
@@ -37,20 +37,8 @@ class KintoneForm_drop_down {
 			$value = $cf7_send_data[ $cf7_mail_tag ];
 		}
 
-
-		//
-		// Check Acceptance.
-		//
-		$value = kintone_form_check_acceptance( $value, $cf7_mail_tag );
-
 		if ( is_array( $value ) ) {
-			$value = $value[0];
-		}
-
-		if ( 'true' === $kintone_form_data['required'] && empty( $value ) ) {
-
-			$e->add( 'Error', $cf7_mail_tag . '->' . $kintone_form_data['code'] . ' : Required fields' );
-
+			$value = implode( "\n", $value );
 		}
 
 		$return_data['value'] = $value;
@@ -58,8 +46,4 @@ class KintoneForm_drop_down {
 		return $return_data;
 
 	}
-
-
 }
-
-

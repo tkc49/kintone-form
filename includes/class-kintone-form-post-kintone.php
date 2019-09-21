@@ -71,7 +71,7 @@ class Kintone_Form_Post_Kintone {
 
 									switch ( $kintone_form_data['type'] ) {
 										case 'SINGLE_LINE_TEXT':
-											$post_data = KintoneForm_text::format_to_kintone_data(
+											$post_data = KintoneFormText::format_to_kintone_data(
 												$kintone_form_data,
 												$cf7_send_data,
 												$cf7_mail_tag,
@@ -82,7 +82,7 @@ class Kintone_Form_Post_Kintone {
 											}
 											break;
 										case 'NUMBER':
-											$post_data = KintoneForm_number::format_to_kintone_data(
+											$post_data = KintoneFormNumber::format_to_kintone_data(
 												$kintone_form_data,
 												$cf7_send_data,
 												$cf7_mail_tag,
@@ -93,7 +93,7 @@ class Kintone_Form_Post_Kintone {
 											}
 											break;
 										case 'RADIO_BUTTON':
-											$post_data = KintoneForm_radio::format_to_kintone_data(
+											$post_data = KintoneFormRadio::format_to_kintone_data(
 												$kintone_form_data,
 												$cf7_send_data,
 												$cf7_mail_tag,
@@ -104,7 +104,7 @@ class Kintone_Form_Post_Kintone {
 											}
 											break;
 										case 'CHECK_BOX':
-											$post_data = KintoneForm_checkbox::format_to_kintone_data(
+											$post_data = KintoneFormCheckbox::format_to_kintone_data(
 												$kintone_form_data,
 												$cf7_send_data,
 												$cf7_mail_tag,
@@ -126,7 +126,7 @@ class Kintone_Form_Post_Kintone {
 											}
 											break;
 										case 'DROP_DOWN':
-											$post_data = KintoneForm_drop_down::format_to_kintone_data(
+											$post_data = KintoneFormDropdown::format_to_kintone_data(
 												$kintone_form_data,
 												$cf7_send_data,
 												$cf7_mail_tag,
@@ -137,7 +137,7 @@ class Kintone_Form_Post_Kintone {
 											}
 											break;
 										case 'DATE':
-											$post_data = KintoneForm_date::format_to_kintone_data(
+											$post_data = KintoneFormDate::format_to_kintone_data(
 												$kintone_form_data,
 												$cf7_send_data,
 												$cf7_mail_tag,
@@ -148,7 +148,7 @@ class Kintone_Form_Post_Kintone {
 											}
 											break;
 										case 'TIME':
-											$post_data = KintoneForm_time::format_to_kintone_data(
+											$post_data = KintoneFormTime::format_to_kintone_data(
 												$kintone_form_data,
 												$cf7_send_data,
 												$cf7_mail_tag,
@@ -159,7 +159,7 @@ class Kintone_Form_Post_Kintone {
 											}
 											break;
 										case 'DATETIME':
-											$post_data = KintoneForm_datetime::format_to_kintone_data(
+											$post_data = KintoneFormDatetime::format_to_kintone_data(
 												$kintone_form_data,
 												$cf7_send_data,
 												$cf7_mail_tag,
@@ -170,7 +170,7 @@ class Kintone_Form_Post_Kintone {
 											}
 											break;
 										case 'LINK':
-											$post_data = KintoneForm_link::format_to_kintone_data(
+											$post_data = KintoneFormLink::format_to_kintone_data(
 												$kintone_form_data,
 												$cf7_send_data,
 												$cf7_mail_tag,
@@ -181,7 +181,7 @@ class Kintone_Form_Post_Kintone {
 											}
 											break;
 										case 'RICH_TEXT':
-											$post_data = KintoneForm_rich_text::format_to_kintone_data(
+											$post_data = KintoneFormRichText::format_to_kintone_data(
 												$kintone_form_data,
 												$cf7_send_data,
 												$cf7_mail_tag,
@@ -192,7 +192,7 @@ class Kintone_Form_Post_Kintone {
 											}
 											break;
 										case 'MULTI_LINE_TEXT':
-											$post_data = KintoneForm_multi_line_text::format_to_kintone_data(
+											$post_data = KintoneFormMultiLineText::format_to_kintone_data(
 												$kintone_form_data,
 												$cf7_send_data,
 												$cf7_mail_tag,
