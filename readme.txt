@@ -3,7 +3,7 @@ Contributors: tkc49
 Tags: cybozu, kintone, crm, database, custom field, contact form 7, form
 Requires at least: 4.9
 Tested up to: 5.2
-Stable tag: 2.5.0
+Stable tag: 2.6.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -45,6 +45,9 @@ A tab for setting the information on kitone appears on the "Contact Form 7" sett
 1. screenshot-1.png
 
 == Changelog ==
+= 2.6.0 =
+* Add CF7 form title to error message.
+
 = 2.5.0 =
 * Change remove checking require by plugin.
 

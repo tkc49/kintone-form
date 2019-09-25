@@ -340,7 +340,15 @@ class Kintone_Form_Post_Kintone {
 	 */
 	private function erro_mail( $e, $email_address_to_send_kintone_registration_error ) {
 
+		$contact_form             = WPCF7_ContactForm::get_current();
+		$cf7_name                 = $contact_form->name();
+		$cf7_name_after_urldecode = urldecode( $cf7_name );
+
+		$cf7_id = $contact_form->id();
+
 		$error_msg  = '';
+		$error_msg  .= $cf7_name_after_urldecode . '(ID:' . $cf7_id . ')' . "\r\n";
+		$error_msg  .= '-----------------------' . "\r\n";
 		$error_msg  .= implode( "\r\n", $e->get_error_messages() ) . "\r\n";
 		$error_data = $e->get_error_data();
 		$error_data = var_export( $error_data, true );
