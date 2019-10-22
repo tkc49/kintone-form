@@ -1,6 +1,6 @@
 const puppeteer = require( 'puppeteer' );
 ( async () => {
-	const browser = await puppeteer.launch( { headless: true } )
+	const browser = await puppeteer.launch( { headless: false } )
 	const page    = await browser.newPage()
 
 	await page.goto( 'http://form-data-to-kintone.test/form-data-to-kintone-test' )

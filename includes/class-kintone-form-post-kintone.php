@@ -77,7 +77,7 @@ class Kintone_Form_Post_Kintone {
 												$cf7_mail_tag,
 												$e
 											);
-											if ( isset( $post_data['value'] ) && ! empty( $post_data['value'] ) ) {
+											if ( isset( $post_data['value'] ) && '' !== $post_data['value'] ) {
 												$kintone_post_data[ $post_data_count ]['datas'][ $kintone_form_data['code'] ] = $post_data;
 											}
 											break;
@@ -88,7 +88,7 @@ class Kintone_Form_Post_Kintone {
 												$cf7_mail_tag,
 												$e
 											);
-											if ( isset( $post_data['value'] ) && ! empty( $post_data['value'] ) ) {
+											if ( isset( $post_data['value'] ) && '' !== $post_data['value'] ) {
 												$kintone_post_data[ $post_data_count ]['datas'][ $kintone_form_data['code'] ] = $post_data;
 											}
 											break;
@@ -99,7 +99,7 @@ class Kintone_Form_Post_Kintone {
 												$cf7_mail_tag,
 												$e
 											);
-											if ( isset( $post_data['value'] ) && ! empty( $post_data['value'] ) ) {
+											if ( isset( $post_data['value'] ) && '' !== $post_data['value'] ) {
 												$kintone_post_data[ $post_data_count ]['datas'][ $kintone_form_data['code'] ] = $post_data;
 											}
 											break;
@@ -110,7 +110,7 @@ class Kintone_Form_Post_Kintone {
 												$cf7_mail_tag,
 												$e
 											);
-											if ( isset( $post_data['value'] ) && ! empty( $post_data['value'] ) ) {
+											if ( isset( $post_data['value'] ) && is_array( $post_data['value'] ) ) {
 												$kintone_post_data[ $post_data_count ]['datas'][ $kintone_form_data['code'] ] = $post_data;
 											}
 											break;
@@ -121,7 +121,7 @@ class Kintone_Form_Post_Kintone {
 												$cf7_mail_tag,
 												$e
 											);
-											if ( isset( $post_data['value'] ) && ! empty( $post_data['value'] ) ) {
+											if ( isset( $post_data['value'] ) && is_array( $post_data['value'] ) ) {
 												$kintone_post_data[ $post_data_count ]['datas'][ $kintone_form_data['code'] ] = $post_data;
 											}
 											break;
@@ -132,7 +132,7 @@ class Kintone_Form_Post_Kintone {
 												$cf7_mail_tag,
 												$e
 											);
-											if ( isset( $post_data['value'] ) && ! empty( $post_data['value'] ) ) {
+											if ( isset( $post_data['value'] ) && '' !== $post_data['value'] ) {
 												$kintone_post_data[ $post_data_count ]['datas'][ $kintone_form_data['code'] ] = $post_data;
 											}
 											break;
@@ -143,7 +143,7 @@ class Kintone_Form_Post_Kintone {
 												$cf7_mail_tag,
 												$e
 											);
-											if ( isset( $post_data['value'] ) && ! empty( $post_data['value'] ) ) {
+											if ( isset( $post_data['value'] ) && '' !== $post_data['value'] ) {
 												$kintone_post_data[ $post_data_count ]['datas'][ $kintone_form_data['code'] ] = $post_data;
 											}
 											break;
@@ -154,7 +154,7 @@ class Kintone_Form_Post_Kintone {
 												$cf7_mail_tag,
 												$e
 											);
-											if ( isset( $post_data['value'] ) && ! empty( $post_data['value'] ) ) {
+											if ( isset( $post_data['value'] ) && '' !== $post_data['value'] ) {
 												$kintone_post_data[ $post_data_count ]['datas'][ $kintone_form_data['code'] ] = $post_data;
 											}
 											break;
@@ -165,7 +165,7 @@ class Kintone_Form_Post_Kintone {
 												$cf7_mail_tag,
 												$e
 											);
-											if ( isset( $post_data['value'] ) && ! empty( $post_data['value'] ) ) {
+											if ( isset( $post_data['value'] ) && '' !== $post_data['value'] ) {
 												$kintone_post_data[ $post_data_count ]['datas'][ $kintone_form_data['code'] ] = $post_data;
 											}
 											break;
@@ -176,7 +176,7 @@ class Kintone_Form_Post_Kintone {
 												$cf7_mail_tag,
 												$e
 											);
-											if ( isset( $post_data['value'] ) && ! empty( $post_data['value'] ) ) {
+											if ( isset( $post_data['value'] ) && '' !== $post_data['value'] ) {
 												$kintone_post_data[ $post_data_count ]['datas'][ $kintone_form_data['code'] ] = $post_data;
 											}
 											break;
@@ -187,7 +187,7 @@ class Kintone_Form_Post_Kintone {
 												$cf7_mail_tag,
 												$e
 											);
-											if ( isset( $post_data['value'] ) && ! empty( $post_data['value'] ) ) {
+											if ( isset( $post_data['value'] ) && '' !== $post_data['value'] ) {
 												$kintone_post_data[ $post_data_count ]['datas'][ $kintone_form_data['code'] ] = $post_data;
 											}
 											break;
@@ -198,7 +198,7 @@ class Kintone_Form_Post_Kintone {
 												$cf7_mail_tag,
 												$e
 											);
-											if ( isset( $post_data['value'] ) && ! empty( $post_data['value'] ) ) {
+											if ( isset( $post_data['value'] ) && '' !== $post_data['value'] ) {
 												$kintone_post_data[ $post_data_count ]['datas'][ $kintone_form_data['code'] ] = $post_data;
 											}
 											break;
@@ -226,7 +226,7 @@ class Kintone_Form_Post_Kintone {
 												$cf7_mail_tag,
 												$e
 											);
-											if ( isset( $post_data['value'] ) && ! empty( $post_data['value'] ) ) {
+											if ( isset( $post_data['value'] ) && is_array( $post_data['value'] ) ) {
 												$kintone_post_data[ $post_data_count ]['datas'][ $kintone_form_data['code'] ] = $post_data;
 											}
 											break;

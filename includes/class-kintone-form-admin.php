@@ -783,8 +783,8 @@ class Kintone_Form_Admin {
 	public function wpcf7_save_contact_form( $contact_form, $args, $context ) {
 
 		$properties = array();
-
-		$i = 0;
+		$i          = 0;
+		$app_datas  = array();
 		if ( isset( $args['kintone_setting_data']['app_datas'] ) ) {
 			foreach ( $args['kintone_setting_data']['app_datas'] as $app_data ) {
 
@@ -808,18 +808,19 @@ class Kintone_Form_Admin {
 						$app_data['formdata'] = $kintone_form_data;
 					}
 
-					$args['kintone_setting_data']['app_datas'][ $i ] = $app_data;
+					$app_datas [ $i ] = $app_data;
 
 				}
 
 				$i ++;
 
 			}
+			$args['kintone_setting_data']['app_datas'] = $app_datas;
+
 			$properties['kintone_setting_data'] = $args['kintone_setting_data'];
 			$contact_form->set_properties( $properties );
 		}
 	}
-
 	/**
 	 * パスワードをエンコードする
 	 *
