@@ -49,7 +49,7 @@ class KintoneFormDatetime {
 			$e->add( 'Error', $cf7_mail_tag . '->' . $kintone_form_data['code'] . ' : Datetime format error' );
 		}
 
-		$value = date( 'Y-m-dTH:i:s+09:00', strtotime( $value ) );
+		$value = date_i18n( 'c', strtotime( $value ) );
 
 		$return_data['value'] = $value;
 
