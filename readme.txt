@@ -1,9 +1,9 @@
 === Form data to kintone ===
-Contributors: tkc49
+Contributors: tkc49, agunchar
 Tags: cybozu, kintone, crm, database, custom field, contact form 7, form
 Requires at least: 4.9
-Tested up to: 5.2
-Stable tag: 2.6.3
+Tested up to: 5.3.2
+Stable tag: 2.7.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -45,6 +45,28 @@ A tab for setting the information on kitone appears on the "Contact Form 7" sett
 1. screenshot-1.png
 
 == Changelog ==
+= 2.7.0 =
+* Add special mail tags
+  * remote_ip
+  * user_agent
+  * url
+  * post_id
+  * post_name
+  * post_title
+  * post_url
+  * post_author
+  * post_author_email
+  * site_title
+  * site_description
+  * site_url
+  * site_admin_email
+
+= 2.6.5 =
+* Change version
+
+= 2.6.4 =
+* Add Contributor.
+
 = 2.6.3 =
 * Fix Fixed a bug what datetime formatting(UTC->ISO 8601).
 

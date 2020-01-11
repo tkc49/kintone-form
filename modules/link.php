@@ -41,9 +41,14 @@ class KintoneFormLink {
 		$return_data = array();
 
 		$value = '';
-		if ( isset( $cf7_send_data[ $cf7_mail_tag ] ) ) {
-			$value = $cf7_send_data[ $cf7_mail_tag ];
+		if ( in_array( $cf7_mail_tag, Kintone_Form::CF7_SPECAIL_TAGS, true ) ) {
+			$value = apply_filters( 'wpcf7_special_mail_tags', '', $cf7_mail_tag, false );
+		} else {
+			if ( isset( $cf7_send_data[ $cf7_mail_tag ] ) ) {
+				$value = $cf7_send_data[ $cf7_mail_tag ];
+			}
 		}
+
 
 		if ( ! empty( $kintone_form_data['minLength'] ) ) {
 

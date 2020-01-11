@@ -357,28 +357,8 @@ class Kintone_Form_Admin {
 								<table class="row" style="margin-bottom: 30px; border-top: 6px solid #ccc; width: 100%;">
 									<tr>
 										<td valign="top" style="padding: 10px 0px;">
-											APP
-											ID:<input
-												type="text"
-												id="kintone-form-appid"
-												name="kintone_setting_data[app_datas][<?php echo esc_attr(
-													$i
-												); ?>][appid]"
-												class="small-text"
-												size="70"
-												value="<?php echo esc_attr( $app_data['appid'] ); ?>"
-											/>
-											Api
-											Token:<input
-												type="text"
-												id="kintone-form-token"
-												name="kintone_setting_data[app_datas][<?php echo esc_attr(
-													$i
-												); ?>][token]"
-												class="regular-text"
-												size="70"
-												value="<?php echo esc_attr( $app_data['token'] ); ?>"
-											/>
+											APP ID:<input type="text" id="kintone-form-appid-<?php echo esc_attr( $i ); ?>" name="kintone_setting_data[app_datas][<?php echo esc_attr( $i ); ?>][appid]" class="small-text" size="70" value="<?php echo esc_attr( $app_data['appid'] ); ?>"/>
+											Api Token:<input type="text" id="kintone-form-token-<?php echo esc_attr( $i ); ?>" name="kintone_setting_data[app_datas][<?php echo esc_attr( $i ); ?>][token]" class="regular-text" size="70" value="<?php echo esc_attr( $app_data['token'] ); ?>"/>
 											<input type="submit" class="button-primary" name="get-kintone-data" value="GET">
 										</td>
 										<td></td>
@@ -425,11 +405,7 @@ class Kintone_Form_Admin {
 																$selectbox_readonly   = 'disabled="disabled"';
 															}
 
-															$error_msg = $this->check_consistency(
-																$tags,
-																$select_option,
-																$form_data
-															);
+															$error_msg = $this->check_consistency( $tags, $select_option, $form_data );
 															?>
 
 															<?php $hash = hash( 'md5', $form_data['code'] ); ?>
@@ -438,61 +414,41 @@ class Kintone_Form_Admin {
 																<td style="padding: 5px 10px; border-bottom: 1px solid #e2e2e2;">
 																	<?php
 																	echo esc_html(
-																		     ( isset( $form_data['label'] ) ) ? $form_data['label'] : ""
-																	     ) . '(' . esc_html(
-																		     $form_data['code']
-																	     ) . ')';
+																			 ( isset( $form_data['label'] ) ) ? $form_data['label'] : ""
+																		 ) . '(' . esc_html(
+																			 $form_data['code']
+																		 ) . ')';
 																	?>
 																</td>
 																<td><-</td>
 																<td style="padding: 5px 10px; border-bottom: 1px solid #e2e2e2;">
-																	<?php if ( array_key_exists(
-																		$form_data['type'],
-																		$this->kintone_fieldcode_supported_list
-																	) ): ?>
+																	<?php if ( array_key_exists( $form_data['type'], $this->kintone_fieldcode_supported_list ) ) : ?>
 
-																		<select id="cf7-mailtag-<?php echo $hash; ?>" <?php echo $selectbox_readonly; ?> name="kintone_setting_data[app_datas][<?php echo $i; ?>][setting][<?php echo esc_attr(
-																			$form_data['code']
-																		) ?>]">
+																		<select id="cf7-mailtag-<?php echo $hash; ?>" <?php echo $selectbox_readonly; ?> name="kintone_setting_data[app_datas][<?php echo $i; ?>][setting][<?php echo esc_attr( $form_data['code'] ) ?>]">
 																			<option value=""></option>
-																			<?php foreach ( $mailtags as $value ): ?>
-																				<option <?php selected(
-																					$value,
-																					$select_option
-																				); ?> value="<?php echo esc_attr(
-																					$value
-																				); ?>">
-																					[<?php echo esc_attr( $value ); ?>]
-																				</option>
+																			<?php foreach ( $mailtags as $value ) : ?>
+																				<option <?php selected( $value, $select_option ); ?> value="<?php echo esc_attr( $value ); ?>">[<?php echo esc_attr( $value ); ?>]</option>
 																			<?php endforeach; ?>
+																			<?php foreach ( Kintone_Form::CF7_SPECAIL_TAGS as $cf7_specail_tag ) : ?>
+																				<option <?php selected( $cf7_specail_tag, $select_option ); ?> value="<?php echo esc_attr( $cf7_specail_tag ); ?>">[<?php echo esc_attr( $cf7_specail_tag ); ?>]</option>
+																			<?php endforeach; ?>
+
 																		</select> or
-																		<input type="text" id="<?php echo $hash; ?>" class="your-cf7-tag-name" placeholder="your-cf7-tag-name" name="kintone_setting_data[app_datas][<?php echo $i; ?>][setting_original_cf7tag_name][<?php echo esc_attr(
-																			$form_data['code']
-																		) ?>]" value="<?php echo $original_cf7tag_name; ?>"/>
-																		<?php if ( $error_msg ): ?>
+																		<input type="text" id="<?php echo $hash; ?>" class="your-cf7-tag-name" placeholder="your-cf7-tag-name" name="kintone_setting_data[app_datas][<?php echo $i; ?>][setting_original_cf7tag_name][<?php echo esc_attr( $form_data['code'] ) ?>]" value="<?php echo $original_cf7tag_name; ?>"/>
+																		<?php if ( $error_msg ) : ?>
 																			<div style="color:red; font-weight:bold;"><?php echo $error_msg; ?></div>
 																		<?php endif; ?>
 																	<?php else: ?>
-																		<?php if ( $form_data['type'] == 'FILE' ): ?>
-																			<a href="<?php echo admin_url(
-																				'admin.php?page=form-data-to-kintone-setting'
-																			); ?>" title="">Add-Ons</a>
+																		<?php if ( 'FILE' === $form_data['type'] ) : ?>
+																			Add-Ons
 																		<?php else: ?>
 																			Not Support
 																		<?php endif; ?>
 																	<?php endif; ?>
 																</td>
 																<td style="padding: 5px 10px; border-bottom: 1px solid #e2e2e2;">
-																	<?php if ( array_key_exists(
-																		$form_data['type'],
-																		$this->kintone_fieldcode_supported_list
-																	) ): ?>
-																		<?php echo $this->create_sample_shortcode(
-																			$form_data,
-																			$select_option,
-																			$original_cf7tag_name,
-																			$hash
-																		); ?>
+																	<?php if ( array_key_exists( $form_data['type'], $this->kintone_fieldcode_supported_list ) ) : ?>
+																		<?php echo $this->create_sample_shortcode( $form_data, $select_option, $original_cf7tag_name, $hash ); ?>
 																	<?php endif; ?>
 																</td>
 
@@ -516,10 +472,8 @@ class Kintone_Form_Admin {
 							<table class="row" style="margin-bottom: 30px; border-top: 6px solid #ccc; width: 100%;">
 								<tr>
 									<td valign="top" style="padding: 10px 0px;">
-										APP
-										ID:<input type="text" id="kintone-form-appid" name="kintone_setting_data[app_datas][0][appid]" class="small-text" size="70" value=""/>
-										Api
-										Token:<input type="text" id="kintone-form-token" name="kintone_setting_data[app_datas][0][token]" class="regular-text" size="70" value=""/>
+										APP ID:<input type="text" id="kintone-form-appid-0" name="kintone_setting_data[app_datas][0][appid]" class="small-text" size="70" value=""/>
+										Api Token:<input type="text" id="kintone-form-token-0" name="kintone_setting_data[app_datas][0][token]" class="regular-text" size="70" value=""/>
 										<input type="submit" class="button-primary" name="get-kintone-data" value="GET">
 									</td>
 								</tr>
@@ -533,11 +487,7 @@ class Kintone_Form_Admin {
 					<tfoot>
 					<tr>
 						<td colspan="2">
-							<span class="add button">追加</span> ←
-							<a
-								href="<?php echo admin_url(
-									'admin.php?page=form-data-to-kintone-setting'
-								); ?>" title="">Add-Ons</a>
+							<span class="add button">追加</span> ← Add-Ons
 						</td>
 					</tr>
 					</tfoot>
@@ -821,6 +771,7 @@ class Kintone_Form_Admin {
 			$contact_form->set_properties( $properties );
 		}
 	}
+
 	/**
 	 * パスワードをエンコードする
 	 *

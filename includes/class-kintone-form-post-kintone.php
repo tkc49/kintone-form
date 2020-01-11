@@ -71,12 +71,7 @@ class Kintone_Form_Post_Kintone {
 
 									switch ( $kintone_form_data['type'] ) {
 										case 'SINGLE_LINE_TEXT':
-											$post_data = KintoneFormText::format_to_kintone_data(
-												$kintone_form_data,
-												$cf7_send_data,
-												$cf7_mail_tag,
-												$e
-											);
+											$post_data = KintoneFormText::format_to_kintone_data( $kintone_form_data, $cf7_send_data, $cf7_mail_tag, $e );
 											if ( isset( $post_data['value'] ) && '' !== $post_data['value'] ) {
 												$kintone_post_data[ $post_data_count ]['datas'][ $kintone_form_data['code'] ] = $post_data;
 											}
@@ -435,7 +430,12 @@ class Kintone_Form_Post_Kintone {
 
 				$message = json_decode( $res['body'], true );
 				$e       = new WP_Error();
-				$e->add( 'validation-error', $message['message'], $message['errors'] );
+
+				$errors = array();
+				if ( isset( $message['errors'] ) ) {
+					$errors = $message['errors'];
+				}
+				$e->add( 'validation-error', $message['message'], $errors );
 				$this->erro_mail( $e, $email_address_to_send_kintone_registration_error );
 
 				return $e;

@@ -3,7 +3,7 @@
  * Plugin Name: Form data to kintone
  * Plugin URI:
  * Description: This plugin is an addon for "Contact Form 7".
- * Version:     2.6.3
+ * Version:     2.7.0
  * Author:      Takashi Hosoya
  * Author URI:  http://ht79.info/
  * License:     GPLv2
@@ -34,17 +34,21 @@ define( 'KINTONE_FORM_PATH', dirname( __FILE__ ) );
 //define( 'GUMROAD_KINTONE_FORM_ATTACHMENTS_SLUG', 'jIewp' );
 //define( 'GUMROAD_KINTONE_FORM_MULTI_KINTONE_APP_SLUG', 'Uqikv' );
 
-$data = get_file_data( __FILE__,
+$data = get_file_data(
+	__FILE__,
 	array(
 		'ver'   => 'Version',
 		'langs' => 'Domain Path',
-	) );
+	)
+);
 
 define( 'KITONE_FORM_VERSION', $data['ver'] );
 define( 'KITONE_FORM_LANGS', $data['langs'] );
-load_plugin_textdomain( 'kintone-form',
+load_plugin_textdomain(
+	'kintone-form',
 	false,
-	dirname( plugin_basename( __FILE__ ) ) . KITONE_FORM_LANGS );
+	dirname( plugin_basename( __FILE__ ) ) . KITONE_FORM_LANGS
+);
 
 
 require KINTONE_FORM_PATH . '/modules/text.php';
