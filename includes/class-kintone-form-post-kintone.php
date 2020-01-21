@@ -346,9 +346,11 @@ class Kintone_Form_Post_Kintone {
 		$error_msg  .= '-----------------------' . "\r\n";
 		$error_msg  .= implode( "\r\n", $e->get_error_messages() ) . "\r\n";
 		$error_data = $e->get_error_data();
-		$error_data = var_export( $error_data, true );
 
-		$error_msg .= $error_data;
+		if ( ! empty( $error_data ) ) {
+			$error_data = var_export( $error_data, true );
+			$error_msg  .= $error_data;
+		}
 
 		if ( $email_address_to_send_kintone_registration_error ) {
 			$to = $email_address_to_send_kintone_registration_error;
