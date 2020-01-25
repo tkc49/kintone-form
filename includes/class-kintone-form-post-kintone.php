@@ -424,6 +424,8 @@ class Kintone_Form_Post_Kintone {
 				$options
 			);
 
+			$res = apply_filters( 'form_data_to_kintone_saved', $res, $body );
+
 			if ( is_wp_error( $res ) ) {
 				$this->erro_mail( $res, $email_address_to_send_kintone_registration_error );
 
