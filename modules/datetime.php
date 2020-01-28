@@ -45,11 +45,14 @@ class KintoneFormDatetime {
 			$value = $cf7_send_data[ $cf7_mail_tag ];
 		}
 
-		if ( strtotime( $value ) === false ) {
-			$e->add( 'Error', $cf7_mail_tag . '->' . $kintone_form_data['code'] . ' : Datetime format error' );
-		}
+		if ( ! empty( $value ) ) {
+			if ( strtotime( $value ) === false ) {
+				$return_data['value'] = '';
 
-		$value = date_i18n( 'c', strtotime( $value ) );
+				return $return_data;
+			}
+			$value = date_i18n( 'c', strtotime( $value ) );
+		}
 
 		$return_data['value'] = $value;
 
