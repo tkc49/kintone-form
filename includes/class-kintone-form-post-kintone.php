@@ -435,9 +435,12 @@ class Kintone_Form_Post_Kintone {
 				$message = json_decode( $res['body'], true );
 				$e       = new WP_Error();
 
-				$errors = array();
+				$errors   = array();
+				$errors[] = 'code: ' . $res['response']['code'];
+				$errors[] = 'message: ' . $res['response']['message'];
+
 				if ( isset( $message['errors'] ) ) {
-					$errors = $message['errors'];
+					$errors[] = $message['errors'];
 				}
 				$e->add( 'validation-error', $message['message'], $errors );
 				$this->erro_mail( $e, $email_address_to_send_kintone_registration_error );
