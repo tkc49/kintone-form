@@ -25,5 +25,25 @@ class Kintone_Form_Utility {
 		}
 	}
 
+	/**
+	 * Kintoneへ接続するURLを返す
+	 * ゲストスペース
+	 * https://(サブドメイン名).cybozu.com/k/guest/(スペースのID)/v1/record.json
+	 *
+	 * @param array $kintone_setting_data
+	 *
+	 * @return string
+	 */
+	public static function get_kintone_url( $kintone_setting_data, $type ) {
+
+		if ( isset( $kintone_setting_data['kintone_guest_space_id'] ) && $kintone_setting_data['kintone_guest_space_id'] ) {
+			$url = 'https://' . $kintone_setting_data['domain'] . '/k/guest/' . esc_attr( $kintone_setting_data['kintone_guest_space_id'] ) . '/v1/' . $type . '.json';
+		} else {
+			$url = 'https://' . $kintone_setting_data['domain'] . '/k/v1/' . $type . '.json';
+		}
+
+		return $url;
+
+	}
 
 }

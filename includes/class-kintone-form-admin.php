@@ -269,6 +269,11 @@ class Kintone_Form_Admin {
 			);
 		}
 
+		$kintone_guest_space_id = '';
+		if ( isset( $kintone_setting_data['kintone_guest_space_id'] ) ) {
+			$kintone_guest_space_id = $kintone_setting_data['kintone_guest_space_id'];
+		}
+
 		$mailtags = $post->collect_mail_tags();
 		$tags     = $post->scan_form_tags();
 
@@ -338,6 +343,21 @@ class Kintone_Form_Admin {
 							size="30"
 							value="<?php echo esc_attr( $kintone_basic_authentication_password ); ?>"
 						/>
+					</td>
+				</tr>
+				<tr>
+					<th><?php esc_html_e( 'Guest Space ID:', 'kintone-form' ); ?></th>
+					<td>
+						ID：
+						<input
+							type="text"
+							id="kintone-guest-space-id"
+							name="kintone_setting_data[kintone_guest_space_id]"
+							class=""
+							size="30"
+							value="<?php echo esc_attr( $kintone_guest_space_id ); ?>"
+						/>
+
 					</td>
 				</tr>
 			</table>
@@ -740,7 +760,8 @@ class Kintone_Form_Admin {
 
 				if ( ! empty( $app_data['appid'] ) && ! empty( $app_data['token'] ) && ! empty( $args['kintone_setting_data']['domain'] ) ) {
 
-					$url               = 'https://' . $args['kintone_setting_data']['domain'] . '/k/v1/form.json?app=' . $app_data['appid'];
+					$url               = Kintone_Form_Utility::get_kintone_url( $args['kintone_setting_data'], 'form' );
+					$url               = $url . '?app=' . $app_data['appid'];
 					$kintone_form_data = $this->kintone_api(
 						$url,
 						$app_data['token'],

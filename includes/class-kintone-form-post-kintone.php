@@ -253,7 +253,9 @@ class Kintone_Form_Post_Kintone {
 			foreach ( $kintone_post_data as $data ) {
 
 				if ( ! empty( $kintone_setting_data['domain'] ) && ! empty( $data['token'] ) && ! empty( $data['appid'] ) ) {
-					$url = 'https://' . $kintone_setting_data['domain'] . '/k/v1/record.json';
+
+					$url = Kintone_Form_Utility::get_kintone_url( $kintone_setting_data, 'record' );
+
 					$this->save_data_to_kintone(
 						$url,
 						$data['token'],
