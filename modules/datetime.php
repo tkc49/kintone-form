@@ -45,6 +45,8 @@ class KintoneFormDatetime {
 			$value = $cf7_send_data[ $cf7_mail_tag ];
 		}
 
+		$value = apply_filters( 'kintone_form_date_customize_mailtag', $value, $cf7_send_data, $cf7_mail_tag );
+
 		if ( ! empty( $value ) ) {
 			if ( strtotime( $value ) === false ) {
 				$return_data['value'] = '';

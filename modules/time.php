@@ -37,6 +37,8 @@ class KintoneFormTime {
 			$value = $cf7_send_data[ $cf7_mail_tag ];
 		}
 
+		$value = apply_filters( 'kintone_form_date_customize_mailtag', $value, $cf7_send_data, $cf7_mail_tag );
+
 		if ( $value ) {
 			if ( strtotime( $value ) === false ) {
 				$e->add( 'Error', $cf7_mail_tag . '->' . $kintone_form_data['code'] . ' : time format error' );
