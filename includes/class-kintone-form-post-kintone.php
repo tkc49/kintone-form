@@ -397,6 +397,7 @@ class Kintone_Form_Post_Kintone {
 			array( 'Content-Type' => 'application/json' )
 		);
 		$datas   = apply_filters( 'form_data_to_kintone_post_datas', $datas, $appid, $unique_key );
+		$datas   = $this->stripslashes_deep( $datas );
 
 		$body = array(
 			'app'    => $appid,
@@ -453,6 +454,12 @@ class Kintone_Form_Post_Kintone {
 			}
 		}
 
+	}
+
+	private function stripslashes_deep( $value ) {
+		$value = is_array( $value ) ? array_map( 'stripslashes_deep', $value ) : stripslashes( $value );
+
+		return $value;
 	}
 }
 
