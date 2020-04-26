@@ -33,6 +33,7 @@ class Kintone_Form_Post_Kintone {
 		if ( empty( $submission ) ) {
 			return;
 		}
+
 		$cf7_send_data = $submission->get_posted_data();
 
 		// Contact Form 7 add confirm.
@@ -41,199 +42,65 @@ class Kintone_Form_Post_Kintone {
 		}
 
 		$kintone_setting_data = $contact_form->prop( 'kintone_setting_data' );
+
 		if ( empty( $kintone_setting_data ) ) {
 			return;
 		}
 
 		$kintone_post_data = array();
-		$post_data_count   = 0;
+		$app_count         = 0;
 
 		$e = new WP_Error();
 
+		// kintoneアプリのマルチ設定考慮して、appdataごとにループ
 		foreach ( $kintone_setting_data['app_datas'] as $appdata ) {
 
-			$kintone_post_data[ $post_data_count ]['appid'] = $appdata['appid'];
-			$kintone_post_data[ $post_data_count ]['token'] = $appdata['token'];
-			$kintone_post_data[ $post_data_count ]['datas'] = array();
+			$kintone_post_data[ $app_count ]['appid'] = $appdata['appid'];
+			$kintone_post_data[ $app_count ]['token'] = $appdata['token'];
+			$kintone_post_data[ $app_count ]['datas'] = array();
 
-			$kintone_data_for_post = $this->get_data_for_post( $appdata );
+			// CFf7の設定画面で紐づけされたデータ
+			$kintone_fields_and_cf7_mailtag_relate_data = $this->get_data_for_post( $appdata );
 
-			if ( isset( $kintone_data_for_post['setting'] ) ) {
+			// 設定があれば処理する
+			if ( isset( $kintone_fields_and_cf7_mailtag_relate_data['setting'] ) ) {
 
-				foreach ( $kintone_data_for_post['setting'] as $kintone_fieldcode => $cf7_mail_tag ) {
+				// kintoneに設定されている全フィールドをループ
 
-					if ( ! empty( $cf7_mail_tag ) ) {
+				foreach ( $appdata['formdata']['properties'] as $kintone_form_properties_data ) {
 
-						foreach ( $appdata['formdata']['properties'] as $kintone_form_data ) {
+					if ( isset( $kintone_form_properties_data['code'] ) ) {
+						if ( 'SUBTABLE' === $kintone_form_properties_data['type'] ) {
+							//
+							// SUBTABLEの処理
+							//
+							$subtable_records = array();
+							$subtable_records = apply_filters(
+								'kintone_form_subtable',
+								$subtable_records,
+								$appdata,
+								$kintone_form_properties_data,
+								$kintone_setting_data,
+								$cf7_send_data,
+								$kintone_fields_and_cf7_mailtag_relate_data,
+								$e
+							);
 
-							if ( isset( $kintone_form_data['code'] ) ) {
-								if ( $kintone_fieldcode === $kintone_form_data['code'] ) {
-
-									switch ( $kintone_form_data['type'] ) {
-										case 'SINGLE_LINE_TEXT':
-											$post_data = KintoneFormText::format_to_kintone_data( $kintone_form_data, $cf7_send_data, $cf7_mail_tag, $e );
-											if ( isset( $post_data['value'] ) && '' !== $post_data['value'] ) {
-												$kintone_post_data[ $post_data_count ]['datas'][ $kintone_form_data['code'] ] = $post_data;
-											}
-											break;
-										case 'NUMBER':
-											$post_data = KintoneFormNumber::format_to_kintone_data(
-												$kintone_form_data,
-												$cf7_send_data,
-												$cf7_mail_tag,
-												$e
-											);
-											if ( isset( $post_data['value'] ) && '' !== $post_data['value'] ) {
-												$kintone_post_data[ $post_data_count ]['datas'][ $kintone_form_data['code'] ] = $post_data;
-											}
-											break;
-										case 'RADIO_BUTTON':
-											$post_data = KintoneFormRadio::format_to_kintone_data(
-												$kintone_form_data,
-												$cf7_send_data,
-												$cf7_mail_tag,
-												$e
-											);
-											if ( isset( $post_data['value'] ) && '' !== $post_data['value'] ) {
-												$kintone_post_data[ $post_data_count ]['datas'][ $kintone_form_data['code'] ] = $post_data;
-											}
-											break;
-										case 'CHECK_BOX':
-											$post_data = KintoneFormCheckbox::format_to_kintone_data(
-												$kintone_form_data,
-												$cf7_send_data,
-												$cf7_mail_tag,
-												$e
-											);
-											if ( isset( $post_data['value'] ) && is_array( $post_data['value'] ) ) {
-												$kintone_post_data[ $post_data_count ]['datas'][ $kintone_form_data['code'] ] = $post_data;
-											}
-											break;
-										case 'MULTI_SELECT':
-											$post_data = KintoneForm_multi_select::format_to_kintone_data(
-												$kintone_form_data,
-												$cf7_send_data,
-												$cf7_mail_tag,
-												$e
-											);
-											if ( isset( $post_data['value'] ) && is_array( $post_data['value'] ) ) {
-												$kintone_post_data[ $post_data_count ]['datas'][ $kintone_form_data['code'] ] = $post_data;
-											}
-											break;
-										case 'DROP_DOWN':
-											$post_data = KintoneFormDropdown::format_to_kintone_data(
-												$kintone_form_data,
-												$cf7_send_data,
-												$cf7_mail_tag,
-												$e
-											);
-											if ( isset( $post_data['value'] ) && '' !== $post_data['value'] ) {
-												$kintone_post_data[ $post_data_count ]['datas'][ $kintone_form_data['code'] ] = $post_data;
-											}
-											break;
-										case 'DATE':
-											$post_data = KintoneFormDate::format_to_kintone_data(
-												$kintone_form_data,
-												$cf7_send_data,
-												$cf7_mail_tag,
-												$e
-											);
-											if ( isset( $post_data['value'] ) && '' !== $post_data['value'] ) {
-												$kintone_post_data[ $post_data_count ]['datas'][ $kintone_form_data['code'] ] = $post_data;
-											}
-											break;
-										case 'TIME':
-											$post_data = KintoneFormTime::format_to_kintone_data(
-												$kintone_form_data,
-												$cf7_send_data,
-												$cf7_mail_tag,
-												$e
-											);
-											if ( isset( $post_data['value'] ) && '' !== $post_data['value'] ) {
-												$kintone_post_data[ $post_data_count ]['datas'][ $kintone_form_data['code'] ] = $post_data;
-											}
-											break;
-										case 'DATETIME':
-											$post_data = KintoneFormDatetime::format_to_kintone_data(
-												$kintone_form_data,
-												$cf7_send_data,
-												$cf7_mail_tag,
-												$e
-											);
-											if ( isset( $post_data['value'] ) && '' !== $post_data['value'] ) {
-												$kintone_post_data[ $post_data_count ]['datas'][ $kintone_form_data['code'] ] = $post_data;
-											}
-											break;
-										case 'LINK':
-											$post_data = KintoneFormLink::format_to_kintone_data(
-												$kintone_form_data,
-												$cf7_send_data,
-												$cf7_mail_tag,
-												$e
-											);
-											if ( isset( $post_data['value'] ) && '' !== $post_data['value'] ) {
-												$kintone_post_data[ $post_data_count ]['datas'][ $kintone_form_data['code'] ] = $post_data;
-											}
-											break;
-										case 'RICH_TEXT':
-											$post_data = KintoneFormRichText::format_to_kintone_data(
-												$kintone_form_data,
-												$cf7_send_data,
-												$cf7_mail_tag,
-												$e
-											);
-											if ( isset( $post_data['value'] ) && '' !== $post_data['value'] ) {
-												$kintone_post_data[ $post_data_count ]['datas'][ $kintone_form_data['code'] ] = $post_data;
-											}
-											break;
-										case 'MULTI_LINE_TEXT':
-											$post_data = KintoneFormMultiLineText::format_to_kintone_data(
-												$kintone_form_data,
-												$cf7_send_data,
-												$cf7_mail_tag,
-												$e
-											);
-											if ( isset( $post_data['value'] ) && '' !== $post_data['value'] ) {
-												$kintone_post_data[ $post_data_count ]['datas'][ $kintone_form_data['code'] ] = $post_data;
-											}
-											break;
-										case 'RECORD_NUMBER':
-										case 'MODIFIER':
-										case 'CREATOR':
-										case 'UPDATED_TIME':
-										case 'CREATED_TIME':
-										case 'CALC':
-										case 'USER_SELECT':
-										case 'REFERENCE_TABLE':
-										case 'GROUP':
-										case 'SUBTABLE':
-										case 'STATUS':
-										case 'STATUS_ASSIGNEE':
-										case 'CATEGORY':
-											break;
-										case 'FILE':
-											$post_data = apply_filters(
-												'kintone_form_attachments_data',
-												$kintone_setting_data,
-												$appdata,
-												$cf7_send_data,
-												$kintone_form_data,
-												$cf7_mail_tag,
-												$e
-											);
-											if ( isset( $post_data['value'] ) && is_array( $post_data['value'] ) ) {
-												$kintone_post_data[ $post_data_count ]['datas'][ $kintone_form_data['code'] ] = $post_data;
-											}
-											break;
-									}
-								}
+							if ( ! empty( $subtable_records ) ) {
+								$kintone_post_data[ $app_count ]['datas'][ $kintone_form_properties_data['code'] ] = $subtable_records;
+							}
+						} else {
+							// 通常処理`
+							$post_data = $this->generate_format_kintone_data( $kintone_setting_data, $appdata, $kintone_fields_and_cf7_mailtag_relate_data, $kintone_form_properties_data, $cf7_send_data, $e );
+							if ( isset( $post_data['value'] ) && ! empty( $post_data['value'] ) ) {
+								$kintone_post_data[ $app_count ]['datas'][ $kintone_form_properties_data['code'] ] = $post_data;
 							}
 						}
 					}
 				}
 			}
 
-			$post_data_count ++;
+			$app_count ++;
 
 		}
 
@@ -269,6 +136,116 @@ class Kintone_Form_Post_Kintone {
 					);
 				}
 			}
+		}
+	}
+
+	// CF7の設定画面で関連付けされたデーターとマッチングさせる
+	private function generate_format_kintone_data( $kintone_setting_data, $appdata, $kintone_fields_and_cf7_mailtag_relate_data, $kintone_form_field_properties, $cf7_send_data, $e, $subtable_flag = false ) {
+
+		$formated_kintone_value = array();
+
+		// CF7の設定画面で関連付けされたデーターをベースにループ
+		foreach ( $kintone_fields_and_cf7_mailtag_relate_data['setting'] as $related_kintone_fieldcode => $related_cf7_mail_tag ) {
+
+			// メールタグが設定されているものだけ kintoneのフィールドにあわせる
+			if ( ! empty( $related_cf7_mail_tag ) ) {
+
+				if ( $kintone_form_field_properties['code'] == $related_kintone_fieldcode ) {
+
+					$formated_kintone_value = Kintone_Form_Post_Kintone::get_formated_data_for_kintone( $kintone_setting_data, $appdata, $kintone_form_field_properties, $cf7_send_data, $related_cf7_mail_tag, $e );
+
+					// 一致するのがあり、値の取得ができたのでループを抜ける
+					break;
+
+				}
+			}
+		}
+
+		return $formated_kintone_value;
+	}
+
+	public static function get_formated_data_for_kintone( $kintone_setting_data, $appdata, $kintone_form_field_properties, $cf7_send_data, $related_cf7_mail_tag, $e ) {
+
+		switch ( $kintone_form_field_properties['type'] ) {
+			case 'SINGLE_LINE_TEXT':
+				$post_data = KintoneFormText::format_to_kintone_data( $kintone_form_field_properties, $cf7_send_data, $related_cf7_mail_tag, $e );
+
+				return $post_data;
+			case 'NUMBER':
+				$post_data = KintoneFormNumber::format_to_kintone_data( $kintone_form_field_properties, $cf7_send_data, $related_cf7_mail_tag, $e );
+
+				return $post_data;
+			case 'RADIO_BUTTON':
+				$post_data = KintoneFormRadio::format_to_kintone_data( $kintone_form_field_properties, $cf7_send_data, $related_cf7_mail_tag, $e );
+
+				return $post_data;
+			case 'CHECK_BOX':
+				$post_data = KintoneFormCheckbox::format_to_kintone_data( $kintone_form_field_properties, $cf7_send_data, $related_cf7_mail_tag, $e );
+
+				return $post_data;
+			case 'MULTI_SELECT':
+				$post_data = KintoneForm_multi_select::format_to_kintone_data( $kintone_form_field_properties, $cf7_send_data, $related_cf7_mail_tag, $e );
+
+				return $post_data;
+			case 'DROP_DOWN':
+				$post_data = KintoneFormDropdown::format_to_kintone_data( $kintone_form_field_properties, $cf7_send_data, $related_cf7_mail_tag, $e );
+
+				return $post_data;
+			case 'DATE':
+				$post_data = KintoneFormDate::format_to_kintone_data( $kintone_form_field_properties, $cf7_send_data, $related_cf7_mail_tag, $e );
+
+				return $post_data;
+			case 'TIME':
+				$post_data = KintoneFormTime::format_to_kintone_data( $kintone_form_field_properties, $cf7_send_data, $related_cf7_mail_tag, $e );
+
+				return $post_data;
+			case 'DATETIME':
+				$post_data = KintoneFormDatetime::format_to_kintone_data( $kintone_form_field_properties, $cf7_send_data, $related_cf7_mail_tag, $e );
+
+				return $post_data;
+			case 'LINK':
+				$post_data = KintoneFormLink::format_to_kintone_data( $kintone_form_field_properties, $cf7_send_data, $related_cf7_mail_tag, $e );
+
+				return $post_data;
+			case 'RICH_TEXT':
+				$post_data = KintoneFormRichText::format_to_kintone_data( $kintone_form_field_properties, $cf7_send_data, $related_cf7_mail_tag, $e );
+
+				return $post_data;
+			case 'MULTI_LINE_TEXT':
+				$post_data = KintoneFormMultiLineText::format_to_kintone_data( $kintone_form_field_properties, $cf7_send_data, $related_cf7_mail_tag, $e );
+
+				return $post_data;
+			case 'RECORD_NUMBER':
+				break;
+			case 'MODIFIER':
+				break;
+			case 'CREATOR':
+				break;
+			case 'UPDATED_TIME':
+				break;
+			case 'CREATED_TIME':
+				break;
+			case 'CALC':
+				break;
+			case 'USER_SELECT':
+				break;
+			case 'REFERENCE_TABLE':
+				break;
+			case 'GROUP':
+				break;
+			case 'SUBTABLE':
+				break;
+			case 'STATUS':
+				break;
+			case 'STATUS_ASSIGNEE':
+				break;
+			case 'CATEGORY':
+				break;
+			case 'FILE':
+				// todo $kintone_setting_data, $appdata 必要？
+				$post_data = apply_filters( 'kintone_form_attachments_data', $kintone_setting_data, $appdata, $cf7_send_data, $kintone_form_field_properties, $related_cf7_mail_tag, $e );
+
+				return $post_data;
 		}
 	}
 

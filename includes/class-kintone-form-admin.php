@@ -371,14 +371,14 @@ class Kintone_Form_Admin {
 
 						<?php if ( isset( $kintone_setting_data['app_datas'] ) && ! empty( $kintone_setting_data['app_datas'] ) ) : ?>
 
-							<?php $i = 0; ?>
+							<?php $multi_kintone_app_count = 0; ?>
 							<?php foreach ( $kintone_setting_data['app_datas'] as $app_data ) : ?>
 
 								<table class="row" style="margin-bottom: 30px; border-top: 6px solid #ccc; width: 100%;">
 									<tr>
 										<td valign="top" style="padding: 10px 0px;">
-											APP ID:<input type="text" id="kintone-form-appid-<?php echo esc_attr( $i ); ?>" name="kintone_setting_data[app_datas][<?php echo esc_attr( $i ); ?>][appid]" class="small-text" size="70" value="<?php echo esc_attr( $app_data['appid'] ); ?>"/>
-											Api Token:<input type="text" id="kintone-form-token-<?php echo esc_attr( $i ); ?>" name="kintone_setting_data[app_datas][<?php echo esc_attr( $i ); ?>][token]" class="regular-text" size="70" value="<?php echo esc_attr( $app_data['token'] ); ?>"/>
+											APP ID:<input type="text" id="kintone-form-appid-<?php echo esc_attr( $multi_kintone_app_count ); ?>" name="kintone_setting_data[app_datas][<?php echo esc_attr( $multi_kintone_app_count ); ?>][appid]" class="small-text" size="70" value="<?php echo esc_attr( $app_data['appid'] ); ?>"/>
+											Api Token:<input type="text" id="kintone-form-token-<?php echo esc_attr( $multi_kintone_app_count ); ?>" name="kintone_setting_data[app_datas][<?php echo esc_attr( $multi_kintone_app_count ); ?>][token]" class="regular-text" size="70" value="<?php echo esc_attr( $app_data['token'] ); ?>"/>
 											<input type="submit" class="button-primary" name="get-kintone-data" value="GET">
 										</td>
 										<td></td>
@@ -441,34 +441,63 @@ class Kintone_Form_Admin {
 																	?>
 																</td>
 																<td><-</td>
-																<td style="padding: 5px 10px; border-bottom: 1px solid #e2e2e2;">
-																	<?php if ( array_key_exists( $form_data['type'], $this->kintone_fieldcode_supported_list ) ) : ?>
 
-																		<select id="cf7-mailtag-<?php echo $hash; ?>" <?php echo $selectbox_readonly; ?> name="kintone_setting_data[app_datas][<?php echo $i; ?>][setting][<?php echo esc_attr( $form_data['code'] ) ?>]">
-																			<option value=""></option>
-																			<?php foreach ( $mailtags as $value ) : ?>
-																				<option <?php selected( $value, $select_option ); ?> value="<?php echo esc_attr( $value ); ?>">[<?php echo esc_attr( $value ); ?>]</option>
-																			<?php endforeach; ?>
-																			<?php foreach ( Kintone_Form::CF7_SPECAIL_TAGS as $cf7_specail_tag ) : ?>
-																				<option <?php selected( $cf7_specail_tag, $select_option ); ?> value="<?php echo esc_attr( $cf7_specail_tag ); ?>">[<?php echo esc_attr( $cf7_specail_tag ); ?>]</option>
-																			<?php endforeach; ?>
+																<?php if ( array_key_exists( $form_data['type'], $this->kintone_fieldcode_supported_list ) ) : ?>
 
-																		</select> or
-																		<input type="text" id="<?php echo $hash; ?>" class="your-cf7-tag-name" placeholder="your-cf7-tag-name" name="kintone_setting_data[app_datas][<?php echo $i; ?>][setting_original_cf7tag_name][<?php echo esc_attr( $form_data['code'] ) ?>]" value="<?php echo $original_cf7tag_name; ?>"/>
-																		<?php if ( $error_msg ) : ?>
-																			<div style="color:red; font-weight:bold;"><?php echo $error_msg; ?></div>
-																		<?php endif; ?>
-																	<?php else: ?>
-																		<?php if ( 'FILE' === $form_data['type'] ) : ?>
-																			Add-Ons
-																		<?php else: ?>
-																			Not Support
-																		<?php endif; ?>
+																	<?php
+																	// ****************************
+																	// サブテーブルの設定
+																	// ****************************
+																	?>
+																	<?php if ( 'SUBTABLE' === $form_data['type'] ) : ?>
+																		<td style="padding: 5px 10px; border-bottom: 1px solid #e2e2e2;" colspan="2">
+																			<table>
+																				<?php foreach ( $form_data['fields'] as $subtables ) : ?>
+																					<tr>
+																						<td style="padding: 5px 10px; border-bottom: 1px solid #e2e2e2;"><?php echo esc_html( ( isset( $subtables['label'] ) ) ? $subtables['label'] : "" ) . '(' . esc_html( $subtables['code'] ) . ')'; ?></td>
+																						<td><-</td>
+																						<td style="padding: 5px 10px; border-bottom: 1px solid #e2e2e2;">
+
+																							<?php if ( array_key_exists( $subtables['type'], $this->kintone_fieldcode_supported_list ) ): ?>
+
+																								<?php echo $this->create_html_for_setting_cf7_mailtag( $tags, $mailtags, $app_data, $subtables, $multi_kintone_app_count ); ?>
+
+																							<?php else: ?>
+																								<?php if ( $subtables['type'] == 'FILE' ): ?>
+																									<a href="<?php echo admin_url( 'admin.php?page=form-data-to-kintone-setting' ); ?>" title="">Add-Ons</a>
+																								<?php else: ?>
+																									Not Support
+																								<?php endif; ?>
+																							<?php endif; ?>
+																						</td>
+																						<td style="padding: 5px 10px; border-bottom: 1px solid #e2e2e2;">
+																							<?php if ( array_key_exists( $subtables['type'], $this->kintone_fieldcode_supported_list ) ): ?>
+																								<?php echo $this->create_sample_shortcode( $subtables, $app_data ); ?>
+																							<?php endif; ?>
+																						</td>
+
+																					</tr>
+
+																				<?php endforeach; ?>
+																			</table>
+																		</td>
+																	<?php else : ?>
+																		<td style="padding: 5px 10px; border-bottom: 1px solid #e2e2e2;">
+																			<?php echo $this->create_html_for_setting_cf7_mailtag( $tags, $mailtags, $app_data, $form_data, $multi_kintone_app_count ); ?>
+																		</td>
+																	<?php endif ?>
+
+																<?php else : ?>
+																	<?php if ( 'FILE' === $form_data['type'] ) : ?>
+																		Add-Ons
+																	<?php else : ?>
+																		Not Support
 																	<?php endif; ?>
+																<?php endif; ?>
 																</td>
 																<td style="padding: 5px 10px; border-bottom: 1px solid #e2e2e2;">
 																	<?php if ( array_key_exists( $form_data['type'], $this->kintone_fieldcode_supported_list ) ) : ?>
-																		<?php echo $this->create_sample_shortcode( $form_data, $select_option, $original_cf7tag_name, $hash ); ?>
+																		<?php echo $this->create_sample_shortcode( $form_data, $app_data ); ?>
 																	<?php endif; ?>
 																</td>
 
@@ -483,7 +512,7 @@ class Kintone_Form_Admin {
 
 								</table>
 
-								<?php $i ++; ?>
+								<?php $multi_kintone_app_count ++; ?>
 
 							<?php endforeach; ?>
 
@@ -528,7 +557,22 @@ class Kintone_Form_Admin {
 	 *
 	 * @return string .
 	 */
-	private function create_sample_shortcode( $form_data, $select_option, $original_cf7tag_name, $hash ) {
+//	private function create_sample_shortcode( $form_data, $select_option, $original_cf7tag_name, $hash ) {
+	private function create_sample_shortcode( $form_data, $app_data ) {
+
+		// selectボックスで既に設定されている cf7のメールタグを設定
+		$select_option = '';
+		if ( isset( $app_data['setting'][ $form_data['code'] ] ) && ! empty( $app_data['setting'][ $form_data['code'] ] ) ) {
+			$select_option = $app_data['setting'][ $form_data['code'] ];
+		}
+
+		// テキストフォーム（オリジナルタグ名:setting_original_cf7tag_name）にデータが設定されている場合、selectbox は disabled に設定し、選択ができないようにする
+		$original_cf7tag_name = '';
+		if ( isset( $app_data['setting_original_cf7tag_name'][ $form_data['code'] ] ) && ! empty( $app_data['setting_original_cf7tag_name'][ $form_data['code'] ] ) ) {
+			$original_cf7tag_name = $app_data['setting_original_cf7tag_name'][ $form_data['code'] ];
+		}
+
+		$hash = hash( 'md5', $form_data['code'] );
 
 		if ( $original_cf7tag_name ) {
 			$tag_name = $original_cf7tag_name;
@@ -660,8 +704,7 @@ class Kintone_Form_Admin {
 							$code = wp_strip_all_tags(
 								$this->create_sample_shortcode(
 									$form_data,
-									$select_option,
-									$original_cf7tag_name,
+									$appdata,
 									''
 								)
 							);
@@ -824,7 +867,7 @@ class Kintone_Form_Admin {
 	}
 
 	/**
-	 * kintoneからデータを取得する.
+	 * Kintoneからデータを取得する.
 	 *
 	 * @param string  $request_url .
 	 * @param string  $kintone_token .
@@ -883,6 +926,67 @@ class Kintone_Form_Admin {
 			return new WP_Error( 'Error', 'URL is required' );
 		}
 
+	}
+
+	/**
+	 * Contact form 7 のメールタグを設定するためのセレクトボックスを作成する.
+	 *
+	 * @param string  $tags .
+	 * @param array   $mailtags .
+	 * @param array   $app_data .
+	 * @param array   $kintone_filed .
+	 * @param integer $multi_kintone_app_count .
+	 *
+	 * @return string html.
+	 */
+	private function create_html_for_setting_cf7_mailtag( $tags, $mailtags, $app_data, $kintone_filed, $multi_kintone_app_count ) {
+
+		// selectボックスで既に設定されている cf7のメールタグを設定
+		$selected_cf7_mailtag = '';
+		if ( isset( $app_data['setting'][ $kintone_filed['code'] ] ) && ! empty( $app_data['setting'][ $kintone_filed['code'] ] ) ) {
+			$selected_cf7_mailtag = $app_data['setting'][ $kintone_filed['code'] ];
+		}
+
+		// テキストフォーム（オリジナルタグ名:setting_original_cf7tag_name）にデータが設定されている場合、selectbox は disabled に設定し、選択ができないようにする
+		$selectbox_readonly   = '';
+		$original_cf7tag_name = '';
+		if ( isset( $app_data['setting_original_cf7tag_name'][ $kintone_filed['code'] ] ) && ! empty( $app_data['setting_original_cf7tag_name'][ $kintone_filed['code'] ] ) ) {
+			$selectbox_readonly   = 'disabled="disabled"';
+			$original_cf7tag_name = $app_data['setting_original_cf7tag_name'][ $kintone_filed['code'] ];
+		}
+
+		$hash = hash( 'md5', $kintone_filed['code'] );
+		ob_start();
+		?>
+		<!-- Create selectbox-->
+		<select id="cf7-mailtag-<?php echo esc_attr( $hash ); ?>" <?php echo esc_attr( $selectbox_readonly ); ?>name="kintone_setting_data[app_datas][<?php echo esc_attr( $multi_kintone_app_count ); ?>][setting][<?php echo esc_attr( $kintone_filed['code'] ); ?>]">
+			<option value=""></option>
+
+			<?php foreach ( $mailtags as $value ) : ?>
+				<option <?php selected( $value, $selected_cf7_mailtag, true ); ?> value="<?php echo esc_attr( $value ); ?>">[<?php echo esc_attr( $value ); ?>]</option>
+			<?php endforeach; ?>
+			<?php foreach ( Kintone_Form::CF7_SPECAIL_TAGS as $cf7_specail_tag ) : ?>
+				<!--				<option --><?php //selected( $cf7_specail_tag, $select_option ); ?><!-- value="--><?php //echo esc_attr( $cf7_specail_tag ); ?><!--">[--><?php //echo esc_attr( $cf7_specail_tag ); ?><!--]</option>-->
+				<option <?php selected( $cf7_specail_tag, $selected_cf7_mailtag ); ?> value="<?php echo esc_attr( $cf7_specail_tag ); ?>">[<?php echo esc_attr( $cf7_specail_tag ); ?>]</option>
+			<?php endforeach; ?>
+
+		</select>
+
+		<!-- Create text for original's name.-->
+		or
+		<input type="text" id="<?php echo esc_attr( $hash ); ?>" class="your-cf7-tag-name" placeholder="your-cf7-tag-name" name="kintone_setting_data[app_datas][<?php echo esc_attr( $multi_kintone_app_count ); ?>][setting_original_cf7tag_name][<?php echo esc_attr( $kintone_filed['code'] ); ?>]" value="<?php echo esc_attr( $original_cf7tag_name ); ?>"/>
+
+		<!-- Show error message-->
+		<?php $error_msg = $this->check_consistency( $tags, $selected_cf7_mailtag, $kintone_filed ); ?>
+		<?php if ( $error_msg ) : ?>
+			<div style="color:red; font-weight:bold;"><?php echo esc_textarea( $error_msg ); ?></div>'
+		<?php endif; ?>
+
+		<?php
+		$html = ob_get_contents(); // 記録結果を変数に代入
+		ob_end_clean(); // 記録
+
+		return $html;
 	}
 }
 
