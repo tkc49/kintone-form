@@ -45,6 +45,9 @@ A tab for setting the information on kitone appears on the "Contact Form 7" sett
 1. screenshot-1.png
 
 == Changelog ==
+= 2.12.0 =
+* Fix the error of the value of radio element when using "Contact Form 7 Multi-Step Forms".
+
 = 2.11.0 =
 * Add feature of subtable.
 

@@ -37,7 +37,11 @@ class KintoneFormRadio {
 			$value = apply_filters( 'wpcf7_special_mail_tags', '', $cf7_mail_tag, false );
 		} else {
 			if ( isset( $cf7_send_data[ $cf7_mail_tag ] ) ) {
-				$value = $cf7_send_data[ $cf7_mail_tag ][0];
+				if ( is_array( $cf7_send_data[ $cf7_mail_tag ] ) ) {
+					$value = $cf7_send_data[ $cf7_mail_tag ][0];
+				} else {
+					$value = $cf7_send_data[ $cf7_mail_tag ];
+				}
 			}
 		}
 
