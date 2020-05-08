@@ -389,7 +389,7 @@ class Kintone_Form_Admin {
 											<table style="width: 100%;">
 
 												<tr>
-													<th style="text-align: left; padding: 5px 10px;">
+													<th style="text-align: left; padding: 5px 10px; width: 30%;">
 														<?php
 														esc_html_e(
 															'kintone Label(fieldcode)',
