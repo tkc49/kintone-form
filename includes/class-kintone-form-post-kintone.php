@@ -19,6 +19,25 @@ class Kintone_Form_Post_Kintone {
 		 */
 		add_action( 'wpcf7_mail_sent', array( $this, 'kintone_form_send' ) );
 		add_filter( 'wpcf7_form_tag', array( $this, 'kintone_form_set_post_title' ) );
+
+		// contact form 7 multi step module が有効なら実行する
+		if ( function_exists( 'cf7msm_fs' ) ) {
+			add_action( 'wp_enqueue_scripts', array( $this, 'kintone_form_enqueue_scripts_save_cf7msm_checkbox_to_kintone' ) );
+		}
+	}
+
+	public function kintone_form_enqueue_scripts_save_cf7msm_checkbox_to_kintone() {
+		wp_enqueue_script(
+			'kintone-form-save-cf7msm-checkbox-to-kintone',
+			KINTONE_FORM_URL . '/asset/js/save_cf7msm_checkbox_to_kintone.js',
+			array( 'jquery' ),
+			date(
+				'YmdGis',
+				filemtime( KINTONE_FORM_PATH . '/asset/js/save_cf7msm_checkbox_to_kintone.js' )
+			),
+			true
+		);
+
 	}
 
 

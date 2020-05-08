@@ -1,0 +1,69 @@
+( function( $ ){
+
+	document.addEventListener( 'wpcf7mailsent', function( e ){
+		let currentInputs = {};
+		let names         = [];
+
+		let kintoneFromSaveCfmsmCheckboxToKintoneData = sessionStorage.getObject( 'kintone-form-save-cfmsm-checkbox-to-kintone-data' );
+		if ( ! kintoneFromSaveCfmsmCheckboxToKintoneData ) {
+			kintoneFromSaveCfmsmCheckboxToKintoneData = {};
+		}
+
+
+		$.each( e.detail.inputs, function( i ){
+			let name  = e.detail.inputs[i].name;
+			let value = e.detail.inputs[i].value;
+
+			//make it compatible with cookie version
+			if ( name.indexOf( '[]' ) === name.length - 2 ) {
+				// name = name.substring(0, name.length - 2 );
+				if ( $.inArray( name, names ) === -1 ) {
+					currentInputs[name] = [];
+				}
+				currentInputs[name].push( value );
+			}
+			names.push( name );
+		} );
+
+		$.each( currentInputs, function( name, value ){
+			kintoneFromSaveCfmsmCheckboxToKintoneData[name] = value;
+		} );
+
+
+		sessionStorage.setObject( 'kintone-form-save-cfmsm-checkbox-to-kintone-data', kintoneFromSaveCfmsmCheckboxToKintoneData );
+
+	}, false );
+
+
+} )( jQuery );
+
+( function( $ ){
+
+	jQuery( document ).ready( function( $ ){
+
+		let cf7msm_field          = $( "input[name='_cf7msm_multistep_tag']" );
+		const hasMultistepOptions = cf7msm_field.length > 0;
+		let isCF7MSM              = hasMultistepOptions;
+		if ( ! isCF7MSM ) {
+			cf7msm_field = $( "input[name='cf7msm-step']" );
+			isCF7MSM     = ( cf7msm_field.length > 0 );
+		}
+		if ( ! isCF7MSM ) {
+			//not a multi step form
+			return;
+		}
+		const cf7msm_form = cf7msm_field.closest( 'form' );
+
+		let kintoneFromSaveCfmsmCheckboxToKintoneData = sessionStorage.getObject( 'kintone-form-save-cfmsm-checkbox-to-kintone-data' );
+
+		$.each( kintoneFromSaveCfmsmCheckboxToKintoneData, function( key, values ){
+			key = key.substr( 0, key.length - 2 );
+			for ( const value of values ) {
+				cf7msm_form.append( $( '<input type="hidden" name="_kintone-form-save-cfmsm-checkbox-to-kintone-data[' + key + '][]" value="' + quoteattr( value ) + '">' ) );
+			}
+		} )
+
+	} );
+
+
+} )( jQuery )

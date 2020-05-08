@@ -42,7 +42,12 @@ class KintoneForm_multi_select {
 		}
 
 		if ( ! is_array( $value ) ) {
-			$value = array( $value );
+
+			if ( isset( $cf7_send_data['_kintone-form-save-cfmsm-checkbox-to-kintone-data'][ $cf7_mail_tag ] ) ) {
+				$value = $cf7_send_data['_kintone-form-save-cfmsm-checkbox-to-kintone-data'][ $cf7_mail_tag ];
+			} else {
+				$value = array( $value );
+			}
 		}
 
 		if ( empty( $value[0] ) ) {
