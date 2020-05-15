@@ -54,6 +54,7 @@ class Kintone_Form_Post_Kintone {
 		}
 
 		$cf7_send_data = $submission->get_posted_data();
+		$cf7_send_data = apply_filters( 'kintone_form_cf7_posted_data_before_post_to_kintone', $cf7_send_data );
 
 		// Contact Form 7 add confirm.
 		if ( isset( $cf7_send_data['_wpcf7c'] ) && 'step1' === $cf7_send_data['_wpcf7c'] ) {

@@ -969,6 +969,7 @@ class Kintone_Form_Admin {
 				<!--				<option --><?php //selected( $cf7_specail_tag, $select_option ); ?><!-- value="--><?php //echo esc_attr( $cf7_specail_tag ); ?><!--">[--><?php //echo esc_attr( $cf7_specail_tag ); ?><!--]</option>-->
 				<option <?php selected( $cf7_specail_tag, $selected_cf7_mailtag ); ?> value="<?php echo esc_attr( $cf7_specail_tag ); ?>">[<?php echo esc_attr( $cf7_specail_tag ); ?>]</option>
 			<?php endforeach; ?>
+			<?php do_action( 'kintone_form_add_original_cf7_mail_tag_for_kintone_form', $selected_cf7_mailtag ); ?>
 
 		</select>
 
