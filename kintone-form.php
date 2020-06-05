@@ -31,8 +31,6 @@
 
 define( 'KINTONE_FORM_URL', plugins_url( '', __FILE__ ) );
 define( 'KINTONE_FORM_PATH', dirname( __FILE__ ) );
-//define( 'GUMROAD_KINTONE_FORM_ATTACHMENTS_SLUG', 'jIewp' );
-//define( 'GUMROAD_KINTONE_FORM_MULTI_KINTONE_APP_SLUG', 'Uqikv' );
 
 $data = get_file_data(
 	__FILE__,
