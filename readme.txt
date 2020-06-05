@@ -45,6 +45,9 @@ A tab for setting the information on kitone appears on the "Contact Form 7" sett
 1. screenshot-1.png
 
 == Changelog ==
+= 2.14.1 =
+* Fix a bug where kintone is not updated when the number is 0.
+
 = 2.14.0 =
 * Add filter kintone_form_add_original_cf7_mail_tag_for_kintone_form, kintone_form_cf7_posted_data_before_post_to_kintone
 

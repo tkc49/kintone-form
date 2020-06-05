@@ -112,7 +112,7 @@ class Kintone_Form_Post_Kintone {
 						} else {
 							// 通常処理`
 							$post_data = $this->generate_format_kintone_data( $kintone_setting_data, $appdata, $kintone_fields_and_cf7_mailtag_relate_data, $kintone_form_properties_data, $cf7_send_data, $e );
-							if ( isset( $post_data['value'] ) && ! empty( $post_data['value'] ) ) {
+							if ( isset( $post_data['value'] ) && '' !== $post_data['value'] ) {
 								$kintone_post_data[ $app_count ]['datas'][ $kintone_form_properties_data['code'] ] = $post_data;
 							}
 						}
