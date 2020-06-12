@@ -385,26 +385,16 @@ class Kintone_Form_Admin {
 										<td><span class="remove button">Remove</span></td>
 									</tr>
 									<tr>
-										<td colspan="2">
+										<td colspan="3">update key: aaaaa</td>
+									</tr>
+									<tr>
+										<td colspan="3">
 											<table style="width: 100%;">
-
 												<tr>
-													<th style="text-align: left; padding: 5px 10px; width: 30%;">
-														<?php
-														esc_html_e(
-															'kintone Label(fieldcode)',
-															'kintone-form'
-														);
-														?>
-													</th>
+													<th style="text-align: left; padding: 5px 10px 5px 0px; width: 30%;"><?php esc_html_e( 'kintone Label(fieldcode)', 'kintone-form' ); ?></th>
 													<th></th>
-													<th style="text-align: left; padding: 5px 10px;">Contact form 7 mail
-														tag
-													</th>
-													<th style="text-align: left; padding: 5px 10px;"><?php _e(
-															'Example Contact Form 7\'s Shortcode<br>※ Change <span style="color:red">your-cf7-tag-name</span> to original name ( your-name or your-email or etc )',
-															'kintone-form'
-														); ?></th>
+													<th style="text-align: left; padding: 5px 10px;">Contact form 7 mail tag</th>
+													<th style="text-align: left; padding: 5px 10px;"><?php _e( 'Example Contact Form 7\'s Shortcode<br>※ Change <span style="color:red">your-cf7-tag-name</span> to original name ( your-name or your-email or etc )', 'kintone-form' ); ?></th>
 												</tr>
 
 												<?php if ( isset( $app_data['formdata']['properties'] ) ) : ?>
@@ -414,14 +404,8 @@ class Kintone_Form_Admin {
 															?>
 
 															<tr>
-																<td style="padding: 5px 10px; border-bottom: 1px solid #e2e2e2;">
-																	<?php
-																	echo esc_html(
-																			 ( isset( $form_data['label'] ) ) ? $form_data['label'] : ""
-																		 ) . '(' . esc_html(
-																			 $form_data['code']
-																		 ) . ')';
-																	?>
+																<td style="padding: 5px 10px 5px 0px; border-bottom: 1px solid #e2e2e2;">
+																	<?php echo esc_html( ( isset( $form_data['label'] ) ) ? $form_data['label'] : "" ) . '(' . esc_html( $form_data['code'] ) . ')'; ?>
 																</td>
 																<td><-</td>
 																<?php
@@ -475,7 +459,7 @@ class Kintone_Form_Admin {
 																	</td>
 																<?php endif ?>
 																</td>
-																<td style="padding: 5px 10px; border-bottom: 1px solid #e2e2e2;">
+																<td style="padding: 5px 0 5px 10px; border-bottom: 1px solid #e2e2e2;">
 																	<?php if ( array_key_exists( $form_data['type'], $this->kintone_fieldcode_supported_list ) ) : ?>
 																		<?php echo $this->create_sample_shortcode( $form_data, $app_data ); ?>
 																	<?php endif; ?>
