@@ -432,20 +432,51 @@ class Kintone_Form_Post_Kintone {
 				return $res;
 			} elseif ( 200 !== $res['response']['code'] ) {
 
-				$message = json_decode( $res['body'], true );
-				$e       = new WP_Error();
+				$retry = false;
+				$retry = apply_filters( 'form_data_to_kintone_retry_save', $retry, $res );
+				if ( $retry ) {
 
-				$errors   = array();
-				$errors[] = 'code: ' . $res['response']['code'];
-				$errors[] = 'message: ' . $res['response']['message'];
+					$reset_data = array(
+						'url'                                              => $url,
+						'token'                                            => $token,
+						'appid'                                            => $appid,
+						'basic_auth_user'                                  => $basic_auth_user,
+						'basic_auth_pass'                                  => $basic_auth_pass,
+						'datas'                                            => $datas,
+						'email_address_to_send_kintone_registration_error' => $email_address_to_send_kintone_registration_error,
+						'unique_key'                                       => $unique_key,
+						'update_key'                                       => $update_key,
+					);
 
-				if ( isset( $message['errors'] ) ) {
-					$errors[] = $message['errors'];
+					$reset_data = apply_filters( 'form_data_to_kintone_reset_data', $reset_data, $res );
+
+					$this->save_data_to_kintone(
+						$reset_data['url'],
+						$reset_data['token'],
+						$reset_data['appid'],
+						$reset_data['basic_auth_user'],
+						$reset_data['basic_auth_pass'],
+						$reset_data['datas'],
+						$reset_data['email_address_to_send_kintone_registration_error'],
+						$reset_data['unique_key'],
+						$reset_data['update_key']
+					);
+				} else {
+					$message = json_decode( $res['body'], true );
+					$e       = new WP_Error();
+
+					$errors   = array();
+					$errors[] = 'code: ' . $res['response']['code'];
+					$errors[] = 'message: ' . $res['response']['message'];
+
+					if ( isset( $message['errors'] ) ) {
+						$errors[] = $message['errors'];
+					}
+					$e->add( 'validation-error', $message['message'], $errors );
+					$this->erro_mail( $e, $email_address_to_send_kintone_registration_error );
+
+					return $e;
 				}
-				$e->add( 'validation-error', $message['message'], $errors );
-				$this->erro_mail( $e, $email_address_to_send_kintone_registration_error );
-
-				return $e;
 			} else {
 				return true;
 			}
