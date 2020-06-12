@@ -410,25 +410,8 @@ class Kintone_Form_Admin {
 												<?php if ( isset( $app_data['formdata']['properties'] ) ) : ?>
 													<?php foreach ( $app_data['formdata']['properties'] as $form_data ) : ?>
 														<?php
-
 														if ( isset( $form_data['code'] ) ) :
-															$select_option = '';
-
-															if ( isset( $app_data['setting'][ $form_data['code'] ] ) && ! empty( $app_data['setting'][ $form_data['code'] ] ) ) {
-																$select_option = $app_data['setting'][ $form_data['code'] ];
-															}
-
-															$original_cf7tag_name = '';
-															$selectbox_readonly   = '';
-															if ( isset( $app_data['setting_original_cf7tag_name'][ $form_data['code'] ] ) && ! empty( $app_data['setting_original_cf7tag_name'][ $form_data['code'] ] ) ) {
-																$original_cf7tag_name = $app_data['setting_original_cf7tag_name'][ $form_data['code'] ];
-																$selectbox_readonly   = 'disabled="disabled"';
-															}
-
-															$error_msg = $this->check_consistency( $tags, $select_option, $form_data );
 															?>
-
-															<?php $hash = hash( 'md5', $form_data['code'] ); ?>
 
 															<tr>
 																<td style="padding: 5px 10px; border-bottom: 1px solid #e2e2e2;">
@@ -547,14 +530,11 @@ class Kintone_Form_Admin {
 	/**
 	 * サンプルのショートコードタグを作成する.
 	 *
-	 * @param array  $form_data .
-	 * @param string $select_option .
-	 * @param string $original_cf7tag_name .
-	 * @param string $hash .
+	 * @param array $form_data .
+	 * @param array $app_data .
 	 *
 	 * @return string .
 	 */
-//	private function create_sample_shortcode( $form_data, $select_option, $original_cf7tag_name, $hash ) {
 	private function create_sample_shortcode( $form_data, $app_data ) {
 
 		// selectボックスで既に設定されている cf7のメールタグを設定
