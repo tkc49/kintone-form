@@ -441,59 +441,56 @@ class Kintone_Form_Admin {
 																	?>
 																</td>
 																<td><-</td>
+																<?php
+																// ****************************
+																// サブテーブルの設定
+																// ****************************
+																?>
+																<?php if ( 'SUBTABLE' === $form_data['type'] ) : ?>
+																	<td style="padding: 5px 10px; border-bottom: 1px solid #e2e2e2;" colspan="2">
+																		<table>
+																			<?php foreach ( $form_data['fields'] as $subtables ) : ?>
+																				<tr>
+																					<td style="padding: 5px 10px; border-bottom: 1px solid #e2e2e2;"><?php echo esc_html( ( isset( $subtables['label'] ) ) ? $subtables['label'] : "" ) . '(' . esc_html( $subtables['code'] ) . ')'; ?></td>
+																					<td><-</td>
+																					<td style="padding: 5px 10px; border-bottom: 1px solid #e2e2e2;">
 
-																<?php if ( array_key_exists( $form_data['type'], $this->kintone_fieldcode_supported_list ) ) : ?>
+																						<?php if ( array_key_exists( $subtables['type'], $this->kintone_fieldcode_supported_list ) ): ?>
 
-																	<?php
-																	// ****************************
-																	// サブテーブルの設定
-																	// ****************************
-																	?>
-																	<?php if ( 'SUBTABLE' === $form_data['type'] ) : ?>
-																		<td style="padding: 5px 10px; border-bottom: 1px solid #e2e2e2;" colspan="2">
-																			<table>
-																				<?php foreach ( $form_data['fields'] as $subtables ) : ?>
-																					<tr>
-																						<td style="padding: 5px 10px; border-bottom: 1px solid #e2e2e2;"><?php echo esc_html( ( isset( $subtables['label'] ) ) ? $subtables['label'] : "" ) . '(' . esc_html( $subtables['code'] ) . ')'; ?></td>
-																						<td><-</td>
-																						<td style="padding: 5px 10px; border-bottom: 1px solid #e2e2e2;">
+																							<?php echo $this->create_html_for_setting_cf7_mailtag( $tags, $mailtags, $app_data, $subtables, $multi_kintone_app_count ); ?>
 
-																							<?php if ( array_key_exists( $subtables['type'], $this->kintone_fieldcode_supported_list ) ): ?>
-
-																								<?php echo $this->create_html_for_setting_cf7_mailtag( $tags, $mailtags, $app_data, $subtables, $multi_kintone_app_count ); ?>
-
+																						<?php else: ?>
+																							<?php if ( $subtables['type'] == 'FILE' ): ?>
+																								<a href="<?php echo admin_url( 'admin.php?page=form-data-to-kintone-setting' ); ?>" title="">Add-Ons</a>
 																							<?php else: ?>
-																								<?php if ( $subtables['type'] == 'FILE' ): ?>
-																									<a href="<?php echo admin_url( 'admin.php?page=form-data-to-kintone-setting' ); ?>" title="">Add-Ons</a>
-																								<?php else: ?>
-																									Not Support
-																								<?php endif; ?>
+																								Not Support
 																							<?php endif; ?>
-																						</td>
-																						<td style="padding: 5px 10px; border-bottom: 1px solid #e2e2e2;">
-																							<?php if ( array_key_exists( $subtables['type'], $this->kintone_fieldcode_supported_list ) ): ?>
-																								<?php echo $this->create_sample_shortcode( $subtables, $app_data ); ?>
-																							<?php endif; ?>
-																						</td>
+																						<?php endif; ?>
+																					</td>
+																					<td style="padding: 5px 10px; border-bottom: 1px solid #e2e2e2;">
+																						<?php if ( array_key_exists( $subtables['type'], $this->kintone_fieldcode_supported_list ) ): ?>
+																							<?php echo $this->create_sample_shortcode( $subtables, $app_data ); ?>
+																						<?php endif; ?>
+																					</td>
 
-																					</tr>
+																				</tr>
 
-																				<?php endforeach; ?>
-																			</table>
-																		</td>
-																	<?php else : ?>
-																		<td style="padding: 5px 10px; border-bottom: 1px solid #e2e2e2;">
-																			<?php echo $this->create_html_for_setting_cf7_mailtag( $tags, $mailtags, $app_data, $form_data, $multi_kintone_app_count ); ?>
-																		</td>
-																	<?php endif ?>
-
+																			<?php endforeach; ?>
+																		</table>
+																	</td>
 																<?php else : ?>
-																	<?php if ( 'FILE' === $form_data['type'] ) : ?>
-																		Add-Ons
-																	<?php else : ?>
-																		Not Support
-																	<?php endif; ?>
-																<?php endif; ?>
+																	<td style="padding: 5px 10px; border-bottom: 1px solid #e2e2e2;">
+																		<?php if ( array_key_exists( $form_data['type'], $this->kintone_fieldcode_supported_list ) ) : ?>
+																			<?php echo $this->create_html_for_setting_cf7_mailtag( $tags, $mailtags, $app_data, $form_data, $multi_kintone_app_count ); ?>
+																		<?php else : ?>
+																			<?php if ( 'FILE' === $form_data['type'] ) : ?>
+																				Add-Ons
+																			<?php else : ?>
+																				Not Support
+																			<?php endif; ?>
+																		<?php endif; ?>
+																	</td>
+																<?php endif ?>
 																</td>
 																<td style="padding: 5px 10px; border-bottom: 1px solid #e2e2e2;">
 																	<?php if ( array_key_exists( $form_data['type'], $this->kintone_fieldcode_supported_list ) ) : ?>
