@@ -181,6 +181,7 @@ class Kintone_Form_Admin {
 		'MULTI_LINE_TEXT'  => 'textarea',
 	);
 
+
 	/**
 	 * Constructor
 	 */
@@ -385,25 +386,27 @@ class Kintone_Form_Admin {
 										<td><span class="remove button">Remove</span></td>
 									</tr>
 									<tr>
-										<td colspan="3">update key: aaaaa</td>
-									</tr>
-									<tr>
 										<td colspan="3">
 											<table style="width: 100%;">
 												<tr>
+													<th>Update Key</th>
 													<th style="text-align: left; padding: 5px 10px 5px 0px; width: 30%;"><?php esc_html_e( 'kintone Label(fieldcode)', 'kintone-form' ); ?></th>
 													<th></th>
 													<th style="text-align: left; padding: 5px 10px;">Contact form 7 mail tag</th>
 													<th style="text-align: left; padding: 5px 10px;"><?php _e( 'Example Contact Form 7\'s Shortcode<br>※ Change <span style="color:red">your-cf7-tag-name</span> to original name ( your-name or your-email or etc )', 'kintone-form' ); ?></th>
 												</tr>
-
 												<?php if ( isset( $app_data['formdata']['properties'] ) ) : ?>
 													<?php foreach ( $app_data['formdata']['properties'] as $form_data ) : ?>
 														<?php
-														if ( isset( $form_data['code'] ) ) :
-															?>
-
+														if ( isset( $form_data['code'] ) ) : ?>
 															<tr>
+																<td>
+																	<?php if ( $this->is_update_key_kintone_field( $form_data ) ) : ?>
+																		<?php $checkbox_for_kintone_update_key = '<input type="checkbox" disabled="disabled" name="" value="">'; ?>
+																		<?php $checkbox_for_kintone_update_key = apply_filters( 'form_data_to_kintone_setting_checkbox_for_kintone_update_key', $checkbox_for_kintone_update_key, $app_data, $multi_kintone_app_count, $form_data ); ?>
+																		<?php echo $checkbox_for_kintone_update_key; ?>
+																	<?php endif; ?>
+																</td>
 																<td style="padding: 5px 10px 5px 0px; border-bottom: 1px solid #e2e2e2;">
 																	<?php echo esc_html( ( isset( $form_data['label'] ) ) ? $form_data['label'] : "" ) . '(' . esc_html( $form_data['code'] ) . ')'; ?>
 																</td>
@@ -927,7 +930,6 @@ class Kintone_Form_Admin {
 				<option <?php selected( $value, $selected_cf7_mailtag, true ); ?> value="<?php echo esc_attr( $value ); ?>">[<?php echo esc_attr( $value ); ?>]</option>
 			<?php endforeach; ?>
 			<?php foreach ( Kintone_Form::CF7_SPECAIL_TAGS as $cf7_specail_tag ) : ?>
-				<!--				<option --><?php //selected( $cf7_specail_tag, $select_option ); ?><!-- value="--><?php //echo esc_attr( $cf7_specail_tag ); ?><!--">[--><?php //echo esc_attr( $cf7_specail_tag ); ?><!--]</option>-->
 				<option <?php selected( $cf7_specail_tag, $selected_cf7_mailtag ); ?> value="<?php echo esc_attr( $cf7_specail_tag ); ?>">[<?php echo esc_attr( $cf7_specail_tag ); ?>]</option>
 			<?php endforeach; ?>
 			<?php do_action( 'kintone_form_add_original_cf7_mail_tag_for_kintone_form', $selected_cf7_mailtag ); ?>
@@ -950,6 +952,18 @@ class Kintone_Form_Admin {
 
 		return $html;
 	}
+
+	private function is_update_key_kintone_field( $form_data ) {
+
+		if ( 'SINGLE_LINE_TEXT' === $form_data['type'] && ! isset( $form_data['relatedApp'] ) && isset( $form_data['unique'] ) && 'true' === $form_data['unique'] ) {
+			return true;
+		}
+
+		if ( 'NUMBER' === $form_data['type'] && 'true' === $form_data['unique'] ) {
+			return true;
+
+		}
+
+		return false;
+	}
 }
-
-
