@@ -401,6 +401,8 @@ class Kintone_Form_Post_Kintone {
 			'record' => $datas,
 		);
 
+		$update_key = apply_filters( 'form_data_to_kintone_get_update_key_for_add_on_enable_update_key', $update_key, $body );
+
 		$tmp_options = apply_filters(
 			'form_data_to_kintone_before_wp_remoto_post',
 			array(
