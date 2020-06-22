@@ -421,6 +421,7 @@ class Kintone_Form_Post_Kintone {
 			);
 
 			// kintoneにフォームデータを追加/更新する.
+			$url = apply_filters( 'form_data_to_kintone_kintone_post_url', $url );
 			$res = wp_remote_post(
 				$url,
 				$options
