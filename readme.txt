@@ -3,7 +3,7 @@ Contributors: tkc49, agunchar
 Tags: cybozu, kintone, crm, database, custom field, contact form 7, form
 Requires at least: 4.9
 Tested up to: 5.4
-Stable tag: 2.16.0
+Stable tag: 2.16.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -45,6 +45,10 @@ A tab for setting the information on kitone appears on the "Contact Form 7" sett
 1. screenshot-1.png
 
 == Changelog ==
+= 2.16.1 =
+* [Change] "form_data_to_kintone_kintone_post_url" to Add parameters
+* [Change] private to public static of "get_data_for_post"
+
 = 2.16.0 =
 * [Add] filter hook of "form_data_to_kintone_kintone_post_url"
 
