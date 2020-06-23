@@ -80,7 +80,7 @@ class Kintone_Form_Post_Kintone {
 			$kintone_post_data[ $app_count ]['datas'] = array();
 
 			// CFf7の設定画面で紐づけされたデータ
-			$kintone_fields_and_cf7_mailtag_relate_data = $this->get_data_for_post( $appdata );
+			$kintone_fields_and_cf7_mailtag_relate_data = Kintone_Form_Post_Kintone::get_data_for_post( $appdata );
 
 			// 設定があれば処理する
 			if ( isset( $kintone_fields_and_cf7_mailtag_relate_data['setting'] ) ) {
@@ -302,7 +302,7 @@ class Kintone_Form_Post_Kintone {
 	 *
 	 * @return array
 	 */
-	private function get_data_for_post( $appdata ) {
+	public static function get_data_for_post( $appdata ) {
 
 		$data['setting'] = array();
 
