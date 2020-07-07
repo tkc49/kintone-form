@@ -45,21 +45,23 @@ class KintoneFormNumber {
 			$value = $value[0];
 		}
 
-		if ( ! empty( $value ) && ! is_numeric( $value ) ) {
-			$e->add( 'Error', $cf7_mail_tag . '->' . $kintone_form_data['code'] . ' : Numeric format error' );
-		}
-
-		if ( ! empty( $kintone_form_data['minValue'] ) ) {
-
-			if ( $kintone_form_data['minValue'] > $value ) {
-				$e->add( 'Error', $cf7_mail_tag . '->' . $kintone_form_data['code'] . ' : Minimum value error' );
+		if ( '' !== $value ) {
+			if ( ! is_numeric( $value ) ) {
+				$e->add( 'Error', $cf7_mail_tag . '->' . $kintone_form_data['code'] . ' : Numeric format error' );
 			}
-		}
 
-		if ( ! empty( $kintone_form_data['maxValue'] ) ) {
+			if ( ! empty( $kintone_form_data['minValue'] ) ) {
 
-			if ( $kintone_form_data['maxValue'] < $value ) {
-				$e->add( 'Error', $cf7_mail_tag . '->' . $kintone_form_data['code'] . ' : Maximum value error' );
+				if ( $kintone_form_data['minValue'] > $value ) {
+					$e->add( 'Error', $cf7_mail_tag . '->' . $kintone_form_data['code'] . ' : Minimum value error' );
+				}
+			}
+
+			if ( ! empty( $kintone_form_data['maxValue'] ) ) {
+
+				if ( $kintone_form_data['maxValue'] < $value ) {
+					$e->add( 'Error', $cf7_mail_tag . '->' . $kintone_form_data['code'] . ' : Maximum value error' );
+				}
 			}
 		}
 
