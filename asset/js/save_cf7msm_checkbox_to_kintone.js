@@ -1,3 +1,6 @@
+/**
+ * 送信ボタンを押された時
+ */
 ( function( $ ){
 
 	document.addEventListener( 'wpcf7mailsent', function( e ){
@@ -37,6 +40,9 @@
 
 } )( jQuery );
 
+/**
+ * 送信ボタンを押された時
+ */
 ( function( $ ){
 
 	jQuery( document ).ready( function( $ ){
