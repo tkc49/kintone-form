@@ -34,7 +34,12 @@ class KintoneFormNumber {
 
 		$value = '';
 		if ( in_array( $cf7_mail_tag, Kintone_Form::CF7_SPECAIL_TAGS, true ) ) {
-			$value = apply_filters( 'wpcf7_special_mail_tags', '', $cf7_mail_tag, false );
+			$mail_tag = new WPCF7_MailTag(
+				sprintf( '[%s]', $cf7_mail_tag ), $cf7_mail_tag, ''
+			);
+
+			$value = apply_filters( 'wpcf7_special_mail_tags', null, $cf7_mail_tag, false, $mail_tag );
+
 		} else {
 			if ( isset( $cf7_send_data[ $cf7_mail_tag ] ) ) {
 				$value = $cf7_send_data[ $cf7_mail_tag ];
