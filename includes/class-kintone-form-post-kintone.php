@@ -13,6 +13,10 @@ class Kintone_Form_Post_Kintone {
 	 * Constructor
 	 */
 	public function __construct() {
+
+		// 現在ログインしているユーザー情報を取得しkintoneに保存するための設定
+		add_filter( 'wpcf7_verify_nonce', '__return_true' );
+
 		/**
 		 * Wpcf7_submit フックの起動時にuploadsフォルダーの添付画像が削除されるので、
 		 * submit の前のメール送信後のhookのwpcf7_mail_sentを使用する.

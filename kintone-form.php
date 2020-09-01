@@ -3,7 +3,7 @@
  * Plugin Name: Form data to kintone
  * Plugin URI:
  * Description: This plugin is an addon for "Contact Form 7".
- * Version:     2.16.4
+ * Version:     2.17.0
  * Author:      Takashi Hosoya
  * Author URI:  http://ht79.info/
  * License:     GPLv2

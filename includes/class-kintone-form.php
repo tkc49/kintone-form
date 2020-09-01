@@ -24,6 +24,13 @@ class Kintone_Form {
 		'_site_description',
 		'_site_url',
 		'_site_admin_email',
+		'_user_login',
+		'_user_email',
+		'_user_url',
+		'_user_first_name',
+		'_user_last_name',
+		'_user_nickname',
+		'_user_display_name',
 	);
 
 
