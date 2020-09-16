@@ -64,12 +64,11 @@
 
 		$.each( kintoneFromSaveCfmsmCheckboxToKintoneData, function( key, values ){
 			key = key.substr( 0, key.length - 2 );
-			for ( const value of values ) {
-				cf7msm_form.append( $( '<input type="hidden" name="_kintone-form-save-cfmsm-checkbox-to-kintone-data[' + key + '][]" value="' + quoteattr( value ) + '">' ) );
+			for ( var i = 0; i < values.length; i++ ) {
+				cf7msm_form.append( $( '<input type="hidden" name="_kintone-form-save-cfmsm-checkbox-to-kintone-data[' + key + '][]" value="' + quoteattr( values[i] ) + '">' ) );
 			}
 		} )
 
 	} );
-
 
 } )( jQuery )
