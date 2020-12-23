@@ -45,6 +45,13 @@ A tab for setting the information on kitone appears on the "Contact Form 7" sett
 1. screenshot-1.png
 
 == Changelog ==
+
+= 2.18.0 =
+Release Date: December 23th, 2020
+
+* [Add] Add "_date" with special tags
+* [Add] Add "_time" with special tags
+
 = 2.17.4 =
 * [Fix] Change type from const to let for IE11
 

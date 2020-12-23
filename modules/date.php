@@ -41,8 +41,13 @@ class KintoneFormDate {
 		$return_data = array();
 
 		$value = '';
-		if ( isset( $cf7_send_data[ $cf7_mail_tag ] ) ) {
-			$value = $cf7_send_data[ $cf7_mail_tag ];
+		if ( '_date' === $cf7_mail_tag ) {
+			$value = date_i18n( 'Y-m-d' );
+		} else {
+
+			if ( isset( $cf7_send_data[ $cf7_mail_tag ] ) ) {
+				$value = $cf7_send_data[ $cf7_mail_tag ];
+			}
 		}
 
 		$value = apply_filters( 'kintone_form_date_customize_mailtag', $value, $cf7_send_data, $cf7_mail_tag );

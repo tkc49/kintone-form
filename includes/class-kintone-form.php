@@ -13,6 +13,8 @@ class Kintone_Form {
 	const CF7_SPECAIL_TAGS = array(
 		'_remote_ip',
 		'_user_agent',
+		'_date',
+		'_time',
 		'_url',
 		'_post_id',
 		'_post_name',
