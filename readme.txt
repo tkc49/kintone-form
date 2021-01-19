@@ -2,8 +2,8 @@
 Contributors: tkc49, agunchar
 Tags: cybozu, kintone, crm, database, custom field, contact form 7, form
 Requires at least: 4.9
-Tested up to: 5.4
-Stable tag: 2.18.1
+Tested up to: 5.6
+Stable tag: 2.19.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -45,6 +45,11 @@ A tab for setting the information on kitone appears on the "Contact Form 7" sett
 1. screenshot-1.png
 
 == Changelog ==
+
+= 2.19.0 =
+Release Date: January 19th, 2021
+
+* [Fixed] Fixed a bug where the settings would disappear when data could not be retrieved from kintone when saving in the kintone tab of CF7 in the administration screen
 
 = 2.18.1 =
 Release Date: December 23th, 2020
