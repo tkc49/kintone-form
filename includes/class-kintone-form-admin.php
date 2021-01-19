@@ -933,7 +933,7 @@ class Kintone_Form_Admin {
 		ob_start();
 		?>
 		<!-- Create selectbox-->
-		<select id="cf7-mailtag-<?php echo esc_attr( $hash ); ?>" <?php echo esc_attr( $selectbox_readonly ); ?>name="kintone_setting_data[app_datas][<?php echo esc_attr( $multi_kintone_app_count ); ?>][setting][<?php echo esc_attr( $kintone_filed['code'] ); ?>]">
+		<select id="cf7-mailtag-<?php echo esc_attr( $hash ); ?>" <?php echo esc_attr( $selectbox_readonly ); ?>name="kintone_setting_data[app_datas][<?php echo esc_attr( $multi_kintone_app_count ); ?>][setting][<?php echo esc_attr( $kintone_filed['code'] ); ?>]">
 			<option value=""></option>
 
 			<?php foreach ( $mailtags as $value ) : ?>
