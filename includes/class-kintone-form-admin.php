@@ -784,6 +784,16 @@ class Kintone_Form_Admin {
 
 					if ( ! is_wp_error( $kintone_form_data ) ) {
 						$app_data['formdata'] = $kintone_form_data;
+					} else {
+						// エラーの場合は保存前のデータをセットする.
+						$kintone_setting_data = $contact_form->prop( 'kintone_setting_data' );
+						if ( isset( $kintone_setting_data['app_datas'] ) ) {
+							foreach ( $kintone_setting_data['app_datas'] as $before_saved_app_data ) {
+								if ( $app_data['appid'] === $before_saved_app_data['appid'] ) {
+									$app_data['formdata'] = $before_saved_app_data['formdata'];
+								}
+							}
+						}
 					}
 
 					$app_datas [ $i ] = $app_data;
