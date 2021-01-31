@@ -3,7 +3,7 @@ Contributors: tkc49, agunchar
 Tags: cybozu, kintone, crm, database, custom field, contact form 7, form
 Requires at least: 4.9
 Tested up to: 5.6
-Stable tag: 2.19.0
+Stable tag: 2.20.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -45,6 +45,11 @@ A tab for setting the information on kitone appears on the "Contact Form 7" sett
 1. screenshot-1.png
 
 == Changelog ==
+
+= 2.20.0 =
+Release Date: January 31th, 2021
+
+* [Changed] Changed the way to get checkbox data when using "Contact Form 7 Multi-Step Forms" due to changes in "Contact form 7"
 
 = 2.19.0 =
 Release Date: January 19th, 2021

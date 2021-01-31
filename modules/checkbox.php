@@ -43,9 +43,7 @@ class KintoneFormCheckbox {
 
 		$value = '';
 		if ( in_array( $cf7_mail_tag, Kintone_Form::CF7_SPECAIL_TAGS, true ) ) {
-			$mail_tag = new WPCF7_MailTag(
-				sprintf( '[%s]', $cf7_mail_tag ), $cf7_mail_tag, ''
-			);
+			$mail_tag = new WPCF7_MailTag( sprintf( '[%s]', $cf7_mail_tag ), $cf7_mail_tag, '' );
 
 			$value = apply_filters( 'wpcf7_special_mail_tags', null, $cf7_mail_tag, false, $mail_tag );
 		} else {
@@ -61,8 +59,8 @@ class KintoneFormCheckbox {
 
 		if ( ! is_array( $value ) ) {
 
-			if ( isset( $cf7_send_data['_kintone-form-save-cfmsm-checkbox-to-kintone-data'][ $cf7_mail_tag ] ) ) {
-				$value = $cf7_send_data['_kintone-form-save-cfmsm-checkbox-to-kintone-data'][ $cf7_mail_tag ];
+			if ( isset( $_REQUEST['_kintone-form-save-cfmsm-checkbox-to-kintone-data'][ $cf7_mail_tag ] ) ) {
+				$value = $_REQUEST['_kintone-form-save-cfmsm-checkbox-to-kintone-data'][ $cf7_mail_tag ];
 			} else {
 				$value = array( $value );
 			}

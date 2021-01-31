@@ -33,16 +33,12 @@ class Kintone_Form_Post_Kintone {
 	}
 
 	public function kintone_form_enqueue_scripts_save_cf7msm_checkbox_to_kintone() {
-		wp_enqueue_script(
-			'kintone-form-save-cf7msm-checkbox-to-kintone',
+		wp_enqueue_script( 'kintone-form-save-cf7msm-checkbox-to-kintone',
 			KINTONE_FORM_URL . '/asset/js/save_cf7msm_checkbox_to_kintone.js',
 			array( 'jquery' ),
-			date(
-				'YmdGis',
-				filemtime( KINTONE_FORM_PATH . '/asset/js/save_cf7msm_checkbox_to_kintone.js' )
-			),
-			true
-		);
+			date( 'YmdGis',
+				filemtime( KINTONE_FORM_PATH . '/asset/js/save_cf7msm_checkbox_to_kintone.js' ) ),
+			true );
 
 	}
 
@@ -62,14 +58,16 @@ class Kintone_Form_Post_Kintone {
 		$cf7_send_data = $submission->get_posted_data();
 		$cf7_send_data = apply_filters( 'kintone_form_cf7_posted_data_before_post_to_kintone', $cf7_send_data );
 
-		// Contact Form 7 add confirm.
-		if ( isset( $cf7_send_data['_wpcf7c'] ) && 'step1' === $cf7_send_data['_wpcf7c'] ) {
-			return;
-		}
-
 		$kintone_setting_data = $contact_form->prop( 'kintone_setting_data' );
 
 		if ( empty( $kintone_setting_data ) ) {
+			return;
+		}
+
+		if ( ! isset( $kintone_setting_data['app_datas'] ) ) {
+			return;
+		}
+		if ( empty( $kintone_setting_data['app_datas'] ) ) {
 			return;
 		}
 
@@ -101,16 +99,14 @@ class Kintone_Form_Post_Kintone {
 							// SUBTABLEの処理
 							//
 							$subtable_records = array();
-							$subtable_records = apply_filters(
-								'kintone_form_subtable',
+							$subtable_records = apply_filters( 'kintone_form_subtable',
 								$subtable_records,
 								$appdata,
 								$kintone_form_properties_data,
 								$kintone_setting_data,
 								$cf7_send_data,
 								$kintone_fields_and_cf7_mailtag_relate_data,
-								$e
-							);
+								$e );
 
 							if ( ! empty( $subtable_records ) ) {
 								$kintone_post_data[ $app_count ]['datas'][ $kintone_form_properties_data['code'] ] = $subtable_records;
@@ -149,8 +145,7 @@ class Kintone_Form_Post_Kintone {
 
 					$url = Kintone_Form_Utility::get_kintone_url( $kintone_setting_data, 'record' );
 
-					$this->save_data_to_kintone(
-						$url,
+					$this->save_data_to_kintone( $url,
 						$data['token'],
 						$data['appid'],
 						$kintone_setting_data['kintone_basic_authentication_id'],
@@ -158,8 +153,7 @@ class Kintone_Form_Post_Kintone {
 						$data['datas'],
 						$kintone_setting_data['email_address_to_send_kintone_registration_error'],
 						$unique_key,
-						$update_key
-					);
+						$update_key );
 				}
 			}
 		}
@@ -386,19 +380,15 @@ class Kintone_Form_Post_Kintone {
 	 */
 	private function save_data_to_kintone( $url, $token, $appid, $basic_auth_user, $basic_auth_pass, $datas, $email_address_to_send_kintone_registration_error, $unique_key, $update_key ) {
 
-		$headers = array_merge(
-			Kintone_Form_Utility::get_auth_header( $token ),
+		$headers = array_merge( Kintone_Form_Utility::get_auth_header( $token ),
 			Kintone_Form_Utility::get_basic_auth_header( $basic_auth_user, $basic_auth_pass ),
-			array( 'Content-Type' => 'application/json' )
-		);
+			array( 'Content-Type' => 'application/json' ) );
 
-		$headers = apply_filters(
-			'form_data_to_kintone_post_header',
+		$headers = apply_filters( 'form_data_to_kintone_post_header',
 			$headers,
 			Kintone_Form_Utility::get_auth_header( $token ),
 			Kintone_Form_Utility::get_basic_auth_header( $basic_auth_user, $basic_auth_pass ),
-			array( 'Content-Type' => 'application/json' )
-		);
+			array( 'Content-Type' => 'application/json' ) );
 		$datas   = apply_filters( 'form_data_to_kintone_post_datas', $datas, $appid, $unique_key );
 		$datas   = $this->stripslashes_deep( $datas );
 
@@ -409,14 +399,12 @@ class Kintone_Form_Post_Kintone {
 
 		$update_key = apply_filters( 'form_data_to_kintone_get_update_key_for_add_on_enable_update_key', $update_key, $body );
 
-		$tmp_options = apply_filters(
-			'form_data_to_kintone_before_wp_remoto_post',
+		$tmp_options = apply_filters( 'form_data_to_kintone_before_wp_remoto_post',
 			array(
 				'method' => 'POST',
 				'body'   => $body,
 			),
-			$update_key
-		);
+			$update_key );
 
 		if ( ! empty( $tmp_options ) ) {
 
@@ -428,10 +416,8 @@ class Kintone_Form_Post_Kintone {
 
 			// kintoneにフォームデータを追加/更新する.
 			$url = apply_filters( 'form_data_to_kintone_kintone_post_url', $url, $tmp_options );
-			$res = wp_remote_post(
-				$url,
-				$options
-			);
+			$res = wp_remote_post( $url,
+				$options );
 
 			$res = apply_filters( 'form_data_to_kintone_saved', $res, $tmp_options['body'] );
 
@@ -459,8 +445,7 @@ class Kintone_Form_Post_Kintone {
 
 					$reset_data = apply_filters( 'form_data_to_kintone_reset_data', $reset_data, $res );
 
-					$this->save_data_to_kintone(
-						$reset_data['url'],
+					$this->save_data_to_kintone( $reset_data['url'],
 						$reset_data['token'],
 						$reset_data['appid'],
 						$reset_data['basic_auth_user'],
@@ -468,8 +453,7 @@ class Kintone_Form_Post_Kintone {
 						$reset_data['datas'],
 						$reset_data['email_address_to_send_kintone_registration_error'],
 						$reset_data['unique_key'],
-						$reset_data['update_key']
-					);
+						$reset_data['update_key'] );
 				} else {
 					$message = json_decode( $res['body'], true );
 					$e       = new WP_Error();
