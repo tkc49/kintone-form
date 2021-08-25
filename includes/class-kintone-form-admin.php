@@ -953,7 +953,7 @@ class Kintone_Form_Admin {
 		<!-- Show error message-->
 		<?php $error_msg = $this->check_consistency( $tags, $selected_cf7_mailtag, $kintone_filed ); ?>
 		<?php if ( $error_msg ) : ?>
-			<div style="color:red; font-weight:bold;"><?php echo esc_textarea( $error_msg ); ?></div>'
+			<div style="color:red; font-weight:bold;"><?php echo esc_textarea( $error_msg ); ?></div>
 		<?php endif; ?>
 
 		<?php
