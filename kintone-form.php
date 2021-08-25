@@ -32,17 +32,21 @@
 define( 'KINTONE_FORM_URL', plugins_url( '', __FILE__ ) );
 define( 'KINTONE_FORM_PATH', dirname( __FILE__ ) );
 
-$data = get_file_data( __FILE__,
+$data = get_file_data(
+	__FILE__,
 	array(
 		'ver'   => 'Version',
 		'langs' => 'Domain Path',
-	) );
+	)
+);
 
 define( 'KITONE_FORM_VERSION', $data['ver'] );
 define( 'KITONE_FORM_LANGS', $data['langs'] );
-load_plugin_textdomain( 'kintone-form',
+load_plugin_textdomain(
+	'kintone-form',
 	false,
-	dirname( plugin_basename( __FILE__ ) ) . KITONE_FORM_LANGS );
+	dirname( plugin_basename( __FILE__ ) ) . KITONE_FORM_LANGS
+);
 
 
 require KINTONE_FORM_PATH . '/modules/text.php';
