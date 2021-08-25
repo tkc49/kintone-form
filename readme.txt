@@ -2,8 +2,8 @@
 Contributors: tkc49, agunchar
 Tags: cybozu, kintone, crm, database, custom field, contact form 7, form
 Requires at least: 4.9
-Tested up to: 5.6
-Stable tag: 2.20.0
+Tested up to: 5.8
+Stable tag: 2.21.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -45,6 +45,11 @@ A tab for setting the information on kitone appears on the "Contact Form 7" sett
 1. screenshot-1.png
 
 == Changelog ==
+
+= 2.21.0 =
+Release Date: August 25th, 2021
+
+* [Add] Added support for importing organization selection into kintone.
 
 = 2.20.0 =
 Release Date: January 31th, 2021
