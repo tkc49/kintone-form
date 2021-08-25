@@ -235,6 +235,10 @@ class Kintone_Form_Post_Kintone {
 				$post_data = KintoneFormMultiLineText::format_to_kintone_data( $kintone_form_field_properties, $cf7_send_data, $related_cf7_mail_tag, $e );
 
 				return $post_data;
+			case 'ORGANIZATION_SELECT':
+				$post_data = KintoneFormOrganization::format_to_kintone_data( $kintone_form_field_properties, $cf7_send_data, $related_cf7_mail_tag, $e );
+
+				return $post_data;
 			case 'RECORD_NUMBER':
 				break;
 			case 'MODIFIER':

@@ -150,6 +150,7 @@ class Kintone_Form_Admin {
 			'RICH_TEXT',
 			'MULTI_LINE_TEXT',
 			'DROP_DOWN',
+			'ORGANIZATION_SELECT'
 		),
 		'time'       => array(
 			'SINGLE_LINE_TEXT',
@@ -167,18 +168,19 @@ class Kintone_Form_Admin {
 	 * @var $kintone_fieldcode_supported_list
 	 */
 	private $kintone_fieldcode_supported_list = array(
-		'SINGLE_LINE_TEXT' => 'text',
-		'NUMBER'           => 'number',
-		'RADIO_BUTTON'     => 'radio',
-		'CHECK_BOX'        => 'checkbox',
-		'MULTI_SELECT'     => 'select',
-		'DROP_DOWN'        => 'select',
-		'DATE'             => 'date',
-		'TIME'             => 'time',
-		'DATETIME'         => '',
-		'LINK'             => 'url',
-		'RICH_TEXT'        => 'textarea',
-		'MULTI_LINE_TEXT'  => 'textarea',
+		'SINGLE_LINE_TEXT'    => 'text',
+		'NUMBER'              => 'number',
+		'RADIO_BUTTON'        => 'radio',
+		'CHECK_BOX'           => 'checkbox',
+		'MULTI_SELECT'        => 'select',
+		'DROP_DOWN'           => 'select',
+		'DATE'                => 'date',
+		'TIME'                => 'time',
+		'DATETIME'            => '',
+		'LINK'                => 'url',
+		'RICH_TEXT'           => 'textarea',
+		'MULTI_LINE_TEXT'     => 'textarea',
+		'ORGANIZATION_SELECT' => 'text',
 	);
 
 
