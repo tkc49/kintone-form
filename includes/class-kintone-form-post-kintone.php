@@ -14,7 +14,7 @@ class Kintone_Form_Post_Kintone {
 	 */
 	public function __construct() {
 
-		// 現在ログインしているユーザー情報を取得しkintoneに保存するための設定
+		// 現在ログインしているユーザー情報を取得しkintoneに保存するための設定.
 		if ( is_user_logged_in() ) {
 			add_filter( 'wpcf7_verify_nonce', '__return_true' );
 		}
@@ -26,7 +26,7 @@ class Kintone_Form_Post_Kintone {
 		add_action( 'wpcf7_mail_sent', array( $this, 'kintone_form_send' ) );
 		add_filter( 'wpcf7_form_tag', array( $this, 'kintone_form_set_post_title' ) );
 
-		// contact form 7 multi step module が有効なら実行する
+		// contact form 7 multi step module が有効なら実行する.
 		if ( function_exists( 'cf7msm_fs' ) ) {
 			add_action( 'wp_enqueue_scripts', array( $this, 'kintone_form_enqueue_scripts_save_cf7msm_checkbox_to_kintone' ) );
 		}
@@ -37,7 +37,7 @@ class Kintone_Form_Post_Kintone {
 			'kintone-form-save-cf7msm-checkbox-to-kintone',
 			KINTONE_FORM_URL . '/asset/js/save_cf7msm_checkbox_to_kintone.js',
 			array( 'jquery' ),
-			date(
+			gmdate(
 				'YmdGis',
 				filemtime( KINTONE_FORM_PATH . '/asset/js/save_cf7msm_checkbox_to_kintone.js' )
 			),
@@ -80,28 +80,28 @@ class Kintone_Form_Post_Kintone {
 
 		$e = new WP_Error();
 
-		// kintoneアプリのマルチ設定考慮して、appdataごとにループ
+		// kintoneアプリのマルチ設定考慮して、appdataごとにループ.
 		foreach ( $kintone_setting_data['app_datas'] as $appdata ) {
 
 			$kintone_post_data[ $app_count ]['appid'] = $appdata['appid'];
 			$kintone_post_data[ $app_count ]['token'] = $appdata['token'];
 			$kintone_post_data[ $app_count ]['datas'] = array();
 
-			// CFf7の設定画面で紐づけされたデータ
-			$kintone_fields_and_cf7_mailtag_relate_data = Kintone_Form_Post_Kintone::get_data_for_post( $appdata );
+			// CFf7の設定画面で紐づけされたデータ.
+			$kintone_fields_and_cf7_mailtag_relate_data = self::get_data_for_post( $appdata );
 
-			// 設定があれば処理する
+			// 設定があれば処理する.
 			if ( isset( $kintone_fields_and_cf7_mailtag_relate_data['setting'] ) ) {
 
-				// kintoneに設定されている全フィールドをループ
+				// kintoneに設定されている全フィールドをループ.
 
 				foreach ( $appdata['formdata']['properties'] as $kintone_form_properties_data ) {
 
 					if ( isset( $kintone_form_properties_data['code'] ) ) {
 						if ( 'SUBTABLE' === $kintone_form_properties_data['type'] ) {
-							//
-							// SUBTABLEの処理
-							//
+							/**
+							 * SUBTABLEの処理.
+							 */
 							$subtable_records = array();
 							$subtable_records = apply_filters(
 								'kintone_form_subtable',
@@ -118,7 +118,7 @@ class Kintone_Form_Post_Kintone {
 								$kintone_post_data[ $app_count ]['datas'][ $kintone_form_properties_data['code'] ] = $subtable_records;
 							}
 						} else {
-							// 通常処理`
+							// 通常処理.
 							$post_data = $this->generate_format_kintone_data( $kintone_setting_data, $appdata, $kintone_fields_and_cf7_mailtag_relate_data, $kintone_form_properties_data, $cf7_send_data, $e );
 							if ( isset( $post_data['value'] ) && '' !== $post_data['value'] ) {
 								$kintone_post_data[ $app_count ]['datas'][ $kintone_form_properties_data['code'] ] = $post_data;
@@ -167,22 +167,22 @@ class Kintone_Form_Post_Kintone {
 		}
 	}
 
-	// CF7の設定画面で関連付けされたデーターとマッチングさせる
+	// CF7の設定画面で関連付けされたデーターとマッチングさせる.
 	private function generate_format_kintone_data( $kintone_setting_data, $appdata, $kintone_fields_and_cf7_mailtag_relate_data, $kintone_form_field_properties, $cf7_send_data, $e, $subtable_flag = false ) {
 
 		$formated_kintone_value = array();
 
-		// CF7の設定画面で関連付けされたデーターをベースにループ
+		// CF7の設定画面で関連付けされたデーターをベースにループ.
 		foreach ( $kintone_fields_and_cf7_mailtag_relate_data['setting'] as $related_kintone_fieldcode => $related_cf7_mail_tag ) {
 
-			// メールタグが設定されているものだけ kintoneのフィールドにあわせる
+			// メールタグが設定されているものだけ kintoneのフィールドにあわせる.
 			if ( ! empty( $related_cf7_mail_tag ) ) {
 
-				if ( $kintone_form_field_properties['code'] == $related_kintone_fieldcode ) {
+				if ( $kintone_form_field_properties['code'] === $related_kintone_fieldcode ) {
 
-					$formated_kintone_value = Kintone_Form_Post_Kintone::get_formated_data_for_kintone( $kintone_setting_data, $appdata, $kintone_form_field_properties, $cf7_send_data, $related_cf7_mail_tag, $e );
+					$formated_kintone_value = self::get_formated_data_for_kintone( $kintone_setting_data, $appdata, $kintone_form_field_properties, $cf7_send_data, $related_cf7_mail_tag, $e );
 
-					// 一致するのがあり、値の取得ができたのでループを抜ける
+					// 一致するのがあり、値の取得ができたのでループを抜ける.
 					break;
 
 				}
@@ -247,34 +247,22 @@ class Kintone_Form_Post_Kintone {
 				$post_data = KintoneFormOrganization::format_to_kintone_data( $kintone_form_field_properties, $cf7_send_data, $related_cf7_mail_tag, $e );
 
 				return $post_data;
+			case 'MODIFIER':
+			case 'CREATOR':
+			case 'UPDATED_TIME':
+			case 'CREATED_TIME':
+			case 'CALC':
+			case 'USER_SELECT':
+			case 'REFERENCE_TABLE':
+			case 'GROUP':
+			case 'SUBTABLE':
+			case 'STATUS':
+			case 'STATUS_ASSIGNEE':
+			case 'CATEGORY':
 			case 'RECORD_NUMBER':
 				break;
-			case 'MODIFIER':
-				break;
-			case 'CREATOR':
-				break;
-			case 'UPDATED_TIME':
-				break;
-			case 'CREATED_TIME':
-				break;
-			case 'CALC':
-				break;
-			case 'USER_SELECT':
-				break;
-			case 'REFERENCE_TABLE':
-				break;
-			case 'GROUP':
-				break;
-			case 'SUBTABLE':
-				break;
-			case 'STATUS':
-				break;
-			case 'STATUS_ASSIGNEE':
-				break;
-			case 'CATEGORY':
-				break;
 			case 'FILE':
-				// todo $kintone_setting_data, $appdata 必要？
+				// todo $kintone_setting_data, $appdata 必要?.
 				$post_data = apply_filters( 'kintone_form_attachments_data', $kintone_setting_data, $appdata, $cf7_send_data, $kintone_form_field_properties, $related_cf7_mail_tag, $e );
 
 				return $post_data;
@@ -353,14 +341,14 @@ class Kintone_Form_Post_Kintone {
 		$cf7_id = $contact_form->id();
 
 		$error_msg  = '';
-		$error_msg  .= $cf7_name_after_urldecode . '(ID:' . $cf7_id . ')' . "\r\n";
-		$error_msg  .= '-----------------------' . "\r\n";
-		$error_msg  .= implode( "\r\n", $e->get_error_messages() ) . "\r\n";
+		$error_msg .= $cf7_name_after_urldecode . '(ID:' . $cf7_id . ')' . "\r\n";
+		$error_msg .= '-----------------------' . "\r\n";
+		$error_msg .= implode( "\r\n", $e->get_error_messages() ) . "\r\n";
 		$error_data = $e->get_error_data();
 
 		if ( ! empty( $error_data ) ) {
 			$error_data = var_export( $error_data, true );
-			$error_msg  .= $error_data;
+			$error_msg .= $error_data;
 		}
 
 		if ( $email_address_to_send_kintone_registration_error ) {
@@ -424,7 +412,6 @@ class Kintone_Form_Post_Kintone {
 			$update_key
 		);
 
-
 		if ( ! empty( $tmp_options ) ) {
 
 			$options = array(
@@ -453,15 +440,15 @@ class Kintone_Form_Post_Kintone {
 				if ( $retry ) {
 
 					$reset_data = array(
-						'url'                                              => $url,
-						'token'                                            => $token,
-						'appid'                                            => $appid,
-						'basic_auth_user'                                  => $basic_auth_user,
-						'basic_auth_pass'                                  => $basic_auth_pass,
-						'datas'                                            => $datas,
+						'url'             => $url,
+						'token'           => $token,
+						'appid'           => $appid,
+						'basic_auth_user' => $basic_auth_user,
+						'basic_auth_pass' => $basic_auth_pass,
+						'datas'           => $datas,
 						'email_address_to_send_kintone_registration_error' => $email_address_to_send_kintone_registration_error,
-						'unique_key'                                       => $unique_key,
-						'update_key'                                       => $update_key,
+						'unique_key'      => $unique_key,
+						'update_key'      => $update_key,
 					);
 
 					$reset_data = apply_filters( 'form_data_to_kintone_reset_data', $reset_data, $res );
