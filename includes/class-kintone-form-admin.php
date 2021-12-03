@@ -191,6 +191,11 @@ class Kintone_Form_Admin {
 
 		add_filter( 'wpcf7_editor_panels', array( $this, 'wpcf7_editor_panels' ) );
 		add_filter( 'wpcf7_contact_form_properties', array( $this, 'wpcf7_contact_form_properties' ), 10, 2 );
+		if ( version_compare( WPCF7_VERSION, '5.5.3', '>=' ) ) {
+			add_filter( 'wpcf7_pre_construct_contact_form_properties', array( $this, 'wpcf7_contact_form_properties' ), 10, 2 );
+		} else {
+			add_filter( 'wpcf7_contact_form_properties', array( $this, 'wpcf7_contact_form_properties' ), 10, 2 );
+		}
 
 		add_action( 'wpcf7_admin_init', array( $this, 'kintone_form_add_tag_generator_text' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'register_assets' ) );
