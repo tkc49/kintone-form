@@ -67,7 +67,7 @@ class KintoneFormCheckbox {
 		}
 
 		if ( empty( $value[0] ) ) {
-			$value = '';
+			$value = array();
 		}
 
 		$return_data['value'] = $value;
