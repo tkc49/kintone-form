@@ -181,6 +181,7 @@ class Kintone_Form_Admin {
 		'RICH_TEXT'           => 'textarea',
 		'MULTI_LINE_TEXT'     => 'textarea',
 		'ORGANIZATION_SELECT' => 'text',
+		'FILE' => 'file',
 	);
 
 
