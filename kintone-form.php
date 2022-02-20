@@ -63,6 +63,7 @@ require KINTONE_FORM_PATH . '/modules/multi_select.php';
 require KINTONE_FORM_PATH . '/modules/time.php';
 require KINTONE_FORM_PATH . '/includes/check-acceptance.php';
 require KINTONE_FORM_PATH . '/modules/organization.php';
+require KINTONE_FORM_PATH . '/modules/file.php';
 
 require_once KINTONE_FORM_PATH . '/includes/class-kintone-form.php';
 
