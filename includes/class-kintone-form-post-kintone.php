@@ -263,7 +263,7 @@ class Kintone_Form_Post_Kintone {
 				break;
 			case 'FILE':
 				// todo $kintone_setting_data, $appdata 必要?.
-				$post_data = apply_filters( 'kintone_form_attachments_data', $kintone_setting_data, $appdata, $cf7_send_data, $kintone_form_field_properties, $related_cf7_mail_tag, $e );
+				$post_data = apply_filters_deprecated( 'kintone_form_attachments_data', array($kintone_setting_data, $appdata, $cf7_send_data, $kintone_form_field_properties, $related_cf7_mail_tag, $e), '2.24.0','kintone_form_file_data' );
 
 				return apply_filters( 'kintone_form_file_data', $post_data, $kintone_setting_data, $appdata, $cf7_send_data, $kintone_form_field_properties, $related_cf7_mail_tag, $e);
 		}

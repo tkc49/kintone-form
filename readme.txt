@@ -50,6 +50,8 @@ A tab for setting the information on kitone appears on the "Contact Form 7" sett
 Release Date:
 
 * [Added] Added the feature to import attached files.
+* [Changed] Changed kintone_form_attachments_data filter to deprecated.
+* [Tested] Contact form 7 version's 5.5.5
 
 = 2.23.0 =
 Release Date: January 16th, 2022
