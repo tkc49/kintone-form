@@ -1,3 +1,5 @@
 README.md
 .idea/
 /tests/E2E/node_modules/
+/node_modules
+/playwright-report
