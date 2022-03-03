@@ -3,7 +3,7 @@ Contributors: tkc49, agunchar, matsuoatsushi
 Tags: cybozu, kintone, crm, database, custom field, contact form 7, form
 Requires at least: 4.9
 Tested up to: 5.8
-Stable tag: 2.24.1
+Stable tag: 2.24.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -46,13 +46,18 @@ A tab for setting the information on kitone appears on the "Contact Form 7" sett
 
 == Changelog ==
 
+= 2.24.2 =
+Release Date: March 3th, 2022
+
+* [Fixed] Fixed a bug where the "quoteattr" function did not exist.
+
 = 2.24.1 =
-Release Date:
+Release Date: February 20th, 2022
 
 * [Fixed] Fixed a forgotten version upgrade.
 
 = 2.24.0 =
-Release Date:
+Release Date: February 20th, 2022
 
 * [Added] Added the feature to import attached files.
 * [Changed] Changed kintone_form_attachments_data filter to deprecated.
