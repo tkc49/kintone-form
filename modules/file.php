@@ -27,7 +27,7 @@ class KintoneFormFile {
 	public function get_kintone_file_key( $post_data, $kintone_setting_data, $appdata, $cf7_send_data, $kintone_form_data, $cf7_mail_tag, $e ) {
 
 		// 既に設定されている場合は何も処理をしない。
-		if( isset( $post_data['value'] ) ){
+		if ( isset( $post_data['value'] ) ) {
 			return $post_data;
 		}
 
@@ -50,9 +50,13 @@ class KintoneFormFile {
 		}
 
 		$file_path = $uploaded_files[ $cf7_mail_tag ];
+		if ( empty( $file_path ) ) {
+			return $return_data;
+		}
+
 		$file_name = mb_convert_encoding( mb_substr( $file_path[0], mb_strrpos( $file_path[0], DIRECTORY_SEPARATOR ) + 1 ), 'UTF-8', 'auto' );
 
-		$file_info     = finfo_open( FILEINFO_MIME_TYPE );
+		$file_info = finfo_open( FILEINFO_MIME_TYPE );
 		$mime_type = finfo_file( $file_info, $file_path[0] );
 		$file_data = file_get_contents( $file_path[0] );
 		finfo_close( $file_info );
