@@ -272,7 +272,7 @@ class Kintone_Form_Admin {
 		}
 
 		$kintone_basic_authentication_password = '';
-		if ( isset( $kintone_setting_data['kintone_basic_authentication_password'] ) ) {
+		if ( isset( $kintone_setting_data['kintone_basic_authentication_password'] ) && $kintone_setting_data['kintone_basic_authentication_password'] ) {
 			$kintone_basic_authentication_password = Kintone_Form_Utility::decode(
 				$kintone_setting_data['kintone_basic_authentication_password']
 			);
