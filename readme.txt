@@ -3,7 +3,7 @@ Contributors: tkc49, agunchar, matsuoatsushi
 Tags: cybozu, kintone, crm, database, custom field, contact form 7, form
 Requires at least: 4.9
 Tested up to: 5.8
-Stable tag: 2.24.4
+Stable tag: 2.24.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -45,6 +45,12 @@ A tab for setting the information on kitone appears on the "Contact Form 7" sett
 1. screenshot-1.png
 
 == Changelog ==
+
+= 2.24.5 =
+Release Date: May 31th, 2022
+
+*[Fixed] Warning error.
+
 
 = 2.24.4 =
 Release Date: May 28th, 2022
