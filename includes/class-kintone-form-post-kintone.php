@@ -481,6 +481,7 @@ class Kintone_Form_Post_Kintone {
 					return $e;
 				}
 			} else {
+				do_action( 'form_data_to_kintone_completed_saving', $res, $tmp_options['body'] );
 				return true;
 			}
 		}
