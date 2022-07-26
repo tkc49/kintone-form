@@ -138,6 +138,10 @@ class Kintone_Form_Post_Kintone {
 
 		} else {
 
+			if ( $contact_form->is_true( 'demo_mode' ) || $contact_form->is_true( 'do_not_store' ) ) {
+				return;
+			}
+
 			// 1フォームで複数アプリを登録する時に紐付けるキーに利用
 			$unique_key = '';
 			$unique_key = apply_filters( 'form_data_to_kintone_get_unique_key', $unique_key );
