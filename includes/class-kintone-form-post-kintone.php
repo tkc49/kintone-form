@@ -54,6 +54,10 @@ class Kintone_Form_Post_Kintone {
 	 */
 	public function kintone_form_send( $contact_form ) {
 
+		if ( $contact_form->is_true( 'demo_mode' ) || $contact_form->is_true( 'do_not_store' ) ) {
+			return;
+		}
+
 		$submission = WPCF7_Submission::get_instance();
 		if ( empty( $submission ) ) {
 			return;
@@ -137,10 +141,6 @@ class Kintone_Form_Post_Kintone {
 			$this->erro_mail( $e, $kintone_setting_data['email_address_to_send_kintone_registration_error'] );
 
 		} else {
-
-			if ( $contact_form->is_true( 'demo_mode' ) || $contact_form->is_true( 'do_not_store' ) ) {
-				return;
-			}
 
 			// 1フォームで複数アプリを登録する時に紐付けるキーに利用
 			$unique_key = '';
