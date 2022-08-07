@@ -54,6 +54,10 @@ class Kintone_Form_Post_Kintone {
 	 */
 	public function kintone_form_send( $contact_form ) {
 
+		if ( $contact_form->is_true( 'demo_mode' ) || $contact_form->is_true( 'do_not_store' ) ) {
+			return;
+		}
+
 		$submission = WPCF7_Submission::get_instance();
 		if ( empty( $submission ) ) {
 			return;
