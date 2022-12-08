@@ -1,9 +1,13 @@
 === Form data to kintone ===
 Contributors: tkc49, agunchar, matsuoatsushi
-Tags: cybozu, kintone, crm, database, custom field, contact form 7, form
+Donate link: https://www.amazon.co.jp/hz/wishlist/ls?requiresSignIn=1&ref_=nav_AccountFlyout_wl
+Author: tkc49
+Website: https://ht79.info/
+Tags: cybozu, kintone, contact form 7, form, form data to kintone
 Requires at least: 4.9
-Tested up to: 5.8
-Stable tag: 2.26.0
+Tested up to: 6.1.1
+Stable tag: 2.26.1
+Requires PHP: 7.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -45,6 +49,9 @@ A tab for setting the information on kitone appears on the "Contact Form 7" sett
 1. screenshot-1.png
 
 == Changelog ==
+
+2.26.1 (2022-12-8)
+Fully tested with Contact Form 7 version 5.6.4
 
 = 2.26.0 =
 Release Date: August 7th, 2022
