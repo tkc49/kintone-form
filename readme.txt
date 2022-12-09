@@ -1,6 +1,6 @@
 === Form data to kintone ===
 Contributors: tkc49, agunchar, matsuoatsushi
-Donate link: https://www.amazon.co.jp/hz/wishlist/ls?requiresSignIn=1&ref_=nav_AccountFlyout_wl
+Donate link: https://www.amazon.co.jp/hz/wishlist/genericItemsPage/38QLNM5LPMK6Q?type=wishlist&filter=unpurchased&sort=priority&viewType=list
 Author: tkc49
 Website: https://ht79.info/
 Tags: cybozu, kintone, contact form 7, form, form data to kintone
@@ -49,6 +49,9 @@ A tab for setting the information on kitone appears on the "Contact Form 7" sett
 1. screenshot-1.png
 
 == Changelog ==
+
+2.26.2 (2022-12-9)
+Change readme.txt
 
 2.26.1 (2022-12-8)
 Fully tested with Contact Form 7 version 5.6.4
