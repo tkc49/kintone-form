@@ -6,7 +6,7 @@ Website: https://ht79.info/
 Tags: cybozu, kintone, contact form 7, form, form data to kintone
 Requires at least: 4.9
 Tested up to: 6.1.1
-Stable tag: 2.26.3
+Stable tag: 2.26.4
 Requires PHP: 7.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -49,6 +49,9 @@ A tab for setting the information on kitone appears on the "Contact Form 7" sett
 1. screenshot-1.png
 
 == Changelog ==
+
+2.26.4 (2022-12-10)
+Fully tested with Contact Form 7 version 5.7
 
 2.26.3 (2022-12-9)
 Change version number
