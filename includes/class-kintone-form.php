@@ -10,7 +10,7 @@
  */
 class Kintone_Form {
 
-	const CF7_SPECAIL_TAGS = array(
+	private const CF7_SPECIAL_TAGS = array(
 		'_remote_ip',
 		'_user_agent',
 		'_date',
@@ -62,5 +62,14 @@ class Kintone_Form {
 		require_once KINTONE_FORM_PATH . '/includes/class-kintone-form-post-kintone.php';
 		new Kintone_Form_Post_Kintone();
 
+	}
+
+	/**
+	 * Get CF7 Special Tags
+	 *
+	 * @return mixed|void
+	 */
+	public static function get_cf7_special_tags() {
+		return apply_filters( 'kintone_form_cf7_special_tags', self::CF7_SPECIAL_TAGS );
 	}
 }

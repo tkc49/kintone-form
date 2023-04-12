@@ -5,9 +5,9 @@ Author: tkc49
 Website: https://ht79.info/
 Tags: cybozu, kintone, contact form 7, form, form data to kintone
 Requires at least: 4.9
-Tested up to: 6.1.1
-Stable tag: 2.26.4
-Requires PHP: 7.0
+Tested up to: 6.2
+Stable tag: 2.27.0
+Requires PHP: 7.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -49,6 +49,10 @@ A tab for setting the information on kitone appears on the "Contact Form 7" sett
 1. screenshot-1.png
 
 == Changelog ==
+2.27.0 (2023-04-12)
+* Changed the method of obtaining CF7_SPECIAL_TAGS.
+* Added a filter hook "kintone_form_cf7_special_tags".
+* Fully tested with Contact Form 7 version 5.7.5.1
 
 2.26.4 (2022-12-10)
 Fully tested with Contact Form 7 version 5.7

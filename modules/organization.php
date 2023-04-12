@@ -37,7 +37,7 @@ class KintoneFormOrganization {
 		$return_data = array();
 
 		$value = '';
-		if ( in_array( $cf7_mail_tag, Kintone_Form::CF7_SPECAIL_TAGS, true ) ) {
+		if ( in_array( $cf7_mail_tag, Kintone_Form::get_cf7_special_tags(), true ) ) {
 			$mail_tag = new WPCF7_MailTag( sprintf( '[%s]', $cf7_mail_tag ), $cf7_mail_tag, '' );
 
 			$value = apply_filters( 'wpcf7_special_mail_tags', null, $cf7_mail_tag, false, $mail_tag );
