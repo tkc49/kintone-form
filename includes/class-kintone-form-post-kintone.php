@@ -98,34 +98,35 @@ class Kintone_Form_Post_Kintone {
 			if ( isset( $kintone_fields_and_cf7_mailtag_relate_data['setting'] ) ) {
 
 				// kintoneに設定されている全フィールドをループ.
+				if (isset($appdata['formdata']['properties']) && (is_array($appdata['formdata']['properties']) || is_object($appdata['formdata']['properties']))) {
+					foreach ( $appdata['formdata']['properties'] as $kintone_form_properties_data ) {
 
-				foreach ( $appdata['formdata']['properties'] as $kintone_form_properties_data ) {
+						if ( isset( $kintone_form_properties_data['code'] ) ) {
+							if ( 'SUBTABLE' === $kintone_form_properties_data['type'] ) {
+								/**
+								 * SUBTABLEの処理.
+								 */
+								$subtable_records = array();
+								$subtable_records = apply_filters(
+									'kintone_form_subtable',
+									$subtable_records,
+									$appdata,
+									$kintone_form_properties_data,
+									$kintone_setting_data,
+									$cf7_send_data,
+									$kintone_fields_and_cf7_mailtag_relate_data,
+									$e
+								);
 
-					if ( isset( $kintone_form_properties_data['code'] ) ) {
-						if ( 'SUBTABLE' === $kintone_form_properties_data['type'] ) {
-							/**
-							 * SUBTABLEの処理.
-							 */
-							$subtable_records = array();
-							$subtable_records = apply_filters(
-								'kintone_form_subtable',
-								$subtable_records,
-								$appdata,
-								$kintone_form_properties_data,
-								$kintone_setting_data,
-								$cf7_send_data,
-								$kintone_fields_and_cf7_mailtag_relate_data,
-								$e
-							);
-
-							if ( ! empty( $subtable_records ) ) {
-								$kintone_post_data[ $app_count ]['datas'][ $kintone_form_properties_data['code'] ] = $subtable_records;
-							}
-						} else {
-							// 通常処理.
-							$post_data = $this->generate_format_kintone_data( $kintone_setting_data, $appdata, $kintone_fields_and_cf7_mailtag_relate_data, $kintone_form_properties_data, $cf7_send_data, $e );
-							if ( isset( $post_data['value'] ) ) {
-								$kintone_post_data[ $app_count ]['datas'][ $kintone_form_properties_data['code'] ] = $post_data;
+								if ( ! empty( $subtable_records ) ) {
+									$kintone_post_data[ $app_count ]['datas'][ $kintone_form_properties_data['code'] ] = $subtable_records;
+								}
+							} else {
+								// 通常処理.
+								$post_data = $this->generate_format_kintone_data( $kintone_setting_data, $appdata, $kintone_fields_and_cf7_mailtag_relate_data, $kintone_form_properties_data, $cf7_send_data, $e );
+								if ( isset( $post_data['value'] ) ) {
+									$kintone_post_data[ $app_count ]['datas'][ $kintone_form_properties_data['code'] ] = $post_data;
+								}
 							}
 						}
 					}
