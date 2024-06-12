@@ -50,7 +50,7 @@ class KintoneFormNumber {
 			$value = $value[0];
 		}
 
-		if ( '' !== $value ) {
+		if ( !empty($value) ) {
 			if ( ! is_numeric( $value ) ) {
 				$e->add( 'Error', $cf7_mail_tag . '->' . $kintone_form_data['code'] . ' : Numeric format error' );
 			}
