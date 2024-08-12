@@ -49,6 +49,9 @@ A tab for setting the information on kitone appears on the "Contact Form 7" sett
 1. screenshot-1.png
 
 == Changelog ==
+2.27.3 (2024-08-12)
+* Refactor dropdown.php to handle array values in KintoneFormDropdown class.
+
 2.27.2 (2024-06-12)
 * Improved error handling for numeric format errors in number.php
 

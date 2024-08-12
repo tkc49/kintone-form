@@ -57,7 +57,7 @@ class KintoneFormDropdown {
 		//
 		$value = kintone_form_check_acceptance( $value, $cf7_mail_tag );
 
-		if ( is_array( $value ) ) {
+		if ( is_array( $value ) && isset( $value[0] ) ) {
 			$value = $value[0];
 		}
 
