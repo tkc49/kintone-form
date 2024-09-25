@@ -9,6 +9,8 @@
  * License:     GPLv2
  * Text Domain: kintone-form
  * Domain Path: /languages
+ *
+ * @package kintone-form
  */
 
 /**
@@ -30,7 +32,7 @@
  */
 
 define( 'KINTONE_FORM_URL', plugins_url( '', __FILE__ ) );
-define( 'KINTONE_FORM_PATH', dirname( __FILE__ ) );
+define( 'KINTONE_FORM_PATH', __DIR__ );
 
 $data = get_file_data(
 	__FILE__,
@@ -69,5 +71,3 @@ require_once KINTONE_FORM_PATH . '/includes/class-kintone-form.php';
 
 $kintone_form = new Kintone_Form();
 $kintone_form->register();
-
-
