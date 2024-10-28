@@ -42,12 +42,12 @@ $data = get_file_data(
 	)
 );
 
-define( 'KITONE_FORM_VERSION', $data['ver'] );
-define( 'KITONE_FORM_LANGS', $data['langs'] );
+define( 'KINTONE_FORM_VERSION', $data['ver'] );
+define( 'KINTONE_FORM_LANGS', $data['langs'] );
 load_plugin_textdomain(
 	'kintone-form',
 	false,
-	dirname( plugin_basename( __FILE__ ) ) . KITONE_FORM_LANGS
+	dirname( plugin_basename( __FILE__ ) ) . KINTONE_FORM_LANGS
 );
 
 
