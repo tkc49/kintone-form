@@ -39,7 +39,7 @@ Cover banner designed by [akari_doi](https://profiles.wordpress.org/akari_doi/)
 1. Upload the entire `kintone-form` folder to the `/ wp-content / plugins /` directory.
 2. Activate the plugin through the 'Plugins' menu in WordPress
 
-A tab for setting the information on kitone appears on the "Contact Form 7" setting screen.
+A tab for setting the information on kintone appears on the "Contact Form 7" setting screen.
 
 == Frequently asked questions ==
 
