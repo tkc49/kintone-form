@@ -1,5 +1,13 @@
 <?php
+/**
+ * Radio module.
+ *
+ * @package kintone-form
+ */
 
+/**
+ * Radio module.
+ */
 class KintoneFormRadio {
 
 	/**
@@ -7,7 +15,7 @@ class KintoneFormRadio {
 	 */
 	public static function get_instance() {
 		/**
-		 * a variable that keeps the sole instance.
+		 * A variable that keeps the sole instance.
 		 */
 		static $instance;
 
@@ -35,7 +43,9 @@ class KintoneFormRadio {
 		$value = '';
 		if ( in_array( $cf7_mail_tag, Kintone_Form::get_cf7_special_tags(), true ) ) {
 			$mail_tag = new WPCF7_MailTag(
-				sprintf( '[%s]', $cf7_mail_tag ), $cf7_mail_tag, ''
+				sprintf( '[%s]', $cf7_mail_tag ),
+				$cf7_mail_tag,
+				''
 			);
 
 			$value = apply_filters( 'wpcf7_special_mail_tags', null, $cf7_mail_tag, false, $mail_tag );
@@ -43,7 +53,7 @@ class KintoneFormRadio {
 		} else {
 			if ( isset( $cf7_send_data[ $cf7_mail_tag ] ) ) {
 				if ( is_array( $cf7_send_data[ $cf7_mail_tag ] ) ) {
-					$value = $cf7_send_data[ $cf7_mail_tag ][0];
+					$value = ! empty( $cf7_send_data[ $cf7_mail_tag ] ) ? $cf7_send_data[ $cf7_mail_tag ][0] : '';
 				} else {
 					$value = $cf7_send_data[ $cf7_mail_tag ];
 				}
@@ -53,6 +63,5 @@ class KintoneFormRadio {
 		$return_data['value'] = $value;
 
 		return $return_data;
-
 	}
 }

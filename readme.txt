@@ -6,7 +6,7 @@ Website: https://ht79.info/
 Tags: cybozu, kintone, contact form 7, form, form data to kintone
 Requires at least: 6.3
 Tested up to: 6.5.4
-Stable tag: 2.27.5
+Stable tag: 2.27.6
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -49,6 +49,10 @@ A tab for setting the information on kitone appears on the "Contact Form 7" sett
 1. screenshot-1.png
 
 == Changelog ==
+
+2.27.6 (2024-10-29)
+* Fixed an issue where radio buttons could be empty when using Conditional Fields for Contact Form 7
+
 2.27.5 (2024-08-19)
 * Fixed an issue when using the Conditional Fields for Contact Form 7 plugin to set form radio buttons to kintone dropdown fields. Under specific conditions, the required check for radio buttons was not functioning correctly, resulting in empty array data being sent to kintone. This problem has been resolved.
 
