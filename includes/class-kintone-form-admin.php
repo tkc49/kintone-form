@@ -200,7 +200,6 @@ class Kintone_Form_Admin {
 			}
 		}
 
-		add_action( 'wpcf7_admin_init', array( $this, 'kintone_form_add_tag_generator_text' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'register_assets' ) );
 
 		add_action( 'wpcf7_save_contact_form', array( $this, 'wpcf7_save_contact_form' ), 10, 3 );
@@ -618,99 +617,6 @@ class Kintone_Form_Admin {
 				}
 			}
 		}
-
-	}
-
-	/**
-	 * CF7のフォームタブにCF7のショートコードをコピペできるブタンを追加.
-	 */
-	public function kintone_form_add_tag_generator_text() {
-		$tag_generator = WPCF7_TagGenerator::get_instance();
-		$tag_generator->add(
-			'kintone',
-			__( 'kintone', 'kintone-form' ),
-			array( $this, 'kintone_form_tag_generator' )
-		);
-	}
-
-	/**
-	 * タグを生成する.
-	 *
-	 * @param WPCF7_ContactForm $contact_form .
-	 * @param string            $args .
-	 */
-	public function kintone_form_tag_generator( $contact_form, $args = '' ) {
-
-		$args = wp_parse_args( $args, array() );
-		$type = $args['id'];
-
-		if ( ! in_array( $type, array( 'email', 'url', 'tel' ), true ) ) {
-			$type = 'text';
-		}
-
-		$description          = 'Please copy & paste the code below.';
-		$properties           = $contact_form->get_properties();
-		$kintone_setting_data = $properties['kintone_setting_data'];
-
-		$insert_code = '';
-
-		if ( isset( $kintone_setting_data['app_datas'] ) ) {
-			foreach ( $kintone_setting_data['app_datas'] as $appdata ) {
-
-				if ( isset( $appdata['formdata']['properties'] ) ) {
-					foreach ( $appdata['formdata']['properties'] as $form_data ) {
-
-						if ( isset( $form_data['code'] ) ) {
-
-							$select_option = '';
-							if ( isset( $appdata['setting'][ $form_data['code'] ] ) && ! empty( $appdata['setting'][ $form_data['code'] ] ) ) {
-								$select_option = $appdata['setting'][ $form_data['code'] ];
-							}
-
-							$original_cf7tag_name = '';
-							$selectbox_readonly   = '';
-							if ( isset( $appdata['setting_original_cf7tag_name'][ $form_data['code'] ] ) && ! empty( $appdata['setting_original_cf7tag_name'][ $form_data['code'] ] ) ) {
-								$original_cf7tag_name = $appdata['setting_original_cf7tag_name'][ $form_data['code'] ];
-							}
-
-							$code = wp_strip_all_tags(
-								$this->create_sample_shortcode(
-									$form_data,
-									$appdata,
-									''
-								)
-							);
-							if ( $code ) {
-								$insert_code .= '<label> ' . $form_data['label'] . "\n    " . $code . "</label>\n\n";
-							}
-						}
-					}
-				}
-			}
-		}
-
-		?>
-		<div class="control-box">
-			<fieldset>
-				<legend><?php echo esc_html( $description ); ?></legend>
-				<textarea class="tag code" name="" id="" rows="18" style="width:100%" readonly="readonly">
-<?php echo esc_textarea( $insert_code ); ?>
-				</textarea>
-			</fieldset>
-		</div>
-
-		<div class="insert-box">
-
-			<div class="submitbox">
-				<input
-					type="button"
-					class="button button-primary kintone-form-insert-tag"
-					value="<?php echo esc_attr( __( 'Insert Tag', 'kintone-form' ) ); ?>"
-				/>
-			</div>
-
-		</div>
-		<?php
 	}
 
 	/**
