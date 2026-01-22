@@ -6,7 +6,7 @@ Website: https://ht79.info/
 Tags: cybozu, kintone, contact form 7, form, form data to kintone
 Requires at least: 6.6
 Tested up to: 6.7
-Stable tag: 2.28.0
+Stable tag: 2.29.0
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -49,6 +49,12 @@ A tab for setting the information on kintone appears on the "Contact Form 7" set
 1. screenshot-1.png
 
 == Changelog ==
+
+2.29.0 (2025-01-23)
+* Improved admin UI with accordion layout for field type grouping
+* Added field search/filter functionality
+* Improved API token management UI (add/delete multiple tokens)
+* Fixed MULTI_SELECT field returning empty string instead of empty array when no option selected
 
 2.28.0 (2025-04-09)
 * Removed kintone button from Contact Form 7's form tab
