@@ -184,6 +184,54 @@ class Kintone_Form_Admin {
 		'FILE'                => 'file',
 	);
 
+	/**
+	 * フィールドタイプのグループ定義.
+	 *
+	 * @var array
+	 */
+	private $field_type_groups = array(
+		'text'          => array(
+			'label' => 'テキストフィールド',
+			'icon'  => '📝',
+			'types' => array( 'SINGLE_LINE_TEXT', 'MULTI_LINE_TEXT', 'RICH_TEXT', 'LINK' ),
+		),
+		'selection'     => array(
+			'label' => '選択フィールド',
+			'icon'  => '📋',
+			'types' => array( 'RADIO_BUTTON', 'CHECK_BOX', 'MULTI_SELECT', 'DROP_DOWN' ),
+		),
+		'datetime'      => array(
+			'label' => '日付・時刻フィールド',
+			'icon'  => '📅',
+			'types' => array( 'DATE', 'TIME', 'DATETIME' ),
+		),
+		'number'        => array(
+			'label' => '数値フィールド',
+			'icon'  => '🔢',
+			'types' => array( 'NUMBER' ),
+		),
+		'user_org'      => array(
+			'label' => 'ユーザー・組織',
+			'icon'  => '👥',
+			'types' => array( 'ORGANIZATION_SELECT' ),
+		),
+		'file'          => array(
+			'label' => 'ファイル',
+			'icon'  => '📎',
+			'types' => array( 'FILE' ),
+		),
+		'table'         => array(
+			'label' => 'テーブル',
+			'icon'  => '📊',
+			'types' => array( 'SUBTABLE' ),
+		),
+		'not_supported' => array(
+			'label' => 'Not Supported',
+			'icon'  => '⚠',
+			'types' => array(), // 動的に設定.
+		),
+	);
+
 
 	/**
 	 * Constructor
@@ -294,231 +342,504 @@ class Kintone_Form_Admin {
 
 		?>
 		<h2><?php esc_html_e( 'Setting kintone', 'kintone-form' ); ?></h2>
-		<fieldset>
 
-			<p class="description">
+		<?php
+		// 基本設定セクション.
+		$this->render_basic_settings(
+			$domain,
+			$email_address_to_send_kintone_registration_error,
+			$kintone_basic_authentication_id,
+			$kintone_basic_authentication_password,
+			$kintone_guest_space_id
+		);
+		?>
 
-			<table>
-				<tr>
-					<th><?php esc_html_e( 'kintone domain:', 'kintone-form' ); ?></th>
-					<td>
-						<input
-							type="text"
-							id="kintone-form-domain"
-							placeholder="xxxx.cybozu.com"
-							name="kintone_setting_data[domain]"
-							class=""
-							size="70"
-							value="<?php echo esc_attr( $domain ); ?>"
-						/>
-					</td>
-				</tr>
-				<tr>
-					<th>
+		<div class="repeat">
+			<div id="kintone_form_setting" class="wrapper">
+				<div class="container">
+
+					<?php if ( isset( $kintone_setting_data['app_datas'] ) && ! empty( $kintone_setting_data['app_datas'] ) ) : ?>
+
+						<?php $multi_kintone_app_count = 0; ?>
+						<?php foreach ( $kintone_setting_data['app_datas'] as $app_data ) : ?>
+
+							<?php
+							$this->render_app_section(
+								$app_data,
+								$multi_kintone_app_count,
+								$tags,
+								$mailtags
+							);
+							?>
+
+							<?php ++$multi_kintone_app_count; ?>
+
+						<?php endforeach; ?>
+
+					<?php else : ?>
+
 						<?php
-						esc_html_e(
-							'E-mail address to send kintone registration error:',
-							'kintone-form'
+						$this->render_app_section(
+							array(
+								'appid'    => '',
+								'tokens'   => array(),
+								'formdata' => array(),
+							),
+							0,
+							$tags,
+							$mailtags
 						);
 						?>
-					</th>
-					<td>
+
+					<?php endif; ?>
+
+					<?php do_action( 'kintone_form_setting_panel_after' ); ?>
+
+				</div>
+
+				<div class="kf-add-app-section">
+					<span class="add button"><?php esc_html_e( '追加', 'kintone-form' ); ?></span>
+					<span style="margin-left: 8px; color: #646970;">← Add-Ons</span>
+				</div>
+			</div>
+		</div>
+		<?php
+	}
+
+	/**
+	 * 基本設定セクションをレンダリング.
+	 *
+	 * @param string $domain ドメイン.
+	 * @param string $error_email エラー通知メール.
+	 * @param string $basic_auth_id Basic認証ID.
+	 * @param string $basic_auth_password Basic認証パスワード.
+	 * @param string $guest_space_id ゲストスペースID.
+	 */
+	private function render_basic_settings( $domain, $error_email, $basic_auth_id, $basic_auth_password, $guest_space_id ) {
+		?>
+		<div class="kf-settings-section">
+			<div class="kf-settings-section-header">
+				<span class="dashicons dashicons-admin-generic"></span>
+				<h3><?php esc_html_e( '基本設定', 'kintone-form' ); ?></h3>
+			</div>
+			<div class="kf-settings-section-content">
+				<div class="kf-form-row">
+					<label class="kf-form-label">
+						<?php esc_html_e( 'kintone ドメイン', 'kintone-form' ); ?>
+						<span class="required">*</span>
+					</label>
+					<div class="kf-form-field">
+						<div class="kf-form-field-with-prefix">
+							<span class="kf-form-prefix">https://</span>
+							<input
+								type="text"
+								id="kintone-form-domain"
+								placeholder="xxxx.cybozu.com"
+								name="kintone_setting_data[domain]"
+								value="<?php echo esc_attr( $domain ); ?>"
+							/>
+						</div>
+					</div>
+				</div>
+
+				<div class="kf-form-row">
+					<label class="kf-form-label">
+						<?php esc_html_e( 'エラー通知メール', 'kintone-form' ); ?>
+					</label>
+					<div class="kf-form-field">
 						<input
-							type="text"
+							type="email"
 							id="email-address-to-send-kintone-registration-error"
 							name="kintone_setting_data[email_address_to_send_kintone_registration_error]"
-							class="" size="70"
-							value="<?php echo esc_attr( $email_address_to_send_kintone_registration_error ); ?>"
+							value="<?php echo esc_attr( $error_email ); ?>"
 						/>
-					</td>
-				</tr>
-				<tr>
-					<th><?php esc_html_e( 'Basic Authentication:', 'kintone-form' ); ?></th>
-					<td>
-						ID：
-						<input
-							type="text"
-							id="kintone-basic-authentication-id"
-							name="kintone_setting_data[kintone_basic_authentication_id]"
-							class=""
-							size="30"
-							value="<?php echo esc_attr( $kintone_basic_authentication_id ); ?>"
-						/>
-						/ Password：
-						<input
-							type="password"
-							id="kintone-basic-authentication-password"
-							name="kintone_setting_data[kintone_basic_authentication_password]"
-							class=""
-							size="30"
-							value="<?php echo esc_attr( $kintone_basic_authentication_password ); ?>"
-						/>
-					</td>
-				</tr>
-				<tr>
-					<th><?php esc_html_e( 'Guest Space ID:', 'kintone-form' ); ?></th>
-					<td>
-						ID：
+						<p class="kf-form-hint">
+							<?php esc_html_e( 'kintone への登録エラー時に通知するメールアドレス', 'kintone-form' ); ?>
+						</p>
+					</div>
+				</div>
+
+				<div class="kf-form-row">
+					<label class="kf-form-label">
+						<?php esc_html_e( 'Basic 認証', 'kintone-form' ); ?>
+					</label>
+					<div class="kf-form-field">
+						<div class="kf-form-field-inline">
+							<input
+								type="text"
+								id="kintone-basic-authentication-id"
+								name="kintone_setting_data[kintone_basic_authentication_id]"
+								placeholder="<?php esc_attr_e( 'ユーザー名', 'kintone-form' ); ?>"
+								value="<?php echo esc_attr( $basic_auth_id ); ?>"
+							/>
+							<span class="separator">/</span>
+							<input
+								type="password"
+								id="kintone-basic-authentication-password"
+								name="kintone_setting_data[kintone_basic_authentication_password]"
+								placeholder="<?php esc_attr_e( 'パスワード', 'kintone-form' ); ?>"
+								value="<?php echo esc_attr( $basic_auth_password ); ?>"
+							/>
+						</div>
+						<p class="kf-form-hint">
+							<?php esc_html_e( '※ Basic認証が有効な場合のみ必要', 'kintone-form' ); ?>
+						</p>
+					</div>
+				</div>
+
+				<div class="kf-form-row">
+					<label class="kf-form-label">
+						<?php esc_html_e( 'ゲストスペースID', 'kintone-form' ); ?>
+					</label>
+					<div class="kf-form-field">
 						<input
 							type="text"
 							id="kintone-guest-space-id"
 							name="kintone_setting_data[kintone_guest_space_id]"
-							class=""
-							size="30"
-							value="<?php echo esc_attr( $kintone_guest_space_id ); ?>"
+							value="<?php echo esc_attr( $guest_space_id ); ?>"
+							style="max-width: 120px;"
 						/>
-
-					</td>
-				</tr>
-			</table>
-			</p>
-
-			<p class="description">
-			<div class="repeat">
-				<div id="kintone_form_setting" class="wrapper" style="border-collapse: collapse;">
-
-					<div class="container">
-
-						<?php if ( isset( $kintone_setting_data['app_datas'] ) && ! empty( $kintone_setting_data['app_datas'] ) ) : ?>
-
-							<?php $multi_kintone_app_count = 0; ?>
-							<?php foreach ( $kintone_setting_data['app_datas'] as $app_data ) : ?>
-
-								<table class="row" style="margin-bottom: 30px; border-top: 6px solid #ccc; width: 100%;">
-									<tr>
-										<td valign="top" style="padding: 10px 0px;">
-											APP ID:<input type="text" id="kintone-form-appid-<?php echo esc_attr( $multi_kintone_app_count ); ?>" name="kintone_setting_data[app_datas][<?php echo esc_attr( $multi_kintone_app_count ); ?>][appid]" class="small-text" size="70" value="<?php echo esc_attr( $app_data['appid'] ); ?>"/>
-											Api Token:<input type="text" id="kintone-form-token-<?php echo esc_attr( $multi_kintone_app_count ); ?>" name="kintone_setting_data[app_datas][<?php echo esc_attr( $multi_kintone_app_count ); ?>][token]" class="regular-text" size="70" value="<?php echo esc_attr( $app_data['token'] ); ?>"/>
-											<input type="submit" class="button-primary" name="get-kintone-data" value="GET">
-										</td>
-										<td></td>
-										<td><span class="remove button">Remove</span></td>
-									</tr>
-									<tr>
-										<td colspan="3">
-											<table style="width: 100%;">
-												<tr>
-													<th>Update Key</th>
-													<th style="text-align: left; padding: 5px 10px 5px 0px; width: 30%;"><?php esc_html_e( 'kintone Label(fieldcode)', 'kintone-form' ); ?></th>
-													<th></th>
-													<th style="text-align: left; padding: 5px 10px;">Contact form 7 mail tag</th>
-													<th style="text-align: left; padding: 5px 10px;"><?php _e( 'Example Contact Form 7\'s Shortcode<br>※ Change <span style="color:red">your-cf7-tag-name</span> to original name ( your-name or your-email or etc )', 'kintone-form' ); ?></th>
-												</tr>
-												<?php if ( isset( $app_data['formdata']['properties'] ) ) : ?>
-													<?php foreach ( $app_data['formdata']['properties'] as $form_data ) : ?>
-														<?php if ( isset( $form_data['code'] ) ) : ?>
-															<tr>
-																<td>
-																	<?php if ( $this->is_update_key_kintone_field( $form_data ) ) : ?>
-																		<?php $checkbox_for_kintone_update_key = '<input type="checkbox" disabled="disabled" name="" value="">'; ?>
-																		<?php $checkbox_for_kintone_update_key = apply_filters( 'form_data_to_kintone_setting_checkbox_for_kintone_update_key', $checkbox_for_kintone_update_key, $app_data, $multi_kintone_app_count, $form_data ); ?>
-																		<?php echo $checkbox_for_kintone_update_key; ?>
-																	<?php endif; ?>
-																</td>
-																<td style="padding: 5px 10px 5px 0px; border-bottom: 1px solid #e2e2e2;">
-																	<?php echo esc_html( ( isset( $form_data['label'] ) ) ? $form_data['label'] : '' ) . '(' . esc_html( $form_data['code'] ) . ')'; ?>
-																</td>
-																<td><-</td>
-																<?php
-																// ****************************
-																// サブテーブルの設定
-																// ****************************
-																?>
-																<?php if ( 'SUBTABLE' === $form_data['type'] ) : ?>
-																	<td style="padding: 5px 10px; border-bottom: 1px solid #e2e2e2;" colspan="2">
-																		<table>
-																			<?php foreach ( $form_data['fields'] as $subtables ) : ?>
-																				<tr>
-																					<td style="padding: 5px 10px; border-bottom: 1px solid #e2e2e2;"><?php echo esc_html( ( isset( $subtables['label'] ) ) ? $subtables['label'] : '' ) . '(' . esc_html( $subtables['code'] ) . ')'; ?></td>
-																					<td><-</td>
-																					<td style="padding: 5px 10px; border-bottom: 1px solid #e2e2e2;">
-
-																						<?php if ( array_key_exists( $subtables['type'], $this->kintone_fieldcode_supported_list ) ) : ?>
-
-																							<?php echo $this->create_html_for_setting_cf7_mailtag( $tags, $mailtags, $app_data, $subtables, $multi_kintone_app_count ); ?>
-
-																						<?php else : ?>
-																							<?php if ( $subtables['type'] == 'FILE' ) : ?>
-																								<a href="<?php echo admin_url( 'admin.php?page=form-data-to-kintone-setting' ); ?>" title="">Add-Ons</a>
-																							<?php else : ?>
-																								Not Support
-																							<?php endif; ?>
-																						<?php endif; ?>
-																					</td>
-																					<td style="padding: 5px 10px; border-bottom: 1px solid #e2e2e2;">
-																						<?php if ( array_key_exists( $subtables['type'], $this->kintone_fieldcode_supported_list ) ) : ?>
-																							<?php echo $this->create_sample_shortcode( $subtables, $app_data ); ?>
-																						<?php endif; ?>
-																					</td>
-
-																				</tr>
-
-																			<?php endforeach; ?>
-																		</table>
-																	</td>
-																<?php else : ?>
-																	<td style="padding: 5px 10px; border-bottom: 1px solid #e2e2e2;">
-																		<?php if ( array_key_exists( $form_data['type'], $this->kintone_fieldcode_supported_list ) ) : ?>
-																			<?php echo $this->create_html_for_setting_cf7_mailtag( $tags, $mailtags, $app_data, $form_data, $multi_kintone_app_count ); ?>
-																		<?php else : ?>
-																			<?php if ( 'FILE' === $form_data['type'] ) : ?>
-																				Add-Ons
-																			<?php else : ?>
-																				Not Support
-																			<?php endif; ?>
-																		<?php endif; ?>
-																	</td>
-																<?php endif ?>
-																</td>
-																<td style="padding: 5px 0 5px 10px; border-bottom: 1px solid #e2e2e2;">
-																	<?php if ( array_key_exists( $form_data['type'], $this->kintone_fieldcode_supported_list ) ) : ?>
-																		<?php echo $this->create_sample_shortcode( $form_data, $app_data ); ?>
-																	<?php endif; ?>
-																</td>
-
-															</tr>
-														<?php endif; ?>
-
-													<?php endforeach; ?>
-												<?php endif; ?>
-											</table>
-										</td>
-									</tr>
-
-								</table>
-
-								<?php ++$multi_kintone_app_count; ?>
-
-							<?php endforeach; ?>
-
-						<?php else : ?>
-
-							<table class="row" style="margin-bottom: 30px; border-top: 6px solid #ccc; width: 100%;">
-								<tr>
-									<td valign="top" style="padding: 10px 0px;">
-										APP ID:<input type="text" id="kintone-form-appid-0" name="kintone_setting_data[app_datas][0][appid]" class="small-text" size="70" value=""/>
-										Api Token:<input type="text" id="kintone-form-token-0" name="kintone_setting_data[app_datas][0][token]" class="regular-text" size="70" value=""/>
-										<input type="submit" class="button-primary" name="get-kintone-data" value="GET">
-									</td>
-								</tr>
-							</table>
-
-						<?php endif; ?>
-
-						<?php do_action( 'kintone_form_setting_panel_after' ); ?>
-
+						<p class="kf-form-hint">
+							<?php esc_html_e( '※ ゲストスペースアプリの場合のみ必要', 'kintone-form' ); ?>
+						</p>
 					</div>
-					<tfoot>
-					<tr>
-						<td colspan="2">
-							<span class="add button">追加</span> ← Add-Ons
-						</td>
-					</tr>
-					</tfoot>
 				</div>
 			</div>
-			</p>
-		</fieldset>
+		</div>
+		<?php
+	}
+
+	/**
+	 * アプリ設定セクションをレンダリング.
+	 *
+	 * @param array $app_data アプリデータ.
+	 * @param int   $app_index アプリのインデックス.
+	 * @param array $tags CF7タグ.
+	 * @param array $mailtags CF7メールタグ.
+	 */
+	private function render_app_section( $app_data, $app_index, $tags, $mailtags ) {
+		$appid  = isset( $app_data['appid'] ) ? $app_data['appid'] : '';
+		$tokens = isset( $app_data['tokens'] ) ? $app_data['tokens'] : ( isset( $app_data['token'] ) ? $app_data['token'] : '' );
+		?>
+		<div class="kf-app-section row" data-app-index="<?php echo esc_attr( $app_index ); ?>">
+			<!-- アプリヘッダー -->
+			<div class="kf-app-header">
+				<div class="kf-app-header-field">
+					<label for="kintone-form-appid-<?php echo esc_attr( $app_index ); ?>">APP ID:</label>
+					<input
+						type="text"
+						id="kintone-form-appid-<?php echo esc_attr( $app_index ); ?>"
+						name="kintone_setting_data[app_datas][<?php echo esc_attr( $app_index ); ?>][appid]"
+						class="small-text"
+						size="10"
+						value="<?php echo esc_attr( $appid ); ?>"
+					/>
+					<input type="submit" class="button-primary" name="get-kintone-data" value="GET">
+				</div>
+				<div class="kf-app-header-actions">
+					<span class="remove button"><?php esc_html_e( 'Remove', 'kintone-form' ); ?></span>
+				</div>
+			</div>
+
+			<!-- トークンセクション -->
+			<div class="kf-app-token-section">
+				<div style="display: flex; align-items: flex-start; gap: 12px;">
+					<label style="font-weight: 500; padding-top: 6px;">API Token:</label>
+					<?php echo $this->render_token_fields( $tokens, $app_index ); ?>
+				</div>
+			</div>
+
+			<?php if ( isset( $app_data['formdata']['properties'] ) && ! empty( $app_data['formdata']['properties'] ) ) : ?>
+				<?php $grouped_fields = $this->group_fields_by_type( $app_data['formdata']['properties'] ); ?>
+
+				<!-- 検索ボックス -->
+				<div class="kf-search-box">
+					<div class="kf-search-wrapper">
+						<span class="dashicons dashicons-search"></span>
+						<input
+							type="text"
+							class="kf-search-input"
+							placeholder="<?php esc_attr_e( 'フィールドを検索...', 'kintone-form' ); ?>"
+							data-app-index="<?php echo esc_attr( $app_index ); ?>"
+						/>
+						<button type="button" class="kf-search-clear" title="<?php esc_attr_e( 'クリア', 'kintone-form' ); ?>">
+							<span class="dashicons dashicons-no-alt"></span>
+						</button>
+					</div>
+					<div class="kf-search-results-info" style="display: none;"></div>
+				</div>
+
+				<!-- フィールドアコーディオン -->
+				<div class="kf-accordion-container">
+					<?php
+					$this->render_field_accordions(
+						$grouped_fields,
+						$app_data,
+						$app_index,
+						$tags,
+						$mailtags
+					);
+					?>
+				</div>
+			<?php endif; ?>
+		</div>
+		<?php
+	}
+
+	/**
+	 * フィールドをタイプごとにグループ化.
+	 *
+	 * @param array $properties kintoneフィールドプロパティ.
+	 * @return array グループ化されたフィールド.
+	 */
+	private function group_fields_by_type( $properties ) {
+		$grouped = array();
+
+		// サポートされているすべてのタイプを収集.
+		$supported_types = array();
+		foreach ( $this->field_type_groups as $group_key => $group ) {
+			if ( 'not_supported' !== $group_key ) {
+				$supported_types = array_merge( $supported_types, $group['types'] );
+			}
+		}
+
+		// 各グループを初期化.
+		foreach ( $this->field_type_groups as $group_key => $group ) {
+			$grouped[ $group_key ] = array(
+				'label'  => $group['label'],
+				'icon'   => $group['icon'],
+				'fields' => array(),
+			);
+		}
+
+		// フィールドを適切なグループに振り分け.
+		foreach ( $properties as $field ) {
+			if ( ! isset( $field['code'] ) ) {
+				continue;
+			}
+
+			$field_type = isset( $field['type'] ) ? $field['type'] : '';
+			$assigned   = false;
+
+			foreach ( $this->field_type_groups as $group_key => $group ) {
+				if ( 'not_supported' !== $group_key && in_array( $field_type, $group['types'], true ) ) {
+					$grouped[ $group_key ]['fields'][] = $field;
+					$assigned                          = true;
+					break;
+				}
+			}
+
+			// どのグループにも属さない場合は not_supported へ.
+			if ( ! $assigned ) {
+				$grouped['not_supported']['fields'][] = $field;
+			}
+		}
+
+		// 空のグループを除去.
+		foreach ( $grouped as $group_key => $group ) {
+			if ( empty( $group['fields'] ) ) {
+				unset( $grouped[ $group_key ] );
+			}
+		}
+
+		return $grouped;
+	}
+
+	/**
+	 * フィールドアコーディオンをレンダリング.
+	 *
+	 * @param array $grouped_fields グループ化されたフィールド.
+	 * @param array $app_data アプリデータ.
+	 * @param int   $app_index アプリのインデックス.
+	 * @param array $tags CF7タグ.
+	 * @param array $mailtags CF7メールタグ.
+	 */
+	private function render_field_accordions( $grouped_fields, $app_data, $app_index, $tags, $mailtags ) {
+		foreach ( $grouped_fields as $group_key => $group ) {
+			$is_not_supported = ( 'not_supported' === $group_key );
+			$is_expanded      = ! $is_not_supported; // Not Supported以外は初期展開.
+			$accordion_id     = 'kf-accordion-' . $app_index . '-' . $group_key;
+			$content_id       = 'kf-accordion-content-' . $app_index . '-' . $group_key;
+			$field_count      = count( $group['fields'] );
+			?>
+			<div class="kf-accordion-group <?php echo $is_not_supported ? 'kf-accordion-group--not-supported' : ''; ?>" data-group="<?php echo esc_attr( $group_key ); ?>">
+				<button
+					type="button"
+					class="kf-accordion-header"
+					id="<?php echo esc_attr( $accordion_id ); ?>"
+					aria-expanded="<?php echo $is_expanded ? 'true' : 'false'; ?>"
+					aria-controls="<?php echo esc_attr( $content_id ); ?>"
+				>
+					<span class="dashicons dashicons-arrow-right-alt2 kf-accordion-toggle"></span>
+					<span class="kf-accordion-icon"><?php echo esc_html( $group['icon'] ); ?></span>
+					<span class="kf-accordion-title"><?php echo esc_html( $group['label'] ); ?></span>
+					<span class="kf-accordion-count" data-original-count="<?php echo esc_attr( $field_count ); ?>"><?php echo esc_html( $field_count ); ?></span>
+				</button>
+				<div
+					class="kf-accordion-content"
+					id="<?php echo esc_attr( $content_id ); ?>"
+					role="region"
+					aria-labelledby="<?php echo esc_attr( $accordion_id ); ?>"
+					<?php echo $is_expanded ? 'style="display: block;"' : ''; ?>
+				>
+					<?php if ( $is_not_supported ) : ?>
+						<?php $this->render_unsupported_fields_list( $group['fields'] ); ?>
+					<?php else : ?>
+						<?php
+						$this->render_field_table(
+							$group['fields'],
+							$app_data,
+							$app_index,
+							$tags,
+							$mailtags
+						);
+						?>
+					<?php endif; ?>
+				</div>
+			</div>
+			<?php
+		}
+	}
+
+	/**
+	 * フィールドテーブルをレンダリング.
+	 *
+	 * @param array $fields フィールド配列.
+	 * @param array $app_data アプリデータ.
+	 * @param int   $app_index アプリのインデックス.
+	 * @param array $tags CF7タグ.
+	 * @param array $mailtags CF7メールタグ.
+	 */
+	private function render_field_table( $fields, $app_data, $app_index, $tags, $mailtags ) {
+		?>
+		<table class="kf-field-table">
+			<thead>
+				<tr>
+					<th>Update Key</th>
+					<th class="kf-field-table-kintone"><?php esc_html_e( 'kintone Field', 'kintone-form' ); ?></th>
+					<th class="kf-field-table-arrow"></th>
+					<th class="kf-field-table-cf7"><?php esc_html_e( 'CF7 Mail Tag', 'kintone-form' ); ?></th>
+					<th><?php esc_html_e( 'Shortcode Example', 'kintone-form' ); ?></th>
+				</tr>
+			</thead>
+			<tbody>
+				<?php foreach ( $fields as $field ) : ?>
+					<?php $this->render_field_row( $field, $app_data, $app_index, $tags, $mailtags ); ?>
+				<?php endforeach; ?>
+			</tbody>
+		</table>
+		<?php
+	}
+
+	/**
+	 * フィールド行をレンダリング.
+	 *
+	 * @param array $field フィールドデータ.
+	 * @param array $app_data アプリデータ.
+	 * @param int   $app_index アプリのインデックス.
+	 * @param array $tags CF7タグ.
+	 * @param array $mailtags CF7メールタグ.
+	 */
+	private function render_field_row( $field, $app_data, $app_index, $tags, $mailtags ) {
+		$label      = isset( $field['label'] ) ? $field['label'] : '';
+		$code       = isset( $field['code'] ) ? $field['code'] : '';
+		$field_type = isset( $field['type'] ) ? $field['type'] : '';
+		?>
+		<tr class="kf-field-row" data-field-label="<?php echo esc_attr( strtolower( $label ) ); ?>" data-field-code="<?php echo esc_attr( strtolower( $code ) ); ?>">
+			<td>
+				<?php if ( $this->is_update_key_kintone_field( $field ) ) : ?>
+					<?php $checkbox_for_kintone_update_key = '<input type="checkbox" disabled="disabled" name="" value="">'; ?>
+					<?php $checkbox_for_kintone_update_key = apply_filters( 'form_data_to_kintone_setting_checkbox_for_kintone_update_key', $checkbox_for_kintone_update_key, $app_data, $app_index, $field ); ?>
+					<?php echo $checkbox_for_kintone_update_key; ?>
+				<?php endif; ?>
+			</td>
+			<td>
+				<div>
+					<strong><?php echo esc_html( $label ); ?></strong>
+				</div>
+				<div class="kf-field-code"><?php echo esc_html( $code ); ?></div>
+			</td>
+			<td class="kf-field-arrow">←</td>
+			<td>
+				<?php if ( 'SUBTABLE' === $field_type ) : ?>
+					<?php $this->render_subtable_fields( $field, $app_data, $app_index, $tags, $mailtags ); ?>
+				<?php elseif ( array_key_exists( $field_type, $this->kintone_fieldcode_supported_list ) ) : ?>
+					<?php echo $this->create_html_for_setting_cf7_mailtag( $tags, $mailtags, $app_data, $field, $app_index ); ?>
+				<?php elseif ( 'FILE' === $field_type ) : ?>
+					<a href="<?php echo esc_url( admin_url( 'admin.php?page=form-data-to-kintone-setting' ) ); ?>">Add-Ons</a>
+				<?php else : ?>
+					<span class="description">Not Support</span>
+				<?php endif; ?>
+			</td>
+			<td>
+				<?php if ( 'SUBTABLE' !== $field_type && array_key_exists( $field_type, $this->kintone_fieldcode_supported_list ) ) : ?>
+					<div class="kf-shortcode-preview">
+						<?php echo $this->create_sample_shortcode( $field, $app_data ); ?>
+					</div>
+				<?php endif; ?>
+			</td>
+		</tr>
+		<?php
+	}
+
+	/**
+	 * サブテーブルフィールドをレンダリング.
+	 *
+	 * @param array $field サブテーブルフィールド.
+	 * @param array $app_data アプリデータ.
+	 * @param int   $app_index アプリのインデックス.
+	 * @param array $tags CF7タグ.
+	 * @param array $mailtags CF7メールタグ.
+	 */
+	private function render_subtable_fields( $field, $app_data, $app_index, $tags, $mailtags ) {
+		if ( ! isset( $field['fields'] ) || empty( $field['fields'] ) ) {
+			return;
+		}
+		?>
+		<div class="kf-subtable-wrapper">
+			<table class="kf-subtable-fields">
+				<?php foreach ( $field['fields'] as $subfield ) : ?>
+					<tr>
+						<td style="width: 40%;">
+							<strong><?php echo esc_html( isset( $subfield['label'] ) ? $subfield['label'] : '' ); ?></strong>
+							<span class="kf-field-code">(<?php echo esc_html( $subfield['code'] ); ?>)</span>
+						</td>
+						<td style="width: 20px; text-align: center;">←</td>
+						<td>
+							<?php if ( array_key_exists( $subfield['type'], $this->kintone_fieldcode_supported_list ) ) : ?>
+								<?php echo $this->create_html_for_setting_cf7_mailtag( $tags, $mailtags, $app_data, $subfield, $app_index ); ?>
+							<?php elseif ( 'FILE' === $subfield['type'] ) : ?>
+								<a href="<?php echo esc_url( admin_url( 'admin.php?page=form-data-to-kintone-setting' ) ); ?>">Add-Ons</a>
+							<?php else : ?>
+								<span class="description">Not Support</span>
+							<?php endif; ?>
+						</td>
+					</tr>
+				<?php endforeach; ?>
+			</table>
+		</div>
+		<?php
+	}
+
+	/**
+	 * Not Supportedフィールドリストをレンダリング.
+	 *
+	 * @param array $fields Not Supportedフィールド配列.
+	 */
+	private function render_unsupported_fields_list( $fields ) {
+		?>
+		<div class="kf-not-supported-list">
+			<?php foreach ( $fields as $field ) : ?>
+				<div class="kf-not-supported-item">
+					<span class="dashicons dashicons-warning"></span>
+					<span class="kf-not-supported-label">
+						<?php echo esc_html( isset( $field['label'] ) ? $field['label'] : '' ); ?>
+						(<?php echo esc_html( $field['code'] ); ?>)
+					</span>
+					<span class="kf-not-supported-type"><?php echo esc_html( $field['type'] ); ?></span>
+				</div>
+			<?php endforeach; ?>
+		</div>
 		<?php
 	}
 
@@ -624,11 +945,27 @@ class Kintone_Form_Admin {
 	 */
 	public function register_assets() {
 
+		// Select2 library.
+		wp_enqueue_style(
+			'select2',
+			'https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css',
+			array(),
+			'4.1.0-rc.0'
+		);
+
+		wp_enqueue_script(
+			'select2',
+			'https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js',
+			array( 'jquery' ),
+			'4.1.0-rc.0',
+			true
+		);
+
 		// styles.
 		wp_enqueue_style(
 			'kintone-form',
 			KINTONE_FORM_URL . '/asset/css/kintone-form.css',
-			array(),
+			array( 'select2' ),
 			date(
 				'YmdGis',
 				filemtime( KINTONE_FORM_PATH . '/asset/css/kintone-form.css' )
@@ -640,7 +977,7 @@ class Kintone_Form_Admin {
 		wp_register_script(
 			'my_loadmore',
 			KINTONE_FORM_URL . '/asset/js/myloadmore.js',
-			array( 'jquery' ),
+			array( 'jquery', 'select2' ),
 			date(
 				'YmdGis',
 				filemtime( KINTONE_FORM_PATH . '/asset/js/myloadmore.js' )
@@ -678,13 +1015,26 @@ class Kintone_Form_Admin {
 		if ( isset( $args['kintone_setting_data']['app_datas'] ) ) {
 			foreach ( $args['kintone_setting_data']['app_datas'] as $app_data ) {
 
-				if ( ! empty( $app_data['appid'] ) && ! empty( $app_data['token'] ) && ! empty( $args['kintone_setting_data']['domain'] ) ) {
+				// トークンの処理: 新形式(tokens)と既存値(tokens_existing)をマージ
+				$processed_tokens   = $this->process_tokens( $app_data );
+				$app_data['tokens'] = $processed_tokens;
+
+				// 後方互換性のため、tokenキーにはカンマ区切り文字列を設定
+				$app_data['token'] = Kintone_Form_Utility::tokens_to_string( $processed_tokens );
+
+				// tokens_existingは保存不要
+				unset( $app_data['tokens_existing'] );
+
+				// トークンが存在するかチェック
+				$has_valid_token = ! empty( $app_data['token'] );
+
+				if ( ! empty( $app_data['appid'] ) && $has_valid_token && ! empty( $args['kintone_setting_data']['domain'] ) ) {
 
 					$url               = Kintone_Form_Utility::get_kintone_url( $args['kintone_setting_data'], 'form' );
 					$url               = $url . '?app=' . $app_data['appid'];
 					$kintone_form_data = $this->kintone_api(
 						$url,
-						$app_data['token'],
+						$app_data['tokens'],
 						$args['kintone_setting_data']['kintone_basic_authentication_id'],
 						$args['kintone_setting_data']['kintone_basic_authentication_password']
 					);
@@ -721,6 +1071,47 @@ class Kintone_Form_Admin {
 			$properties['kintone_setting_data'] = $args['kintone_setting_data'];
 			$contact_form->set_properties( $properties );
 		}
+	}
+
+	/**
+	 * kintone の仕様: 1アプリあたり最大9トークン.
+	 */
+	const MAX_TOKENS_PER_APP = 9;
+
+	/**
+	 * トークンの処理: 新規入力と既存値をマージしてエンコード.
+	 *
+	 * @param array $app_data アプリデータ.
+	 * @return array エンコードされたトークン配列.
+	 */
+	private function process_tokens( $app_data ) {
+		$new_tokens      = isset( $app_data['tokens'] ) ? $app_data['tokens'] : array();
+		$existing_tokens = isset( $app_data['tokens_existing'] ) ? $app_data['tokens_existing'] : array();
+
+		$result = array();
+
+		// 各インデックスについて処理
+		$max_index = max( count( $new_tokens ), count( $existing_tokens ) );
+		for ( $j = 0; $j < $max_index; $j++ ) {
+			// 最大数に達したら終了.
+			if ( count( $result ) >= self::MAX_TOKENS_PER_APP ) {
+				break;
+			}
+
+			$new_value      = isset( $new_tokens[ $j ] ) ? trim( $new_tokens[ $j ] ) : '';
+			$existing_value = isset( $existing_tokens[ $j ] ) ? $existing_tokens[ $j ] : '';
+
+			if ( ! empty( $new_value ) ) {
+				// 新しい値が入力された場合: エンコードして保存
+				$result[] = Kintone_Form_Utility::encode_token( $new_value );
+			} elseif ( ! empty( $existing_value ) ) {
+				// 空欄で既存値がある場合: 既存値を維持
+				$result[] = $existing_value;
+			}
+			// 両方空の場合は追加しない
+		}
+
+		return array_values( array_filter( $result ) );
 	}
 
 	/**
@@ -796,13 +1187,11 @@ class Kintone_Form_Admin {
 
 					return new WP_Error( $res['response']['code'], $res['response']['message'] );
 
-				} else {
+				} elseif ( $file ) {
 
-					if ( $file ) {
 						$return_value = $res['body'];
-					} else {
-						$return_value = json_decode( $res['body'], true );
-					}
+				} else {
+					$return_value = json_decode( $res['body'], true );
 				}
 
 				return $return_value;
@@ -845,8 +1234,8 @@ class Kintone_Form_Admin {
 		ob_start();
 		?>
 		<!-- Create selectbox-->
-		<select id="cf7-mailtag-<?php echo esc_attr( $hash ); ?>" <?php echo esc_attr( $selectbox_readonly ); ?>name="kintone_setting_data[app_datas][<?php echo esc_attr( $multi_kintone_app_count ); ?>][setting][<?php echo esc_attr( $kintone_filed['code'] ); ?>]">
-			<option value=""></option>
+		<select id="cf7-mailtag-<?php echo esc_attr( $hash ); ?>" class="kf-cf7-mailtag-select" <?php echo esc_attr( $selectbox_readonly ); ?>name="kintone_setting_data[app_datas][<?php echo esc_attr( $multi_kintone_app_count ); ?>][setting][<?php echo esc_attr( $kintone_filed['code'] ); ?>]">
+			<option value=""><?php esc_html_e( '-- 選択 --', 'kintone-form' ); ?></option>
 
 			<?php foreach ( $mailtags as $value ) : ?>
 				<option <?php selected( $value, $selected_cf7_mailtag, true ); ?> value="<?php echo esc_attr( $value ); ?>">[<?php echo esc_attr( $value ); ?>]</option>
@@ -887,5 +1276,58 @@ class Kintone_Form_Admin {
 		}
 
 		return false;
+	}
+
+	/**
+	 * APIトークンフィールドのHTMLを生成する.
+	 *
+	 * @param array $tokens トークン配列（エンコード済み）.
+	 * @param int   $app_index アプリのインデックス.
+	 * @return string HTML.
+	 */
+	private function render_token_fields( $tokens, $app_index ) {
+		// 後方互換性: カンマ区切り文字列を配列に変換
+		$tokens = Kintone_Form_Utility::normalize_tokens( $tokens );
+
+		// 空の場合は1つの空フィールドを表示
+		if ( empty( $tokens ) ) {
+			$tokens = array( '' );
+		}
+
+		ob_start();
+		?>
+		<div class="kintone-token-fields" data-app-index="<?php echo esc_attr( $app_index ); ?>">
+			<?php foreach ( $tokens as $token_index => $token ) : ?>
+				<?php $masked = Kintone_Form_Utility::mask_token( $token ); ?>
+				<div class="kintone-token-row" style="margin-bottom: 5px;">
+					<?php if ( ! empty( $masked ) ) : ?>
+						<span class="kintone-token-masked" style="display: inline-block; min-width: 200px; padding: 2px 5px; background: #f0f0f0; border-radius: 3px; font-family: monospace; margin-right: 10px;">
+							<?php echo esc_html( $masked ); ?>
+						</span>
+					<?php endif; ?>
+					<input
+						type="password"
+						name="kintone_setting_data[app_datas][<?php echo esc_attr( $app_index ); ?>][tokens][<?php echo esc_attr( $token_index ); ?>]"
+						class="regular-text kintone-token-input"
+						size="50"
+						value=""
+						placeholder="<?php echo empty( $masked ) ? esc_attr__( 'API Token を入力', 'kintone-form' ) : esc_attr__( '変更する場合のみ入力', 'kintone-form' ); ?>"
+						autocomplete="new-password"
+					/>
+					<!-- 既存トークンを保持するhiddenフィールド -->
+					<input
+						type="hidden"
+						name="kintone_setting_data[app_datas][<?php echo esc_attr( $app_index ); ?>][tokens_existing][<?php echo esc_attr( $token_index ); ?>]"
+						value="<?php echo esc_attr( $token ); ?>"
+					/>
+					<button type="button" class="button kintone-token-remove" title="<?php esc_attr_e( '削除', 'kintone-form' ); ?>" <?php echo count( $tokens ) <= 1 ? 'style="display:none;"' : ''; ?>>×</button>
+				</div>
+			<?php endforeach; ?>
+			<button type="button" class="button kintone-token-add" style="margin-top: 5px;">
+				<?php esc_html_e( '+ トークン追加', 'kintone-form' ); ?>
+			</button>
+		</div>
+		<?php
+		return ob_get_clean();
 	}
 }

@@ -1,10 +1,19 @@
+/**
+ * kintone-form Admin Styles
+ *
+ * @package Kintone_Form
+ */
+
+/* ==========================================================================
+   Existing Styles (backwards compatible)
+   ========================================================================== */
 
 .form-data-to-kintone-setting-block{
 	background: #FFFFFF;
-    border: 1px solid #E5E5E5;
-    position: relative;
-    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04);
-    margin: 20px 0;
+	border: 1px solid #E5E5E5;
+	position: relative;
+	box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04);
+	margin: 20px 0;
 }
 .form-data-to-kintone-setting-block .title{
 	border-bottom: 1px solid #EEEEEE;
@@ -16,4 +25,695 @@
 
 .form-data-to-kintone-setting-block .inner{
 	padding: 15px;
+}
+
+/* ==========================================================================
+   New UI Styles - kf- prefix (kintone-form)
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   Settings Section
+   -------------------------------------------------------------------------- */
+
+.kf-settings-section {
+	background: #fff;
+	border: 1px solid #c3c4c7;
+	border-radius: 4px;
+	margin-bottom: 20px;
+	box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04);
+}
+
+.kf-settings-section-header {
+	display: flex;
+	align-items: center;
+	padding: 12px 16px;
+	background: #f6f7f7;
+	border-bottom: 1px solid #c3c4c7;
+	border-radius: 4px 4px 0 0;
+}
+
+.kf-settings-section-header .dashicons {
+	margin-right: 8px;
+	color: #646970;
+}
+
+.kf-settings-section-header h3 {
+	margin: 0;
+	font-size: 14px;
+	font-weight: 600;
+	color: #1d2327;
+}
+
+.kf-settings-section-content {
+	padding: 16px;
+}
+
+/* --------------------------------------------------------------------------
+   Form Fields
+   -------------------------------------------------------------------------- */
+
+.kf-form-row {
+	display: flex;
+	align-items: flex-start;
+	margin-bottom: 16px;
+}
+
+.kf-form-row:last-child {
+	margin-bottom: 0;
+}
+
+.kf-form-label {
+	flex: 0 0 180px;
+	padding-top: 6px;
+	font-weight: 500;
+	color: #1d2327;
+}
+
+.kf-form-label .required {
+	color: #d63638;
+	margin-left: 2px;
+}
+
+.kf-form-field {
+	flex: 1;
+}
+
+.kf-form-field input[type="text"],
+.kf-form-field input[type="email"],
+.kf-form-field input[type="password"] {
+	width: 100%;
+	max-width: 400px;
+}
+
+.kf-form-field-inline {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+}
+
+.kf-form-field-inline input {
+	flex: 1;
+	max-width: 180px;
+}
+
+.kf-form-field-inline .separator {
+	color: #646970;
+}
+
+.kf-form-hint {
+	margin-top: 6px;
+	font-size: 12px;
+	color: #646970;
+}
+
+.kf-form-prefix {
+	display: inline-flex;
+	align-items: center;
+	padding: 0 8px;
+	background: #f0f0f1;
+	border: 1px solid #8c8f94;
+	border-right: none;
+	border-radius: 4px 0 0 4px;
+	color: #646970;
+	height: 30px;
+}
+
+.kf-form-field-with-prefix {
+	display: inline-flex;
+	align-items: center;
+}
+
+.kf-form-field-with-prefix input[type="text"] {
+	border-radius: 0 4px 4px 0;
+}
+
+/* --------------------------------------------------------------------------
+   App Settings Section
+   -------------------------------------------------------------------------- */
+
+.kf-app-section {
+	background: #fff;
+	border: 1px solid #c3c4c7;
+	border-radius: 4px;
+	margin-bottom: 20px;
+}
+
+.kf-app-header {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 16px;
+	padding: 12px 16px;
+	background: #f6f7f7;
+	border-bottom: 1px solid #c3c4c7;
+	border-radius: 4px 4px 0 0;
+}
+
+.kf-app-header-field {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+}
+
+.kf-app-header-field label {
+	font-weight: 500;
+	white-space: nowrap;
+}
+
+.kf-app-header-field input[type="text"] {
+	width: 80px;
+}
+
+.kf-app-header-actions {
+	margin-left: auto;
+	display: flex;
+	align-items: center;
+	gap: 8px;
+}
+
+.kf-app-token-section {
+	padding: 12px 16px;
+	background: #f9f9f9;
+	border-bottom: 1px solid #e2e4e7;
+}
+
+/* --------------------------------------------------------------------------
+   Search Box
+   -------------------------------------------------------------------------- */
+
+.kf-search-box {
+	padding: 12px 16px;
+	background: #fff;
+	border-bottom: 1px solid #e2e4e7;
+}
+
+.kf-search-wrapper {
+	position: relative;
+	max-width: 400px;
+}
+
+.kf-search-wrapper .dashicons-search {
+	position: absolute;
+	left: 10px;
+	top: 50%;
+	transform: translateY(-50%);
+	color: #8c8f94;
+	pointer-events: none;
+}
+
+input.kf-search-input {
+	width: 100%;
+	padding: 8px 36px 8px 36px !important;
+	border: 1px solid #8c8f94;
+	border-radius: 4px;
+	font-size: 14px;
+	box-sizing: border-box;
+}
+
+.kf-search-input:focus {
+	border-color: #2271b1;
+	box-shadow: 0 0 0 1px #2271b1;
+	outline: none;
+}
+
+.kf-search-clear {
+	position: absolute;
+	right: 8px;
+	top: 50%;
+	transform: translateY(-50%);
+	background: none;
+	border: none;
+	color: #8c8f94;
+	cursor: pointer;
+	padding: 4px;
+	display: none;
+}
+
+.kf-search-clear:hover {
+	color: #1d2327;
+}
+
+.kf-search-wrapper.has-value .kf-search-clear {
+	display: block;
+}
+
+.kf-search-results-info {
+	margin-top: 8px;
+	font-size: 12px;
+	color: #646970;
+}
+
+/* --------------------------------------------------------------------------
+   Accordion
+   -------------------------------------------------------------------------- */
+
+.kf-accordion-group {
+	border-bottom: 1px solid #e2e4e7;
+}
+
+.kf-accordion-group:last-child {
+	border-bottom: none;
+}
+
+.kf-accordion-header {
+	display: flex;
+	align-items: center;
+	width: 100%;
+	padding: 12px 16px;
+	background: #fff;
+	border: none;
+	cursor: pointer;
+	user-select: none;
+	transition: background-color 0.15s ease;
+	text-align: left;
+	font-size: 14px;
+}
+
+.kf-accordion-header:hover {
+	background: #f6f7f7;
+}
+
+.kf-accordion-header:focus {
+	outline: none;
+	background: #f0f0f1;
+}
+
+.kf-accordion-toggle {
+	margin-right: 12px;
+	color: #646970;
+	transition: transform 0.2s ease;
+}
+
+.kf-accordion-header[aria-expanded="true"] .kf-accordion-toggle {
+	transform: rotate(90deg);
+}
+
+.kf-accordion-icon {
+	margin-right: 8px;
+	font-size: 16px;
+}
+
+.kf-accordion-title {
+	flex: 1;
+	font-weight: 500;
+	color: #1d2327;
+}
+
+.kf-accordion-count {
+	background: #dcdcde;
+	color: #50575e;
+	padding: 2px 8px;
+	border-radius: 10px;
+	font-size: 12px;
+	font-weight: 500;
+}
+
+.kf-accordion-content {
+	display: none;
+	padding: 0 16px 16px;
+	background: #fff;
+}
+
+.kf-accordion-header[aria-expanded="true"] + .kf-accordion-content {
+	display: block;
+}
+
+/* Not Supported group styling */
+.kf-accordion-group--not-supported .kf-accordion-header {
+	background: #fef7f1;
+}
+
+.kf-accordion-group--not-supported .kf-accordion-header:hover {
+	background: #fcf0e5;
+}
+
+.kf-accordion-group--not-supported .kf-accordion-count {
+	background: #f0b849;
+	color: #1d2327;
+}
+
+/* --------------------------------------------------------------------------
+   Field Table
+   -------------------------------------------------------------------------- */
+
+.kf-field-table {
+	width: 100%;
+	border-collapse: collapse;
+	font-size: 13px;
+}
+
+.kf-field-table th {
+	text-align: left;
+	padding: 8px 12px;
+	background: #f0f0f1;
+	border-bottom: 1px solid #c3c4c7;
+	font-weight: 500;
+	color: #1d2327;
+	white-space: nowrap;
+}
+
+.kf-field-table th:first-child {
+	width: 60px;
+	text-align: center;
+}
+
+.kf-field-table th.kf-field-table-kintone {
+	width: 25%;
+}
+
+.kf-field-table th.kf-field-table-arrow {
+	width: 40px;
+	text-align: center;
+}
+
+.kf-field-table th.kf-field-table-cf7 {
+	width: 35%;
+}
+
+.kf-field-table td {
+	padding: 10px 12px;
+	border-bottom: 1px solid #e2e4e7;
+	vertical-align: middle;
+}
+
+.kf-field-table td:first-child {
+	text-align: center;
+}
+
+.kf-field-table tbody tr:last-child td {
+	border-bottom: none;
+}
+
+.kf-field-table tbody tr:hover {
+	background: #f6f7f7;
+}
+
+.kf-field-row--hidden {
+	display: none;
+}
+
+.kf-field-row--highlighted td {
+	background: #fff8e5;
+}
+
+.kf-field-code {
+	color: #646970;
+	font-family: monospace;
+	font-size: 12px;
+}
+
+.kf-field-arrow {
+	text-align: center;
+	color: #2271b1;
+	font-weight: bold;
+}
+
+.kf-field-cf7-select {
+	min-width: 150px;
+}
+
+.kf-field-cf7-or {
+	display: inline-block;
+	margin: 0 8px;
+	color: #646970;
+}
+
+.kf-field-cf7-input {
+	width: 150px;
+}
+
+/* Shortcode preview */
+.kf-shortcode-preview {
+	font-family: monospace;
+	font-size: 12px;
+	color: #646970;
+	word-break: break-all;
+}
+
+.kf-shortcode-preview .kf-shortcode-tag {
+	color: #d63638;
+}
+
+/* --------------------------------------------------------------------------
+   Not Supported Fields List
+   -------------------------------------------------------------------------- */
+
+.kf-not-supported-list {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+	gap: 8px;
+}
+
+.kf-not-supported-item {
+	display: flex;
+	align-items: center;
+	padding: 8px 12px;
+	background: #f6f7f7;
+	border-radius: 4px;
+	font-size: 13px;
+}
+
+.kf-not-supported-item .dashicons {
+	margin-right: 8px;
+	color: #dba617;
+	font-size: 16px;
+	width: 16px;
+	height: 16px;
+}
+
+.kf-not-supported-label {
+	flex: 1;
+	color: #1d2327;
+}
+
+.kf-not-supported-type {
+	font-size: 11px;
+	color: #646970;
+	background: #e2e4e7;
+	padding: 2px 6px;
+	border-radius: 3px;
+	margin-left: 8px;
+}
+
+/* --------------------------------------------------------------------------
+   Subtable Fields
+   -------------------------------------------------------------------------- */
+
+.kf-subtable-wrapper {
+	background: #f9f9f9;
+	border: 1px solid #e2e4e7;
+	border-radius: 4px;
+	padding: 12px;
+	margin: 8px 0;
+}
+
+.kf-subtable-title {
+	font-weight: 500;
+	margin-bottom: 8px;
+	color: #1d2327;
+}
+
+.kf-subtable-fields {
+	width: 100%;
+}
+
+.kf-subtable-fields td {
+	padding: 6px 8px;
+	border-bottom: 1px solid #e2e4e7;
+}
+
+.kf-subtable-fields tr:last-child td {
+	border-bottom: none;
+}
+
+/* --------------------------------------------------------------------------
+   Buttons and Actions
+   -------------------------------------------------------------------------- */
+
+.kf-button-group {
+	display: flex;
+	gap: 8px;
+}
+
+.kf-add-app-section {
+	padding: 16px;
+	text-align: center;
+	border-top: 1px solid #c3c4c7;
+}
+
+/* --------------------------------------------------------------------------
+   Token Fields Enhancement
+   -------------------------------------------------------------------------- */
+
+.kintone-token-fields {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+}
+
+.kintone-token-row {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	margin-bottom: 0 !important;
+}
+
+.kintone-token-masked {
+	display: inline-flex !important;
+	align-items: center;
+	min-width: 180px !important;
+	padding: 4px 10px !important;
+	background: #f0f0f1 !important;
+	border: 1px solid #c3c4c7;
+	border-radius: 4px !important;
+	font-family: monospace;
+	font-size: 13px;
+	color: #646970;
+}
+
+.kintone-token-input {
+	max-width: 250px !important;
+}
+
+.kintone-token-remove {
+	color: #d63638 !important;
+	border-color: #d63638 !important;
+}
+
+.kintone-token-remove:hover {
+	background: #d63638 !important;
+	color: #fff !important;
+}
+
+.kintone-token-add {
+	align-self: flex-start;
+}
+
+/* --------------------------------------------------------------------------
+   Error Messages
+   -------------------------------------------------------------------------- */
+
+.kf-error-message {
+	color: #d63638;
+	font-weight: 500;
+	font-size: 12px;
+	margin-top: 4px;
+}
+
+/* --------------------------------------------------------------------------
+   Responsive Adjustments
+   -------------------------------------------------------------------------- */
+
+@media screen and (max-width: 782px) {
+	.kf-form-row {
+		flex-direction: column;
+	}
+
+	.kf-form-label {
+		flex: none;
+		margin-bottom: 8px;
+		padding-top: 0;
+	}
+
+	.kf-form-field input[type="text"],
+	.kf-form-field input[type="email"],
+	.kf-form-field input[type="password"] {
+		max-width: 100%;
+	}
+
+	.kf-app-header {
+		flex-direction: column;
+		align-items: flex-start;
+	}
+
+	.kf-app-header-actions {
+		margin-left: 0;
+		margin-top: 8px;
+	}
+
+	.kf-field-table th:last-child,
+	.kf-field-table td:last-child {
+		display: none;
+	}
+
+	.kf-not-supported-list {
+		grid-template-columns: 1fr;
+	}
+}
+
+/* --------------------------------------------------------------------------
+   Animation
+   -------------------------------------------------------------------------- */
+
+.kf-accordion-content {
+	transition: none;
+}
+
+/* Smooth highlight fade */
+.kf-field-row--highlighted td {
+	transition: background-color 0.3s ease;
+}
+
+/* --------------------------------------------------------------------------
+   Select2 Customization
+   -------------------------------------------------------------------------- */
+
+.kf-cf7-mailtag-select + .select2-container {
+	min-width: 200px;
+}
+
+.select2-container--default .select2-selection--single {
+	height: 32px;
+	border-color: #8c8f94;
+	border-radius: 4px;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+	line-height: 30px;
+	padding-left: 10px;
+	color: #1d2327;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__arrow {
+	height: 30px;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__clear {
+	margin-right: 20px;
+	font-size: 16px;
+}
+
+.select2-container--default.select2-container--focus .select2-selection--single {
+	border-color: #2271b1;
+	box-shadow: 0 0 0 1px #2271b1;
+}
+
+.select2-dropdown {
+	border-color: #8c8f94;
+	border-radius: 4px;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.select2-container--default .select2-search--dropdown .select2-search__field {
+	border-color: #8c8f94;
+	border-radius: 4px;
+	padding: 6px 10px;
+}
+
+.select2-container--default .select2-search--dropdown .select2-search__field:focus {
+	border-color: #2271b1;
+	outline: none;
+}
+
+.select2-container--default .select2-results__option--highlighted[aria-selected] {
+	background-color: #2271b1;
+}
+
+.select2-container--default .select2-results__option[aria-selected=true] {
+	background-color: #f0f0f1;
+	color: #1d2327;
+}
+
+.select2-results__option {
+	padding: 8px 12px;
 }
