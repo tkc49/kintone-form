@@ -38,10 +38,8 @@ class KintoneForm_multi_select {
 
 			$value = apply_filters( 'wpcf7_special_mail_tags', null, $cf7_mail_tag, false, $mail_tag );
 
-		} else {
-			if ( isset( $cf7_send_data[ $cf7_mail_tag ] ) ) {
+		} elseif ( isset( $cf7_send_data[ $cf7_mail_tag ] ) ) {
 				$value = $cf7_send_data[ $cf7_mail_tag ];
-			}
 		}
 
 		if ( ! is_array( $value ) ) {
@@ -54,12 +52,11 @@ class KintoneForm_multi_select {
 		}
 
 		if ( empty( $value[0] ) ) {
-			$value = '';
+			$value = array();
 		}
 
 		$return_data['value'] = $value;
 
 		return $return_data;
-
 	}
 }
