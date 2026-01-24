@@ -19,8 +19,7 @@
 # Composer
 composer.lock
 
-# Package manager locks (keep for CI reproducibility, remove if you want to ignore)
-# package-lock.json
+# Package manager locks - keep for CI reproducibility
 
 # WordPress environment
 .wp-env.override.json
