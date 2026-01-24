@@ -19,13 +19,13 @@
 	<arg name="colors"/>
 
 	<!-- Exclude directories -->
-	<exclude-pattern>node_modules/</exclude-pattern>
-	<exclude-pattern>vendor/</exclude-pattern>
-	<exclude-pattern>tests/</exclude-pattern>
-	<exclude-pattern>.phpunit.cache/</exclude-pattern>
-	<exclude-pattern>bin/</exclude-pattern>
-	<exclude-pattern>e2e/</exclude-pattern>
-	<exclude-pattern>\.git/</exclude-pattern>
+	<exclude-pattern>*/node_modules/*</exclude-pattern>
+	<exclude-pattern>*/vendor/*</exclude-pattern>
+	<exclude-pattern>*/tests/*</exclude-pattern>
+	<exclude-pattern>*/.phpunit.cache/*</exclude-pattern>
+	<exclude-pattern>*/bin/*</exclude-pattern>
+	<exclude-pattern>*/e2e/*</exclude-pattern>
+	<exclude-pattern>*/\.git/*</exclude-pattern>
 
 	<!-- Allow short array syntax -->
 	<rule ref="Generic.Arrays.DisallowShortArraySyntax.Found">

@@ -149,27 +149,38 @@ jobs:
         run: npx playwright install --with-deps chromium
 
       - name: Start WordPress environment
-        run: npx wp-env start
+        run: |
+          npx wp-env start
+          echo "WordPress environment started"
 
       - name: Wait for WordPress
         run: |
           for i in {1..30}; do
             if curl -s http://localhost:8888 > /dev/null; then
               echo "WordPress is ready!"
-              break
+              exit 0
             fi
             echo "Waiting for WordPress... ($i/30)"
             sleep 2
           done
+          echo "WordPress failed to start"
+          exit 1
 
       - name: Verify WordPress environment
         run: |
+          echo "=== Plugin List ==="
           npx wp-env run cli wp plugin list
+          echo "=== Site URL ==="
           npx wp-env run cli wp option get siteurl
-          npx wp-env run cli wp plugin activate kintone-form contact-form-7 || true
+          echo "=== Activating plugins ==="
+          npx wp-env run cli wp plugin activate kintone-form contact-form-7 || echo "Plugin activation warning"
+          echo "=== Final plugin status ==="
+          npx wp-env run cli wp plugin list
 
       - name: Run Playwright tests
+        id: playwright
         run: npx playwright test
+        continue-on-error: true
 
       - name: Upload Playwright report
         uses: actions/upload-artifact@v4
@@ -179,9 +190,21 @@ jobs:
           path: playwright-report/
           retention-days: 7
 
+      - name: Show wp-env logs on failure
+        if: steps.playwright.outcome == 'failure'
+        run: |
+          echo "=== Docker containers ==="
+          docker ps -a
+          echo "=== WordPress logs ==="
+          npx wp-env logs || true
+
       - name: Stop WordPress environment
         if: always()
         run: npx wp-env stop
+
+      - name: Check Playwright result
+        if: steps.playwright.outcome == 'failure'
+        run: exit 1
 
   # Job 5: WordPress Plugin Check
   plugin-check:

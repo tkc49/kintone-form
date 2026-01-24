@@ -30,8 +30,8 @@
 	"scripts": {
 		"test": "phpunit --testsuite Unit",
 		"test:integration": "phpunit --testsuite Integration",
-		"phpcs": "phpcs --ignore=tests/,vendor/,node_modules/,bin/,.phpunit.cache/",
-		"phpcs:fix": "phpcbf --ignore=tests/,vendor/,node_modules/,bin/,.phpunit.cache/",
+		"phpcs": "phpcs --ignore=*/tests/*,*/vendor/*,*/node_modules/*,*/bin/*,*/.phpunit.cache/*",
+		"phpcs:fix": "phpcbf --ignore=*/tests/*,*/vendor/*,*/node_modules/*,*/bin/*,*/.phpunit.cache/*",
 		"phpstan": "phpstan analyse --memory-limit=256M"
 	},
 	"config": {
