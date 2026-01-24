@@ -149,7 +149,7 @@ jobs:
         run: npx playwright install --with-deps chromium
 
       - name: Start WordPress environment
-        run: npm run wp-env start
+        run: npx wp-env start
 
       - name: Wait for WordPress
         run: |
@@ -164,8 +164,9 @@ jobs:
 
       - name: Verify WordPress environment
         run: |
-          npm run wp-env run cli wp plugin list
-          npm run wp-env run cli wp option get siteurl
+          npx wp-env run cli wp plugin list
+          npx wp-env run cli wp option get siteurl
+          npx wp-env run cli wp plugin activate kintone-form contact-form-7 || true
 
       - name: Run Playwright tests
         run: npx playwright test
@@ -180,7 +181,7 @@ jobs:
 
       - name: Stop WordPress environment
         if: always()
-        run: npm run wp-env stop
+        run: npx wp-env stop
 
   # Job 5: WordPress Plugin Check
   plugin-check:
