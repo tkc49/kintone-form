@@ -5,6 +5,8 @@
 	"private": true,
 	"scripts": {
 		"wp-env": "wp-env",
+		"wp-env start": "wp-env start",
+		"wp-env stop": "wp-env stop",
 		"wp-env:start": "wp-env start",
 		"wp-env:stop": "wp-env stop",
 		"wp-env:destroy": "wp-env destroy",
