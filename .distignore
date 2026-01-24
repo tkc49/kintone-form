@@ -7,19 +7,34 @@
 /tests
 /.git
 /node_modules
+/vendor
+/e2e
+/playwright-report
+/coverage
+/.phpunit.cache
 
 # Files
 /.distignore
 /.editorconfig
 /.gitignore
 /.travis.yml
+/.wp-env.json
 /phpunit.xml
 /phpunit.xml.dist
 /phpcs.xml
 /phpcs.xml.dist
+/phpstan.neon
+/composer.json
+/composer.lock
+/package.json
+/package-lock.json
+/playwright.config.ts
 /README.md
 .DS_Store
 Thumbs.db
 *.sql
 *.tar.gz
 *.zip
+test-uninstall.php
+coverage.xml
+phpcs-report.xml

@@ -1,5 +1,42 @@
-README.md
+# IDE
 .idea/
+
+# Dependencies
+/node_modules/
+/vendor/
 /tests/E2E/node_modules/
-/node_modules
-/playwright-report
+
+# Build artifacts
+/playwright-report/
+/test-results/
+/coverage/
+/.phpunit.cache/
+
+# Environment
+.env
+.env.local
+
+# Composer
+composer.lock
+
+# Package manager locks (keep for CI reproducibility, remove if you want to ignore)
+# package-lock.json
+
+# WordPress environment
+.wp-env.override.json
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+/logs/
+
+# Test artifacts
+coverage.xml
+phpcs-report.xml
+
+# Temporary files
+*.tmp
+*.bak

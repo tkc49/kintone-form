@@ -2,8 +2,8 @@
 <ruleset name="WordPress Coding Standards for Plugins">
 	<description>Generally-applicable sniffs for WordPress plugins</description>
 
-	<rule ref="WordPress-Core" />
-	<rule ref="WordPress-Docs" />
+	<rule ref="WordPress-Core"/>
+	<rule ref="WordPress-Docs"/>
 
 	<!-- Check all PHP files in directory tree by default. -->
 	<arg name="extensions" value="php"/>
@@ -12,6 +12,36 @@
 	<!-- Show sniff codes in all reports -->
 	<arg value="s"/>
 
+	<!-- Show progress -->
+	<arg value="p"/>
+
+	<!-- Enable colors in output -->
+	<arg name="colors"/>
+
+	<!-- Exclude directories -->
 	<exclude-pattern>*/node_modules/*</exclude-pattern>
 	<exclude-pattern>*/vendor/*</exclude-pattern>
+	<exclude-pattern>*/tests/*</exclude-pattern>
+	<exclude-pattern>*/.phpunit.cache/*</exclude-pattern>
+
+	<!-- Allow short array syntax -->
+	<rule ref="Generic.Arrays.DisallowShortArraySyntax.Found">
+		<severity>0</severity>
+	</rule>
+
+	<!-- Text domain for translations -->
+	<rule ref="WordPress.WP.I18n">
+		<properties>
+			<property name="text_domain" type="array">
+				<element value="kintone-form"/>
+			</property>
+		</properties>
+	</rule>
+
+	<!-- Minimum supported WordPress version -->
+	<config name="minimum_supported_wp_version" value="6.0"/>
+
+	<!-- PHP Compatibility -->
+	<config name="testVersion" value="8.1-"/>
+	<rule ref="PHPCompatibilityWP"/>
 </ruleset>

@@ -1,0 +1,36 @@
+includes:
+	- vendor/szepeviktor/phpstan-wordpress/extension.neon
+
+parameters:
+	level: 4
+	paths:
+		- kintone-form.php
+		- includes/
+		- modules/
+	excludePaths:
+		- vendor/
+		- node_modules/
+		- tests/
+	bootstrapFiles:
+		- vendor/php-stubs/wordpress-stubs/wordpress-stubs.php
+	treatPhpDocTypesAsCertain: false
+	reportUnmatchedIgnoredErrors: false
+	ignoreErrors:
+		# Contact Form 7 classes - external dependency
+		- '#Instantiated class WPCF7_MailTag not found#'
+		- '#Instantiated class WPCF7_ContactForm not found#'
+		- '#Instantiated class WPCF7_Submission not found#'
+		- '#unknown class WPCF7_MailTag#'
+		- '#unknown class WPCF7_ContactForm#'
+		- '#unknown class WPCF7_Submission#'
+		- '#invalid type WPCF7_ContactForm#'
+		# WordPress constants defined at runtime
+		- '#Constant AUTH_SALT not found#'
+		- '#Constant KINTONE_FORM_URL not found#'
+		- '#Constant KINTONE_FORM_PATH not found#'
+		# Access to properties on form tag objects
+		- '#Access to an undefined property object::\$#'
+		# PHPDoc issues - will fix incrementally
+		- '#PHPDoc tag @var has invalid value#'
+		# Missing return statements - will fix incrementally
+		- '#return statement is missing#'

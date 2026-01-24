@@ -1,0 +1,23 @@
+{
+	"name": "form-data-to-kintone",
+	"version": "2.29.0",
+	"description": "WordPress plugin to send Contact Form 7 data to kintone",
+	"private": true,
+	"scripts": {
+		"wp-env": "wp-env",
+		"wp-env:start": "wp-env start",
+		"wp-env:stop": "wp-env stop",
+		"wp-env:destroy": "wp-env destroy",
+		"test:e2e": "playwright test",
+		"test:e2e:ui": "playwright test --ui",
+		"test:e2e:headed": "playwright test --headed",
+		"test:e2e:debug": "playwright test --debug"
+	},
+	"devDependencies": {
+		"@playwright/test": "^1.50.0",
+		"@wordpress/env": "^10.12.0"
+	},
+	"engines": {
+		"node": ">=18.0.0"
+	}
+}
