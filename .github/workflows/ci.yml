@@ -178,9 +178,8 @@ jobs:
           npx wp-env run cli wp plugin list
 
       - name: Run Playwright tests
-        id: playwright
         run: npx playwright test
-        continue-on-error: true
+        timeout-minutes: 10
 
       - name: Upload Playwright report
         uses: actions/upload-artifact@v4
@@ -190,21 +189,9 @@ jobs:
           path: playwright-report/
           retention-days: 7
 
-      - name: Show wp-env logs on failure
-        if: steps.playwright.outcome == 'failure'
-        run: |
-          echo "=== Docker containers ==="
-          docker ps -a
-          echo "=== WordPress logs ==="
-          npx wp-env logs || true
-
       - name: Stop WordPress environment
         if: always()
         run: npx wp-env stop
-
-      - name: Check Playwright result
-        if: steps.playwright.outcome == 'failure'
-        run: exit 1
 
   # Job 5: WordPress Plugin Check
   plugin-check:
