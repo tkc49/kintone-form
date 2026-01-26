@@ -176,6 +176,12 @@ jobs:
           npx wp-env run cli wp plugin activate kintone-form contact-form-7 || echo "Plugin activation warning"
           echo "=== Final plugin status ==="
           npx wp-env run cli wp plugin list
+          echo "=== Create test user if needed ==="
+          npx wp-env run cli wp user list
+          echo "=== WordPress version ==="
+          npx wp-env run cli wp core version
+          echo "=== Verify HTTP access ==="
+          curl -s -o /dev/null -w "%{http_code}" http://localhost:8888/wp-login.php
 
       - name: Run Playwright tests
         run: npx playwright test

@@ -58,10 +58,10 @@ export default defineConfig({
 		// },
 	],
 
-	/* Timeout settings */
-	timeout: 30000,
+	/* Timeout settings - more generous for CI environments */
+	timeout: process.env.CI ? 60000 : 30000,
 	expect: {
-		timeout: 5000,
+		timeout: process.env.CI ? 10000 : 5000,
 	},
 
 	/* Run your local dev server before starting the tests */

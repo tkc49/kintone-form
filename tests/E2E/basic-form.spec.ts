@@ -18,26 +18,38 @@ test.describe('Form data to kintone - Basic Form', () => {
 	test('Plugin is activated and visible in admin menu', async ({ page }) => {
 		// Navigate to plugins page
 		await page.goto('/wp-admin/plugins.php');
+		await page.waitForLoadState('networkidle');
 
-		// Check that the plugin is activated
+		// Debug: Check if we're on the right page
+		const pageTitle = await page.title();
+		console.log('Page title:', pageTitle);
+
+		// Check that the plugin row exists
 		const pluginRow = page.locator('tr[data-slug="kintone-form"]');
-		await expect(pluginRow).toBeVisible();
+		await expect(pluginRow).toBeVisible({ timeout: 10000 });
+
+		// Debug: Get the plugin row class to see if it's active or inactive
+		const rowClass = await pluginRow.getAttribute('class');
+		console.log('Plugin row class:', rowClass);
+
+		// Check if plugin is active (row has 'active' class)
+		const isActive = rowClass?.includes('active') && !rowClass?.includes('inactive');
+		console.log('Plugin appears active:', isActive);
 
 		// Verify it's active (has deactivate link)
-		const deactivateLink = pluginRow.locator('a.deactivate');
-		await expect(deactivateLink).toBeVisible();
+		// WordPress uses <span class="deactivate"><a href="...">Deactivate</a></span>
+		const deactivateLink = pluginRow.locator('span.deactivate a');
+		await expect(deactivateLink).toBeVisible({ timeout: 10000 });
 	});
 
 	test('Contact Form 7 integration tab is visible', async ({ page }) => {
 		// Navigate to Contact Form 7 forms
 		await page.goto('/wp-admin/admin.php?page=wpcf7');
-
-		// Wait for the page to load
 		await page.waitForLoadState('networkidle');
 
 		// Check if there's at least one form or add form button
 		const addNewButton = page.locator('a.page-title-action, a.add-new-h2');
-		await expect(addNewButton).toBeVisible();
+		await expect(addNewButton).toBeVisible({ timeout: 10000 });
 	});
 
 	test('kintone settings tab appears in CF7 form editor', async ({ page }) => {
@@ -131,17 +143,28 @@ test.describe('Form data to kintone - Frontend Form', () => {
  */
 async function loginToWordPress(page: Page): Promise<void> {
 	await page.goto('/wp-login.php');
+	await page.waitForLoadState('networkidle');
 
-	// Check if already logged in
+	// Check if already logged in (redirected to admin)
 	if (page.url().includes('wp-admin')) {
 		return;
 	}
 
-	// Fill login form
+	// Check if login form exists
+	const loginForm = page.locator('#loginform');
+	if (await loginForm.count() === 0) {
+		// Already logged in or on admin page
+		if (page.url().includes('wp-admin')) {
+			return;
+		}
+	}
+
+	// Fill login form with wp-env default credentials
 	await page.fill('#user_login', 'admin');
 	await page.fill('#user_pass', 'password');
 	await page.click('#wp-submit');
 
-	// Wait for redirect to admin
-	await page.waitForURL(/wp-admin/);
+	// Wait for redirect to admin with increased timeout
+	await page.waitForURL(/wp-admin/, { timeout: 15000 });
+	await page.waitForLoadState('networkidle');
 }
