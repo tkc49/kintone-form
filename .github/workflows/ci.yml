@@ -214,3 +214,12 @@ jobs:
           categories: |
             plugin_repo
             security
+          exclude-directories: |
+            .git
+            .github
+            .phpunit.cache
+            bin
+            e2e
+            node_modules
+            tests
+            vendor
