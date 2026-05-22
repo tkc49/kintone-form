@@ -5,8 +5,8 @@ Author: tkc49
 Website: https://ht79.info/
 Tags: cybozu, kintone, contact form 7, form, form data to kintone
 Requires at least: 6.6
-Tested up to: 6.7
-Stable tag: 2.29.1
+Tested up to: 6.9
+Stable tag: 2.29.2
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -49,6 +49,9 @@ A tab for setting the information on kintone appears on the "Contact Form 7" set
 1. screenshot-1.png
 
 == Changelog ==
+
+2.29.2 (2026-05-23)
+* Fully tested with WordPress version 6.9
 
 2.29.1 (2026-05-23)
 * Added support for multiple recipient email addresses (comma-separated) in the kintone registration error notification field
