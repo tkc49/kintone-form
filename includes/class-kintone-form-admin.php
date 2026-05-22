@@ -449,6 +449,7 @@ class Kintone_Form_Admin {
 					<div class="kf-form-field">
 						<input
 							type="email"
+							multiple
 							id="email-address-to-send-kintone-registration-error"
 							name="kintone_setting_data[email_address_to_send_kintone_registration_error]"
 							value="<?php echo esc_attr( $error_email ); ?>"
